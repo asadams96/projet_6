@@ -1,0 +1,26 @@
+# Eclipse
+.metadata
+*.classpath
+*.project
+
+projet_6/.settings/
+projet_6/projet_6-business/.settings/
+projet_6/projet_6-consumer/.settings/
+projet_6/projet_6-model/.settings/
+projet_6/projet_6-technical/.settings/
+projet_6/projet_6-webapp/.settings/
+
+# Maven
+projet_6/target/
+projet_6/projet_6-business/target/
+projet_6/projet_6-consumer/target/
+projet_6/projet_6-model/target/
+projet_6/projet_6-technical/target/
+projet_6/projet_6-webapp/target/
+
+# Log file
+*.log
+
+# Package Files
+*.jar
+*.war

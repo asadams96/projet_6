@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>fr.openclassrooms</groupId>
+    <artifactId>projet_6</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>projet_6-technical</artifactId>
+  <name>projet_6-technical</name>
+  <url>http://maven.apache.org</url>
+  <packaging>jar</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+    <!-- ===== Bibliothèques tierces ===== -->
+  	<!-- ===== Gestion des Logs ===== -->
+  	<!-- Logs de Commons-logging -->
+  	<dependency>
+    	<groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+     </dependency>
+     <!-- ===== Logs de Log4j ===== -->
+     <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+     </dependency>
+     <!-- ===== Redirige les Logs de Commons-logging vers Log4j ===== -->
+     <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-jcl</artifactId>
+      </dependency>
+        
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

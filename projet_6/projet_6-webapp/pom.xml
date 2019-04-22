@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>fr.openclassrooms</groupId>
+		<artifactId>projet_6</artifactId>
+   	 	<version>1.0-SNAPSHOT</version>
+	</parent>
+  
+	<artifactId>projet_6-webapp</artifactId>
+	<packaging>war</packaging>
+  
+  	<name>projet_6-webapp Maven Webapp</name>
+  	<url>http://maven.apache.org</url>
+  
+  	<build>
+    	<finalName>projet_6-webapp</finalName>
+  	</build>
+  
+  	<dependencies>
+  
+ 		<!-- ===== Modules ===== -->
+        <dependency>
+            <groupId>fr.openclassrooms</groupId>
+            <artifactId>projet_6-business</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.openclassrooms</groupId>
+            <artifactId>projet_6-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.openclassrooms</groupId>
+            <artifactId>projet_6-technical</artifactId>
+        </dependency>
+        
+        
+  	  	<!-- ===== Bibliothèques tierces ===== -->
+        <!-- JUnit -->
+		<dependency>
+     	 	<groupId>junit</groupId>
+     		 <artifactId>junit</artifactId>
+     		 <version>3.8.1</version>
+     		 <scope>test</scope>
+    	</dependency>
+    	
+    	<!-- JAVAX SERVLET API-->
+    	<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>javax.servlet-api</artifactId>
+    		<version>4.0.1</version>
+    		<scope>provided</scope>
+		</dependency>
+		
+		<!-- SPRING-WEB -->
+		<!-- Listener pour injection de dépendance-->
+		<dependency>
+   			 <groupId>org.springframework</groupId>
+   			 <artifactId>spring-web</artifactId>
+		</dependency>
+		
+		<!-- STRUTS2-CORE -->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.apache.struts</groupId>
+    		<artifactId>struts2-spring-plugin</artifactId>
+		</dependency>
+  	</dependencies>
+  
+  
+</project>
