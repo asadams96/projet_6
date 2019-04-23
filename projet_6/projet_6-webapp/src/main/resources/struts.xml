@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+
+	<!-- ============================================================== Package de base ============================================================== -->
+    <package name="base" abstract="true" extends="struts-default">
+       <interceptors>
+        	<interceptor name="authentification" class="authentificationInterceptor" />
+        	<interceptor name="encoding" class="encodingInterceptor" />
+        	
+        	<interceptor-stack name="baseStack">
+                <interceptor-ref name="encoding" />
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        	
+            <interceptor-stack name="authenticatedStack">
+                <interceptor-ref name="authentification" />
+                <interceptor-ref name="baseStack" />
+            </interceptor-stack>
+        </interceptors>
+        
+        <!-- Results globaux -->
+        <global-results>
+        	<result name="error-forbidden" type="httpheader">
+                <param name="error">403</param>
+            </result>
+            
+            <result name="error">/WEB-INF/jsp/error.jsp</result>      
+        </global-results>
+                
+     </package>
+     
+     <!-- ============================================================== Package public ============================================================== -->
+     <package name="public" extends="base">
+     
+        <default-interceptor-ref name="baseStack" />
+     
+		<!-- Action par défaut -->
+    	<default-action-ref name="index" />
+    	
+             <!-- Action "index" -->
+        <action name="index">
+            <result>/WEB-INF/jsp/other/index.jsp</result>
+        </action>
+		
+     </package>
+     
+     <!-- ============================================================== Package privé ============================================================== -->
+      <package name="private" extends="base">
+      
+      	<!-- Pile d'interceptor par defaut pour le package private (composition dans le package 'base') -->
+      	<!-- Permet de restreindre les action du package au utilisateur connecté -->
+      	<default-interceptor-ref name="authenticatedStack" />
+     
+     </package>
+    
+    
+</struts>

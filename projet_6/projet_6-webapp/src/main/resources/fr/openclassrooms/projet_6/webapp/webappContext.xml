@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+            
+            
+	<!-- ============================================ Actions =========================================== -->	
+	<!-- ========================= Les ids sont utilisé dans les actions (param: class) dans struts.xml ======================== -->	
+    <bean id="gestionPretAction" class="fr.openclassrooms.projet_6.webapp.action.GestionPretAction">
+    	<property name="managerFactory" ref="managerFactory" />
+    </bean>
+    <bean id="gestionSiteAction" class="fr.openclassrooms.projet_6.webapp.action.GestionSiteAction">
+    	<property name="managerFactory" ref="managerFactory" />
+    </bean>
+    <bean id="gestionTopoAction" class="fr.openclassrooms.projet_6.webapp.action.GestionTopoAction">
+    	<property name="managerFactory" ref="managerFactory" />
+    </bean>
+    <bean id="gestionUtilisateurAction" class="fr.openclassrooms.projet_6.webapp.action.GestionUtilisateurAction">
+    	<property name="managerFactory" ref="managerFactory" />
+    </bean>  
+    
+    <!-- =========================================== Interceptors =========================================== -->
+    <!-- Interceptor id utilisé dans struts.xml -->
+    <bean id="authentificationInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor" /> 
+    
+    <!-- Interceptor id utilisé dans struts.xml -->
+    <bean id="encodingInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor" />  
+     
+</beans>
