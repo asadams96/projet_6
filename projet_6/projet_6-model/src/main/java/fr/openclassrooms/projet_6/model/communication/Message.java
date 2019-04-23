@@ -2,7 +2,7 @@ package fr.openclassrooms.projet_6.model.communication;
 
 import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
-public abstract class Message {
+public class Message {
 	
 	private int idMessage;
 	private String date;

@@ -7,6 +7,7 @@ public class TamponProprietaireTopo {
 	
 	private Utilisateur proprietaire;
 	private Topo topo;
+	private int quantite;
 	
 	
 	public Utilisateur getProprietaire() {
@@ -20,5 +21,11 @@ public class TamponProprietaireTopo {
 	}
 	public void setTopo(Topo topo) {
 		this.topo = topo;
+	}
+	public int getQuantite() {
+		return quantite;
+	}
+	public void setQuantite(int quantite) {
+		this.quantite = quantite;
 	}
 }

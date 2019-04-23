@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+            
+            
+    <!-- ============================================== Resource JNDI ==============================================  -->
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" >
+    	<property name="jndiName" value="java:comp/env/jdbc/DB_P6" />
+    </bean>
+            
+    <!-- ========================================= NamedParameterJdbcTemplate  & MapSqlParameterSource======================================= -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >
+    	<constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
+    </bean>
+    <bean id="params" class="org.springframework.jdbc.core.namedparam.MapSqlParameterSource" />
+       
+	<!-- =================================================== Abstract Dao ================================================= -->
+	<bean id="abstractDao" abstract="true">
+		<property name="jdbcTemplate" ref="jdbcTemplate" /> 
+		<property name="params" ref="params" />
+	</bean>
+
+	<!-- =================================================== Déclaration des RowMapper ================================================= -->
+	<bean id="messageRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.MessageRM" />
+	<bean id="messagePretRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.MessagePretRM" />
+	<bean id="commentaireSiteRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.CommentaireSiteRM" />
+	<bean id="commentaireTopoRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.CommentaireTopoRM" />
+	
+	<bean id="tamponProprietaireTopoRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.liaison.TamponProprietaireTopoRM" />
+	<bean id="tamponSiteTopoRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.liaison.TamponSiteTopoRM" />
+	
+	<bean id="pretRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.pret.PretRM" />
+	
+	<bean id="siteRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.site.SiteRM" />
+	<bean id="secteurRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.site.SecteurRM" />
+	<bean id="voieRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.site.VoieRM" />
+	
+	<bean id="topoRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.topo.TopoRM" />
+	
+	<bean id="utilisateurRM" class="fr.openclassrooms.projet_6.consumer.impl.rowmapper.utilisateur.UtilisateurRM" />
+	
+	<!-- =================================================== Déclaration des DAO ================================================= -->
+	<bean id="messageDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.communication.MessageDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="messageRM" />
+	</bean>
+	<bean id="messagePretDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.communication.MessagePretDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="messagePretRM" />
+	</bean>
+	<bean id="commentaireSiteDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.communication.CommentaireSiteDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="commentaireSiteRM" />
+	</bean>
+	<bean id="commentaireTopoDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.communication.CommentaireTopoDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="commentaireTopoRM" />
+	</bean>
+	
+	<bean id="tamponProprietaireTopoDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="tamponProprietaireTopoRM" />
+	</bean>
+	<bean id="tamponSiteTopoDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponSiteTopoDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="tamponSiteTopoRM" />
+	</bean>
+	
+	<bean id="pretDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.pret.PretDaoImpl" parent="abstractDao">
+		<property name="rowMapper" ref="pretRM" />
+	</bean>
+	
+	<bean id="siteDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.SiteDaoImpl" parent="abstractDao">
+		<property name="siteRM" />
+	</bean>
+	<bean id="secteurDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl" parent="abstractDao">
+		<property name="secteurRM" />
+	</bean>
+	<bean id="voieDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.VoieDaoImpl" parent="abstractDao">
+		<property name="voieRM" />
+	</bean>
+	
+	<bean id="topoDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl" parent="abstractDao">
+		<property name="topoRM" />
+	</bean>
+	
+	<bean id="utilisateurDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.utilisateur.UtilisateurDaoImpl" parent="abstractDao">
+		<property name="utilisateurRM" />
+	</bean>
+	
+	
+	<!-- ========================================================== DaoFactory ================================================== -->
+    <bean id="daoFactory" class="fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl">
+        <property name="messageDao" ref="messageDao"/>
+        <property name="messagePretDao" ref="messagePretDao"/>
+        <property name="commentaireSiteDao" ref="commentaireSiteDao"/>
+		<property name="commentaireTopoDao" ref="commentaireTopoDao"/>
+		
+        <property name="tamponSiteTopoDao" ref="tamponSiteTopoDao"/>
+        <property name="tamponProprietaireTopo" ref="tamponProprietaireTopo"/>
+        
+		<property name="pretDao" ref="pretDao"/>
+		
+        <property name="siteDao" ref="siteDao"/>
+        <property name="secteurDao" ref="secteurDao"/>
+		<property name="voieDao" ref="voieDao"/>
+		
+        <property name="topoDao" ref="topoDao"/>
+        <property name="utilisateurDao" ref="utilisateurDao"/>
+    </bean>
+         
+</beans>
