@@ -94,7 +94,7 @@
 		<property name="commentaireTopoDao" ref="commentaireTopoDao"/>
 		
         <property name="tamponSiteTopoDao" ref="tamponSiteTopoDao"/>
-        <property name="tamponProprietaireTopo" ref="tamponProprietaireTopo"/>
+        <property name="tamponProprietaireTopoDao" ref="tamponProprietaireTopoDao"/>
         
 		<property name="pretDao" ref="pretDao"/>
 		
