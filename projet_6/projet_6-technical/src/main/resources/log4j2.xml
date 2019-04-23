@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <!-- ===== Appenders ===== -->
+    <Appenders>
+        <!-- == Sortie sur la console == -->
+        <Console name="STDOUT">
+        	<!-- PatternLayout => 
+        		%d => date (format en) / %-5level => level du log / %t => info sur la connexion? / 
+        		%c => chemin de la classe ou est le log/ %m => le message / %n => retour à la ligne
+        	-->
+            <PatternLayout pattern="[%d] {%-5level} [%t] %c : %m%n"/>
+        </Console>
+    </Appenders>
+
+    <!-- ===== Loggers ===== -->
+    <Loggers>
+        <!-- == Logger pour Struts == -->
+        <Logger name="com.opensymphony.xwork2" level="warn">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+        <Logger name="org.apache.struts2" level="warn">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+        <!-- == Logger pour l'application == -->
+        <Logger name="fr.openclassrooms.projet_6" level="debug" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+
+
+        <!-- == Logger de base == -->
+        
+        <!-- Regle le level de tous les autres systemes de log qui peuvent etre inclus dans les differents framework
+        	 Comme on peut le voir plus haut, on peut tout de même regler un autre level pour des Loggers spécifique si on le souhaite 
+        -->
+        <Root level="warn">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        
+        
+  		<!-- 
+			Le niveau de trace est croissant : 
+	
+			debug => msg de debogage
+
+			info => msg d'information
+
+			warn => msg d'avertissement
+
+			error => msg d'erreur
+
+			fatal => msg d'erreur fatale
+	
+			Si le level est reglé sur "warn" (par exemple), tous les logs warn / error / fatal seront affichés	 
+  		-->
+    </Loggers>
+</Configuration>
+
