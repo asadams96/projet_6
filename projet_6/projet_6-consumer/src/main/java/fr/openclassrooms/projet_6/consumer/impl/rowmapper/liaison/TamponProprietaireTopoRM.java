@@ -2,22 +2,44 @@ package fr.openclassrooms.projet_6.consumer.impl.rowmapper.liaison;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class TamponProprietaireTopoRM implements RowMapper<Map<String, Integer>> {
+import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl;
+import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
+import fr.openclassrooms.projet_6.model.topo.Topo;
+import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
+
+
+/**
+ * <p>RowMapper de la classe 'TamponProprietaireTopo'</p>
+ * <p>Permet de stocker les informations de la table public.tampon_proprietaire_topo</p>
+ * 
+ * @see TamponProprietaireTopoRM#mapRow(ResultSet, int)
+ * @see TamponProprietaireTopoDaoImpl#setRowMapper(RowMapper)
+ * @see DaoFactoryImpl
+ * @see TamponProprietaireTopo
+ * @see RowMapper
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
+public class TamponProprietaireTopoRM implements RowMapper<TamponProprietaireTopo> {
+
+	
+	
 	@Override
-	public Map<String, Integer> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public TamponProprietaireTopo mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		TamponProprietaireTopo tampon = new TamponProprietaireTopo();
 		
-		map.put("idProprietaire", rs.getInt("id_proprietaire"));
-		map.put("idTopo", rs.getInt("id_topo"));
-		map.put("quantite", rs.getInt("quantite"));
-		
-		return map;
+		tampon.setProprietaire(new Utilisateur(rs.getInt("id_proprietaire")));
+		tampon.setTopo(new Topo(rs.getInt("id_topo")));
+		tampon.setQuantite(rs.getInt("quantite"));
+				
+		return tampon;
 	}
 }

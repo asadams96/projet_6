@@ -5,6 +5,10 @@
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
             
+    <!-- ====================================== Creation bean ResourcesBundle ====================================== -->
+    <!-- <bean id="resourcesBundle" class="fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle" /> -->
+    <bean id="resourcesBundle" class="fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle" />
+    
             
 	<!-- ============================================ Actions =========================================== -->	
 	<!-- ========================= Les ids sont utilisé dans les actions (param: class) dans struts.xml ======================== -->	
@@ -14,8 +18,9 @@
     <bean id="gestionSiteAction" class="fr.openclassrooms.projet_6.webapp.action.GestionSiteAction">
     	<property name="managerFactory" ref="managerFactory" />
     </bean>
-    <bean id="gestionTopoAction" class="fr.openclassrooms.projet_6.webapp.action.GestionTopoAction">
+    <bean id="gestionTopoAction" class="fr.openclassrooms.projet_6.webapp.action.GestionTopoAction" scope="prototype">
     	<property name="managerFactory" ref="managerFactory" />
+    	<property name="resourcesBundle" ref="resourcesBundle" />
     </bean>
     <bean id="gestionUtilisateurAction" class="fr.openclassrooms.projet_6.webapp.action.GestionUtilisateurAction">
     	<property name="managerFactory" ref="managerFactory" />
@@ -23,9 +28,12 @@
     
     <!-- =========================================== Interceptors =========================================== -->
     <!-- Interceptor id utilisé dans struts.xml -->
-    <bean id="authentificationInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor" /> 
+    <bean id="authentificationInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor">
+    	<property name="managerFactory" ref="managerFactory" />
+    </bean> 
     
     <!-- Interceptor id utilisé dans struts.xml -->
-    <bean id="encodingInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor" />  
+    <bean id="encodingInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor" />
+    
      
 </beans>

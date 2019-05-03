@@ -1,16 +1,65 @@
 package fr.openclassrooms.projet_6.consumer.impl.dao.pret;
 
-import java.util.Map;
-
 import org.springframework.jdbc.core.RowMapper;
 
+import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.pret.PretDao;
+import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
+import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl;
+import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
+import fr.openclassrooms.projet_6.model.pret.Pret;
+import fr.openclassrooms.projet_6.model.site.Secteur;
 
-public class PretDaoImpl implements PretDao {
+/**
+ * <p>Implémentation de l'interface PretDao</p>
+ * <p>Effectue les actions qui lui sont destinés en interagissant avec une base de donnée</p>
+ * 
+ * @see PretDao
+ * @see DaoFactory#getPretDao()
+ * @see DaoFactory#setPretDao(PretDao)
+ * @see DaoFactoryImpl#getPretDao()
+ * @see DaoFactoryImpl#setPretDao(PretDao)
+ * @see Pret
+ * @see RowMapper
+ * @see PretRM
+ * @see AbstractDao
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
+public class PretDaoImpl extends AbstractDao implements PretDao {
 	
-	private RowMapper<Map<String, Object>> rowMapper;
+	
+	
+	/**
+	 * <p>
+	 * 	Construit une instance de la classe Pret suite à une lecture 
+	 * 	de ligne complète de la table public.pret en base de donnée
+	 * </p>
+	 * 
+	 * @see RowMapper
+	 * @see Pret
+	 * @see PretDaoImpl#setRowMapper(RowMapper)
+	 * @see PretRM
+	 */
+	private RowMapper<Pret> rowMapper;
 
-	public void setRowMapper(RowMapper<Map<String, Object>> rowMapper) {
+	
+	
+	/**
+	 * <p>Setter du paramètre 'rowMapper' utilisé par spring lors de l'injection</p>
+	 * 
+	 * @param rowMapper L'instance du RowMapper injecté
+	 * 
+	 * @see RowMapper
+	 * @see Pret
+	 * @see PretDaoImpl#rowMapper
+	 * @see PretRM
+	 */
+	public void setRowMapper(RowMapper<Pret> rowMapper) {
 		this.rowMapper = rowMapper;
 	}
 }

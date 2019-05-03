@@ -5,9 +5,7 @@
 </head>
 <body>
 	<s:include value="../_include/body_header.jsp" />
-		
-		
-	
+
 	<s:include value="../_include/body_footer.jsp" />
 </body>
 </html>

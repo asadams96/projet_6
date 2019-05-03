@@ -2,30 +2,50 @@ package fr.openclassrooms.projet_6.consumer.impl.rowmapper.site;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class VoieRM implements RowMapper<Map<String, Object>> {
+import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.site.VoieDaoImpl;
+import fr.openclassrooms.projet_6.model.site.Voie;
 
+
+
+/**
+ * <p>RowMapper de la classe 'Voie'</p>
+ * <p>Permet de stocker les informations de la table public.voie</p>
+ * 
+ * @see VoieRM#mapRow(ResultSet, int)
+ * @see VoieDaoImpl#setRowMapper(RowMapper)
+ * @see DaoFactoryImpl
+ * @see Voie
+ * @see RowMapper
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
+public class VoieRM implements RowMapper<Voie> {
+
+	
+	
 	@Override
-	public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public Voie mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Voie voie = new Voie();
 		
-		map.put("idVoie", rs.getInt("id_voie"));
-		map.put("numero", rs.getInt("numero"));
-		map.put("nom", rs.getString("nom"));
-		map.put("cotation", rs.getString("cotation"));
-		map.put("longueur", rs.getString("longueur"));
-		map.put("hauteur", rs.getString("hauteur"));
-		map.put("nbrPoint", rs.getString("nbr_point"));
-		map.put("typePoint", rs.getString("type_point"));
-		map.put("remarque", rs.getString("remarque"));
-		map.put("idSecteur", rs.getInt("id_secteur"));
+		voie.setIdVoie(rs.getInt("id_voie"));
+		voie.setNumero(rs.getInt("numero"));
+		voie.setNom(rs.getString("nom"));
+		voie.setCotation(rs.getString("cotation"));
+		voie.setLongueur(rs.getString("longueur"));
+		voie.setHauteur(rs.getString("hauteur"));
+		voie.setNbrPoint(rs.getString("nbr_point"));
+		voie.setTypePoint(rs.getString("type_point"));
+		voie.setRemarque(rs.getString("remarque"));
+		voie.setIdSecteur(rs.getInt("id_secteur"));
 		
-		return map;
+		return voie;
 	}
 
 }

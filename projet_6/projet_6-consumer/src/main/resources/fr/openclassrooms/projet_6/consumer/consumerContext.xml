@@ -15,12 +15,10 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >
     	<constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
-    <bean id="params" class="org.springframework.jdbc.core.namedparam.MapSqlParameterSource" />
        
 	<!-- =================================================== Abstract Dao ================================================= -->
 	<bean id="abstractDao" abstract="true">
 		<property name="jdbcTemplate" ref="jdbcTemplate" /> 
-		<property name="params" ref="params" />
 	</bean>
 
 	<!-- =================================================== Déclaration des RowMapper ================================================= -->
@@ -68,21 +66,21 @@
 	</bean>
 	
 	<bean id="siteDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.SiteDaoImpl" parent="abstractDao">
-		<property name="siteRM" />
+		<property name="rowMapper" ref="siteRM" />
 	</bean>
 	<bean id="secteurDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl" parent="abstractDao">
-		<property name="secteurRM" />
+		<property name="rowMapper" ref="secteurRM" />
 	</bean>
 	<bean id="voieDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.site.VoieDaoImpl" parent="abstractDao">
-		<property name="voieRM" />
+		<property name="rowMapper" ref="voieRM" />
 	</bean>
 	
 	<bean id="topoDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl" parent="abstractDao">
-		<property name="topoRM" />
+		<property name="rowMapper" ref="topoRM" />
 	</bean>
 	
 	<bean id="utilisateurDao" class="fr.openclassrooms.projet_6.consumer.impl.dao.utilisateur.UtilisateurDaoImpl" parent="abstractDao">
-		<property name="utilisateurRM" />
+		<property name="rowMapper" ref="utilisateurRM" />
 	</bean>
 	
 	

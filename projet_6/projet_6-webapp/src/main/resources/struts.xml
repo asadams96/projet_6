@@ -27,7 +27,7 @@
                 <param name="error">403</param>
             </result>
             
-            <result name="error">/WEB-INF/jsp/error.jsp</result>      
+            <result name="error">/WEB-INF/jsp/other/error.jsp</result>      
         </global-results>
                 
      </package>
@@ -44,7 +44,32 @@
         <action name="index">
             <result>/WEB-INF/jsp/other/index.jsp</result>
         </action>
-		
+        
+     <!-- ====================================== GestionTopoAction ===================================== -->
+        
+        <!-- Action permettant d'afficher la liste des topos -->
+        <action name="topo_list"
+        		class="gestionTopoAction"
+        		method="doList">
+        	<result>/WEB-INF/jsp/topo/list-topo.jsp</result>
+        </action>
+        
+        
+        <!-- Action permettant d'afficher les détails d'un topo -->
+        <action name="topo_detail"
+        		class="gestionTopoAction"
+        		method="doDetail">
+        	
+        	<!-- Interceptor necessaire dans le cas ou on arrive sur cette page suite à une redirection (ex :deposer commentaire)  -->	
+        	<interceptor-ref name="baseStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+   		 	</interceptor-ref>
+    
+        	<result name="success">/WEB-INF/jsp/topo/topo.jsp</result>
+        	
+        </action>
+        
      </package>
      
      <!-- ============================================================== Package privé ============================================================== -->
@@ -54,6 +79,76 @@
       	<!-- Permet de restreindre les action du package au utilisateur connecté -->
       	<default-interceptor-ref name="authenticatedStack" />
      
+     <!-- ====================================== GestionTopoAction ===================================== -->
+     	<!-- Action permettant d'afficher la bibliotheque de l'utilisateur -->
+		<action name="library"
+        		class="gestionTopoAction"
+        		method="doLibrary">
+        		
+        	<interceptor-ref name="authenticatedStack" />
+    	 	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+    		</interceptor-ref>	
+        		
+        	<result name="success">/WEB-INF/jsp/topo/bibliotheque.jsp</result>
+        </action>
+     
+     	<!-- Action permettant d'ajouter un topo à la bibliotheque de l'utilisateur -->
+		<action name="add_library"
+        		class="gestionTopoAction"
+        		method="doAddLibrary">
+        		
+        	<interceptor-ref name="authenticatedStack" />
+    	 	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+    		</interceptor-ref>	
+        		
+        	<result name ="success" type="redirectAction">library</result>
+        	
+        	<result name ="input" type="redirectAction">
+        		<param name="actionName">topo_detail</param>
+        		<param name="idTopo">${idTopo}</param>
+    		</result>
+        </action>
+        
+        
+        <!-- Action permettant de supprimer un topo de la bibliotheque de l'utilisateur -->
+		<action name="remove_library"
+        		class="gestionTopoAction"
+        		method="doRemoveLibrary">
+        		
+        	<interceptor-ref name="authenticatedStack" />
+    	 	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+    		</interceptor-ref>
+    		
+        	<result name="success" type="redirectAction">library</result>
+        	<result name="input" type="redirectAction">library</result>
+        </action>
+        
+        
+        <!-- Action permettant d'ajouter un commentaire de topo -->        
+        <action name="topo_comment"
+        		class="gestionTopoAction"
+        		method="doAddComment">
+        	
+        	<!-- Interceptor necessaire en cas de succes (redirection = securité) pour stocker le nouveau commentaire en session  -->
+			<interceptor-ref name="authenticatedStack" />
+    	 	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+    		</interceptor-ref>
+    
+        	<result name= "success" type="redirectAction">
+        		<param name="actionName">topo_detail</param>
+        		<param name="idTopo">${idTopo}</param>
+    		</result>
+    		<result name= "input" type="redirectAction">
+        		<param name="actionName">topo_detail</param>
+        		<param name="idTopo">${idTopo}</param>
+    		</result>
+        </action>
+        
+        
      </package>
     
     

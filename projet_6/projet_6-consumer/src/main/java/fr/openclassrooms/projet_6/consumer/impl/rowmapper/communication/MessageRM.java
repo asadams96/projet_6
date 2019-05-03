@@ -2,24 +2,51 @@ package fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class MessageRM implements RowMapper<Map<String, Object>> {
+import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.communication.MessageDaoImpl;
+import fr.openclassrooms.projet_6.model.communication.Message;
+import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
+
+
+/**
+ * <p>RowMapper de la classe 'Message'</p>
+ * <p>Permet de stocker les informations de la table public.message</p>
+ * 
+ * @see MessageRM#mapRow(ResultSet, int)
+ * @see MessageDaoImpl#setRowMapper(RowMapper)
+ * @see DaoFactoryImpl
+ * @see Message
+ * @see RowMapper
+ * @see Utilisateur
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
+public class MessageRM implements RowMapper<Message> {
+
+	
+	
 	@Override
-	public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
 	 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Message message = new Message();
 		
-		map.put("idMessage", rs.getInt("id_message"));
-		map.put("date", rs.getString("date"));
-		map.put("contenu", rs.getString("contenu"));
-		map.put("idAuteur", rs.getInt("id_auteur"));
+		message.setIdMessage(rs.getInt("id_message"));
+		message.setContenu(rs.getString("contenu"));
+		message.setAuteur(new Utilisateur(rs.getInt("id_auteur")));
 		
-	    return map;
+		Date date = rs.getTimestamp("date");
+		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
+		message.setDate(formater.format(date));
+		
+	    return message;
 	}
 
 }

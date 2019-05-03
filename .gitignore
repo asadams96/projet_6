@@ -24,3 +24,6 @@ projet_6/projet_6-webapp/target/
 # Package Files
 *.jar
 *.war
+
+# Server
+Servers/

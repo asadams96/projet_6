@@ -7,16 +7,40 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class CommentaireSiteRM implements RowMapper<Map<String, Integer>> {
+import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.communication.CommentaireSiteDaoImpl;
+import fr.openclassrooms.projet_6.model.communication.CommentaireSite;
+import fr.openclassrooms.projet_6.model.site.Site;
 
+
+
+/**
+ * <p>RowMapper de la classe 'CommentaireSite'</p>
+ * <p>Permet de stocker les informations de la table public.commentaire_site</p>
+ * 
+ * @see CommentaireSiteRM#mapRow(ResultSet, int)
+ * @see CommentaireSiteDaoImpl#setRowMapper(RowMapper)
+ * @see DaoFactoryImpl
+ * @see CommentaireSite
+ * @see RowMapper
+ * @see Site
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
+public class CommentaireSiteRM implements RowMapper<CommentaireSite> {
+
+	
+	
 	@Override
-	public Map<String, Integer> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public CommentaireSite mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		CommentaireSite commentaire = new CommentaireSite();
 		
-		map.put("idMessage", rs.getInt("id_message"));
-		map.put("idSite", rs.getInt("id_site"));
-		
-		return map;
+		commentaire.setIdMessage(rs.getInt("id_message"));
+		commentaire.setSite(new Site(rs.getInt("id_site")));
+				
+		return commentaire;
 	}
 }
