@@ -4,6 +4,7 @@ import java.sql.Types;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.utilisateur.UtilisateurDao;
@@ -30,6 +31,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see UtilisateurRM
  * @see RowMapper
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda

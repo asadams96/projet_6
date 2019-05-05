@@ -1,16 +1,14 @@
 package fr.openclassrooms.projet_6.consumer.impl.dao.pret;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.pret.PretDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl;
-import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
+import fr.openclassrooms.projet_6.consumer.impl.rowmapper.pret.PretRM;
 import fr.openclassrooms.projet_6.model.pret.Pret;
-import fr.openclassrooms.projet_6.model.site.Secteur;
 
 /**
  * <p>Implémentation de l'interface PretDao</p>
@@ -25,6 +23,7 @@ import fr.openclassrooms.projet_6.model.site.Secteur;
  * @see RowMapper
  * @see PretRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.site.SiteDao;
@@ -24,9 +25,11 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * @see SiteDao#getSite(int)
  * @see SiteDao#getIdsSiteByLocalisation(String)
  * @see SiteDao#checkLocalisation(int)
+ * @see SiteDao#getList()
  * @see SiteDaoImpl#getSite(int)
  * @see SiteDaoImpl#getIdsSiteByLocalisation(String)
  * @see SiteDaoImpl#checkLocalisation(int)
+ * @see SiteDaoImpl#getList()
  * @see DaoFactory#getSiteDao()
  * @see DaoFactory#setSiteDao(SiteDao)
  * @see DaoFactoryImpl#getSiteDao()
@@ -37,6 +40,7 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * @see RowMapper
  * @see SiteRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -143,6 +147,23 @@ public class SiteDaoImpl extends AbstractDao implements SiteDao {
 		return vResult;
 	}
 
+	
+	
+	/**
+	 * @see SiteDao#getList()
+	 * @see Site
+	 */
+	@Override
+	public List<Site> getList() throws Exception {
+		
+		List<Site> listSite = null;
+		
+		String sql = "SELECT * FROM public.site";
+		listSite = this.getJdbcTemplate().query(sql, this.rowMapper);
+		
+		return listSite;
+		
+	}
 	
 
 }

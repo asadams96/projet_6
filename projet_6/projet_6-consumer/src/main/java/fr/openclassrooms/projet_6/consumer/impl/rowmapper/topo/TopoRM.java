@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.utilisateur.UtilisateurDaoImpl;
 import fr.openclassrooms.projet_6.model.topo.Topo;
-import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
 
 

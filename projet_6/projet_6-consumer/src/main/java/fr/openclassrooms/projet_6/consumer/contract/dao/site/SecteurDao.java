@@ -15,10 +15,12 @@ import fr.openclassrooms.projet_6.model.site.Secteur;
  * @see SecteurDao#getIdsSiteByType(String)
  * @see SecteurDao#checkType(int)
  * @see SecteurDao#checkOrientation(int)
+ * @see SecteurDao#getList(String)
  * @see SecteurDaoImpl#getIdsSiteByOrientation(String)
  * @see SecteurDaoImpl#getIdsSiteByType(String)
  * @see SecteurDaoImpl#checkType(int)
  * @see SecteurDaoImpl#checkOrientation(int)
+ * @see SecteurDaoImpl#getList(String)
  * @see DaoFactory#getSecteurDao()
  * @see DaoFactory#setSecteurDao(SecteurDao)
  * @see DaoFactoryImpl#getSecteurDao()
@@ -66,7 +68,7 @@ public interface SecteurDao {
 	/**
 	 * <p>Récupère la liste des types associé à l'id de topo</p>
 	 * 
-	 * @param idSite Clef étrangère (fk) de la table public.secteur permettant d'identifier les secteurs d'un site.
+	 * @param idSite L'identifiant d'un site
 	 * @return Une liste de type.
 	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus.
 	 * 
@@ -81,7 +83,7 @@ public interface SecteurDao {
 	/**
 	 * <p>Récupère la liste des orientations associé à l'id de topo</p>
 	 * 
-	 * @param idSite Clef étrangère (fk) de la table public.secteur permettant d'identifier les secteurs d'un site.
+	 * @param idSite L'identifiant d'un site
 	 * @return Une liste d'orientation.
 	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus.
 	 * 
@@ -90,5 +92,18 @@ public interface SecteurDao {
 	 * @see Site
 	 */
 	List<String> checkOrientation(int idSite) throws Exception;
+
+
+	/**
+	 * <p>Récupère la liste des secteurs en fonction d'un identifiant de site</p>
+	 * 
+	 * @param idSite L'identifiant d'un site
+	 * @return Une liste d'instance de la classe 'Secteur'
+	 * 
+	 * @see SecteurDaoImpl#getList(String)
+	 * @see Secteur
+	 * @see Site
+	 */
+	List<Secteur> getList(String idSite);
 
 }

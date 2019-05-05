@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.liaison.TamponSiteTopoDao;
@@ -31,6 +32,7 @@ import fr.openclassrooms.projet_6.model.liaison.TamponSiteTopo;
  * @see RowMapper
  * @see TamponSiteTopoRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -99,17 +101,17 @@ public class TamponSiteTopoDaoImpl extends AbstractDao implements TamponSiteTopo
 	 * @see TamponSiteTopo
 	 */
 	@Override
-	public List<Integer> getTamponBySite(int idSite) throws Exception {
+	public List<TamponSiteTopo> getTamponBySite(int idSite) throws Exception {
 		
-		List<Integer> tampons = null;
+		List<TamponSiteTopo> tampons = null;
 		
 		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
-			String sql = "SELECT id_topo FROM public.tampon_site_topo WHERE id_site = :id_site";
+			String sql = "SELECT * FROM public.tampon_site_topo WHERE id_site = :id_site";
 			
 			MapSqlParameterSource map = new MapSqlParameterSource();
 			map.addValue("id_site", idSite, Types.INTEGER);
 			
-			tampons = getJdbcTemplate().queryForList(sql, map, Integer.class);
+			tampons = getJdbcTemplate().query(sql, map, this.rowMapper);
 		}
 		
 		return tampons;

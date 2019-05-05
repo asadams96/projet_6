@@ -14,6 +14,7 @@
 
 <!-- =========================== Menu de navigation ===========================-->
 <nav>
+	<s:a action="site_list">Consulter les sites</s:a>
 	<s:a action="topo_list">Consulter les topos</s:a>
 	<s:if test="#session.utilisateur"><s:a action="library">Ma bibliothèque</s:a></s:if>
 	<s:a action="#">#</s:a>

@@ -362,7 +362,7 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	
 	
 	/**
-	 * <p>Setter servant à la vue 'bibliotheque.jsp' pour définir l'objet 'contenu'</p>
+	 * <p>Setter servant à la vue 'topo.jsp' pour définir l'objet 'contenu'</p>
 	 * 
 	 * @see GestionTopoAction#contenu
 	 */
@@ -521,7 +521,6 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			this.addActionError("Une erreur s'est produit, veuillez reessayer plus tard...");
 			vResult = ActionSupport.ERROR;
-			e.printStackTrace();
 		}
 		
 		return vResult;

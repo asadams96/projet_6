@@ -16,9 +16,11 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  * @see TopoManager#getTopo(String)
  * @see TopoManager#getCheckTopo(String)
  * @see TopoManager#getList(String, String, String)
+ * @see TopoManager#getList(String)
  * @see TopoManagerImpl#getTopo(String)
  * @see TopoManagerImpl#getCheckTopo(String)
  * @see TopoManagerImpl#getList(String, String, String)
+ * @see TopoManagerImpl#getList(String)
  * @see ManagerFactory#getTopoManager()
  * @see ManagerFactory#setTopoManager(TopoManager)
  * @see ManagerFactoryImpl#getTopoManager()
@@ -81,4 +83,17 @@ public interface TopoManager {
 	 */
 	List<Topo> getList(String critereType, String critereOrientation, String critereLocalisation) throws Exception;
 
+	
+	
+	/**
+	 * <p>Récupère à partir d'un identifiant de topo, la liste des topos qui lui sont associés</p>
+	 * 
+	 * @param idTopo L'identifiant d'un topo
+	 * @return Une liste d'instance de la classe 'Topo'
+	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
+	 * 
+	 * @see TopoManagerImpl#getList(String)
+	 * @see Topo
+	 */
+	List<Topo> getList(String idTopo) throws Exception;
 }

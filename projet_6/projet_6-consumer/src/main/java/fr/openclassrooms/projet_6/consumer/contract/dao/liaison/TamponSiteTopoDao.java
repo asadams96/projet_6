@@ -47,12 +47,12 @@ public interface TamponSiteTopoDao {
 	 * <p>Récupère une liste d'id de topo en fonction d'un id de site</p>
 	 * 
 	 * @param idSite Un id de site
-	 * @return Une liste d'Integer 
+	 * @return Une liste de TamponSiteTopo 
 	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
 	 * 
 	 * @see TamponSiteTopoDaoImpl#getTamponBySite(int)
 	 * @see TamponSiteTopo
 	 */
-	List<Integer> getTamponBySite(int idSite) throws Exception;
+	List<TamponSiteTopo> getTamponBySite(int idSite) throws Exception;
 
 }

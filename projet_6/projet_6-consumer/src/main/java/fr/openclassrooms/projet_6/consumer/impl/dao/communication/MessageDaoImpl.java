@@ -5,12 +5,13 @@ import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.communication.MessageDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.MessagePretRM;
+import fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.MessageRM;
 import fr.openclassrooms.projet_6.model.communication.CommentaireSite;
 import fr.openclassrooms.projet_6.model.communication.CommentaireTopo;
 import fr.openclassrooms.projet_6.model.communication.Message;
@@ -28,6 +29,7 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
  * @see MessageDaoImpl#getMessage(int)
  * @see MessageDaoImpl#addMessage(int, String, Date)
  * @see MessageDaoImpl#getIdMessage(int, Date)
+ * @see MessageDaoImpl#contenuValidation(String)
  * @see DaoFactory#getMessageDao()
  * @see DaoFactory#setMessageDao(MessageDao)
  * @see DaoFactoryImpl#getMessageDao()
@@ -39,6 +41,7 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
  * @see RowMapper
  * @see MessageRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda

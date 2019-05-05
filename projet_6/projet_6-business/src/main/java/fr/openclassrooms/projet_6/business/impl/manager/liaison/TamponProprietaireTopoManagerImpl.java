@@ -22,6 +22,7 @@ import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
  * @see TamponProprietaireTopoManagerImpl#getBibliotheque(int)
  * @see TamponProprietaireTopoManagerImpl#addTampon(int, String, int)
  * @see TamponProprietaireTopoManagerImpl#removeTampon(int, String, int)
+ * @see TamponProprietaireTopoManagerImpl#getCheckQuantity(int, String, int)
  * @see ManagerFactory#getTamponProprietaireTopoManager()
  * @see ManagerFactory#setTamponProprietaireTopoManager(TamponProprietaireTopoManager)
  * @see ManagerFactoryImpl#getTamponProprietaireTopoManager()

@@ -3,16 +3,15 @@ package fr.openclassrooms.projet_6.consumer.impl.dao.communication;
 import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.communication.MessagePretDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.MessagePretRM;
 import fr.openclassrooms.projet_6.model.communication.Message;
 import fr.openclassrooms.projet_6.model.communication.MessagePret;
-import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
 
 
 
@@ -31,6 +30,7 @@ import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
  * @see Message
  * @see RowMapper
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda

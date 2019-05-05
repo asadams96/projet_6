@@ -4,7 +4,6 @@ import java.util.List;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.dao.site.SiteDaoImpl;
 import fr.openclassrooms.projet_6.model.site.Secteur;
 import fr.openclassrooms.projet_6.model.site.Site;
@@ -16,9 +15,11 @@ import fr.openclassrooms.projet_6.model.site.Site;
  * @see SiteDao#getSite(int)
  * @see SiteDao#getIdsSiteByLocalisation(String)
  * @see SiteDao#checkLocalisation(int)
+ * @see SiteDao#getList()
  * @see SiteDaoImpl#getSite(int)
  * @see SiteDaoImpl#getIdsSiteByLocalisation(String)
  * @see SiteDaoImpl#checkLocalisation(int)
+ * @see SiteDaoImpl#getList()
  * @see DaoFactory#getSiteDao()
  * @see DaoFactory#setSiteDao(SiteDao)
  * @see DaoFactoryImpl#getSiteDao()
@@ -74,5 +75,17 @@ public interface SiteDao {
 	 */
 	String checkLocalisation(int idSite) throws Exception;
 
+	
+	
+	/**
+	 * <p>Récupère le catalogue de topo sans critère de recherche</p>
+	 * 
+	 * @return Une liste de le Topo
+	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
+	 * 
+	 * @see SiteDaoImpl#getList()
+	 * @see Site
+	 */
+	List<Site> getList() throws Exception;
 
 }

@@ -5,6 +5,9 @@
 <struts>
 
 	<!-- ============================================================== Package de base ============================================================== -->
+    
+    
+    
     <package name="base" abstract="true" extends="struts-default">
        <interceptors>
         	<interceptor name="authentification" class="authentificationInterceptor" />
@@ -21,6 +24,9 @@
             </interceptor-stack>
         </interceptors>
         
+        
+        
+        
         <!-- Results globaux -->
         <global-results>
         	<result name="error-forbidden" type="httpheader">
@@ -33,6 +39,9 @@
      </package>
      
      <!-- ============================================================== Package public ============================================================== -->
+     
+     
+     
      <package name="public" extends="base">
      
         <default-interceptor-ref name="baseStack" />
@@ -45,7 +54,11 @@
             <result>/WEB-INF/jsp/other/index.jsp</result>
         </action>
         
+        
+        
      <!-- ====================================== GestionTopoAction ===================================== -->
+        
+        
         
         <!-- Action permettant d'afficher la liste des topos -->
         <action name="topo_list"
@@ -70,16 +83,56 @@
         	
         </action>
         
+        
+        
+        <!-- ====================================== GestionSiteAction ===================================== -->
+        
+        
+        <!-- Action permettant d'afficher la liste des sites -->
+        <action name="site_list"
+        		class="gestionSiteAction"
+        		method="doList">
+        	<result>/WEB-INF/jsp/site/list-site.jsp</result>
+        </action>
+        
+        
+        
+        <!-- Action permettant d'afficher les détails d'un site -->
+        <action name="site_detail"
+        		class="gestionSiteAction"
+        		method="doDetail">
+        	
+        	<!-- Interceptor necessaire dans le cas ou on arrive sur cette page suite à une redirection (ex :deposer commentaire)  -->	
+        	<interceptor-ref name="baseStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+   		 	</interceptor-ref>
+    
+        	<result name="success">/WEB-INF/jsp/site/site.jsp</result>
+        	
+        </action>
+        
+        
+        
+        
      </package>
      
      <!-- ============================================================== Package privé ============================================================== -->
+      
+      
+      
       <package name="private" extends="base">
       
       	<!-- Pile d'interceptor par defaut pour le package private (composition dans le package 'base') -->
       	<!-- Permet de restreindre les action du package au utilisateur connecté -->
       	<default-interceptor-ref name="authenticatedStack" />
      
+     
+     
      <!-- ====================================== GestionTopoAction ===================================== -->
+     
+     
+     
      	<!-- Action permettant d'afficher la bibliotheque de l'utilisateur -->
 		<action name="library"
         		class="gestionTopoAction"
@@ -92,6 +145,8 @@
         		
         	<result name="success">/WEB-INF/jsp/topo/bibliotheque.jsp</result>
         </action>
+     
+     
      
      	<!-- Action permettant d'ajouter un topo à la bibliotheque de l'utilisateur -->
 		<action name="add_library"
@@ -112,6 +167,7 @@
         </action>
         
         
+        
         <!-- Action permettant de supprimer un topo de la bibliotheque de l'utilisateur -->
 		<action name="remove_library"
         		class="gestionTopoAction"
@@ -125,6 +181,7 @@
         	<result name="success" type="redirectAction">library</result>
         	<result name="input" type="redirectAction">library</result>
         </action>
+        
         
         
         <!-- Action permettant d'ajouter un commentaire de topo -->        
@@ -145,6 +202,32 @@
     		<result name= "input" type="redirectAction">
         		<param name="actionName">topo_detail</param>
         		<param name="idTopo">${idTopo}</param>
+    		</result>
+        </action>
+        
+        
+        
+        <!-- ====================================== GestionSiteAction ===================================== -->
+        
+        
+         <!-- Action permettant d'ajouter un commentaire de site -->        
+        <action name="site_comment"
+        		class="gestionSiteAction"
+        		method="doAddComment">
+        	
+        	<!-- Interceptor necessaire en cas de succes (redirection = securité) pour stocker le nouveau commentaire en session  -->
+			<interceptor-ref name="authenticatedStack" />
+    	 	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+    		</interceptor-ref>
+    
+        	<result name= "success" type="redirectAction">
+        		<param name="actionName">site_detail</param>
+        		<param name="idSite">${idSite}</param>
+    		</result>
+    		<result name= "input" type="redirectAction">
+        		<param name="actionName">site_detail</param>
+        		<param name="idSite">${idSite}</param>
     		</result>
         </action>
         

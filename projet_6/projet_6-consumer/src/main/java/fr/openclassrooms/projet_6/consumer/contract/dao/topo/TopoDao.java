@@ -4,9 +4,7 @@ import java.util.List;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.site.SiteDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl;
-import fr.openclassrooms.projet_6.model.site.Site;
 import fr.openclassrooms.projet_6.model.topo.Topo;
 
 /**
@@ -43,6 +41,8 @@ public interface TopoDao {
 	 */
 	Topo getTopo(String idTopo) throws Exception;
 
+	
+	
 	/**
 	 * <p>Récupère le catalogue de topo sans critère de recherche</p>
 	 * 

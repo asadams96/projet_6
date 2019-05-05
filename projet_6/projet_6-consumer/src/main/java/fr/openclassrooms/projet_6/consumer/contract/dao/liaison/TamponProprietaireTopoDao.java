@@ -5,9 +5,7 @@ import java.util.List;
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
 import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponProprietaireTopoDaoImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.liaison.TamponSiteTopoDaoImpl;
 import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
-import fr.openclassrooms.projet_6.model.liaison.TamponSiteTopo;
 
 /**
  * <p>Interface de la couche consumer</p>

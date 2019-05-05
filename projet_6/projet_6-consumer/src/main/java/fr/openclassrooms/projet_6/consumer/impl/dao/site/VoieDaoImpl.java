@@ -1,6 +1,11 @@
 package fr.openclassrooms.projet_6.consumer.impl.dao.site;
 
+import java.sql.Types;
+import java.util.List;
+
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.site.VoieDao;
@@ -15,7 +20,9 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * <p>Effectue les actions qui lui sont destinés en interagissant avec une base de donnée</p>
  * 
  *
- * @see VoieDao
+ *
+ * @see VoieDao#getVoies(int)
+ * @see VoieDaoImpl#getVoies(int)
  * @see DaoFactory#getVoieDao()
  * @see DaoFactory#setVoieDao(VoieDao)
  * @see DaoFactoryImpl#getVoieDao()
@@ -26,6 +33,7 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * @see RowMapper
  * @see VoieRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -62,5 +70,26 @@ public class VoieDaoImpl extends AbstractDao implements VoieDao {
 	 */
 	public void setRowMapper(RowMapper<Voie> rowMapper) {
 		this.rowMapper = rowMapper;
+	}
+
+
+	/**
+	 * @see VoieDao#getVoies(int)
+	 * @see Secteur
+	 */
+	@Override
+	public List<Voie> getVoies(int idSecteur) throws Exception {
+
+		List<Voie> listVoie = null;
+		
+		if(String.valueOf(idSecteur) != null && !String.valueOf(idSecteur).isEmpty()) {
+			
+			String sql = "SELECT * FROM public.voie WHERE id_secteur = :id_secteur";
+			MapSqlParameterSource map = new MapSqlParameterSource();
+			map.addValue("id_secteur", idSecteur, Types.INTEGER);
+			listVoie = this.getJdbcTemplate().query(sql, map, this.rowMapper);
+		}
+		
+		return listVoie;
 	}
 }

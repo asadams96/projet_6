@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.site.SecteurDao;
@@ -35,6 +36,7 @@ import fr.openclassrooms.projet_6.model.site.Site;
  * @see Secteur
  * @see RowMapper
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -165,5 +167,29 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 		}
 		
 		return vResult;
+	}
+
+
+
+	/**
+	 * @see SecteurDaoImpl#getList(String)
+	 * @see Secteur
+	 * @see Site
+	 */
+	@Override
+	public List<Secteur> getList(String idSite) {
+
+		List<Secteur> listSecteur = null;
+		
+		if(idSite != null && !idSite.isEmpty()) {
+			
+			String sql = "SELECT * FROM public.secteur WHERE id_site = :id_site";
+			MapSqlParameterSource map = new MapSqlParameterSource();
+			map.addValue("id_site", idSite, Types.INTEGER);
+			
+			listSecteur = this.getJdbcTemplate().query(sql, map, this.rowMapper);
+		}
+		
+		return listSecteur;
 	}
 }

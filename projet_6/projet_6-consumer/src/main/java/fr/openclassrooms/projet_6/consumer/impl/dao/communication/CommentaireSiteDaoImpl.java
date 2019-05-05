@@ -1,8 +1,12 @@
 package fr.openclassrooms.projet_6.consumer.impl.dao.communication;
 
+import java.sql.Types;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.communication.CommentaireSiteDao;
@@ -16,7 +20,10 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * <p>Implémentation de l'interface CommentaireSiteDao</p>
  * <p>Effectue les actions qui lui sont destinés en interagissant avec une base de donnée</p>
  * 
- * @see CommentaireSiteDao
+ * @see CommentaireSiteDaoImpl#getIdsComment(String)
+ * @see CommentaireSiteDaoImpl#addComment(int, String)
+ * @see CommentaireSiteDao#getIdsComment(String)
+ * @see CommentaireSiteDao#addComment(int, String)
  * @see DaoFactory#getCommentaireSiteDao()
  * @see DaoFactory#setCommentaireSiteDao(CommentaireSiteDao)
  * @see DaoFactoryImpl#getCommentaireSiteDao()
@@ -26,6 +33,7 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * @see RowMapper
  * @see CommentaireSiteRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -61,5 +69,57 @@ public class CommentaireSiteDaoImpl extends AbstractDao implements CommentaireSi
 	 */
 	public void setRowMapper(RowMapper<Map<String, Integer>> rowMapper) {
 		this.rowMapper = rowMapper;
+	}
+	
+	
+	
+	/**
+	 * @see CommentaireSiteDao#getIdsComment(String)
+	 * @see CommentaireSite
+	 */
+	@Override
+	public List<Integer> getIdsComment(String idSite) throws Exception {
+		
+		List<Integer> listIdsComment = null;
+		
+		if(idSite != null && !idSite.isEmpty()) {
+			
+			String sql = "SELECT id_message FROM public.commentaire_site WHERE id_site = :id_site";
+			MapSqlParameterSource map = new MapSqlParameterSource();
+			map.addValue("id_site", idSite, Types.INTEGER);
+			
+			listIdsComment = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
+			
+		}
+		
+		return listIdsComment;
+	}
+	
+	
+	
+	/**
+	 * @see CommentaireSiteDao#addComment(int, String)
+	 * @see CommentaireSite
+	 */
+	@Override
+	public boolean addComment(int idNewMessage, String idSite) throws Exception {
+		
+		Boolean vResult = false;
+		
+			if(String.valueOf(idNewMessage) != null && !String.valueOf(idNewMessage).isEmpty() 
+																	&& idSite != null && !idSite.isEmpty()) {
+				
+				String sql = "INSERT INTO public.commentaire_site (id_message, id_site) "
+								+ "VALUES (:id_message, :id_site)";
+				
+				MapSqlParameterSource map = new MapSqlParameterSource();
+				map.addValue("id_message", idNewMessage, Types.INTEGER);
+				map.addValue("id_site", idSite, Types.INTEGER);
+				
+				this.getJdbcTemplate().update(sql, map);
+				vResult = true;
+			}
+		
+		return vResult;
 	}
 }

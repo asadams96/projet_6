@@ -2,9 +2,6 @@ package fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.jdbc.core.RowMapper;
 
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;

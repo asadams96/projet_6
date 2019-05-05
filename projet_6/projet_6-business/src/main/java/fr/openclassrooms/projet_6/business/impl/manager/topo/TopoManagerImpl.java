@@ -7,6 +7,7 @@ import fr.openclassrooms.projet_6.business.contract.manager.ManagerFactory;
 import fr.openclassrooms.projet_6.business.contract.manager.topo.TopoManager;
 import fr.openclassrooms.projet_6.business.impl.manager.AbstractManager;
 import fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl;
+import fr.openclassrooms.projet_6.model.liaison.TamponSiteTopo;
 import fr.openclassrooms.projet_6.model.topo.Topo;
 
 
@@ -18,6 +19,8 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  * @see TopoManager#getTopo(String)
  * @see TopoManager#getCheckTopo(String)
  * @see TopoManager#getList(String, String, String)
+ * @see TopoManager#getList(String)
+ * @see TopoManagerImpl#getList(String)
  * @see TopoManagerImpl#getTopo(String)
  * @see TopoManagerImpl#getCheckTopo(String)
  * @see TopoManagerImpl#getList(String, String, String)
@@ -61,26 +64,25 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager {
 			listTopo = new ArrayList<Topo>();
 		}
 		
-		if(critereType != null && !critereType.isEmpty()) {
+		if(critereLocalisation != null && !critereLocalisation.isEmpty()) {
 			
-				listIdsSite = this.getDaoFactory().getSecteurDao().getIdsSiteByType(critereType);	
-				
+			listIdsSite = this.getDaoFactory().getSiteDao().getIdsSiteByLocalisation(critereLocalisation);
+			
+			
 		}
 		if(critereOrientation != null && !critereOrientation.isEmpty() && listIdsSite != null) {
+		
+			listIdsSiteProvisoire = this.getDaoFactory().getSecteurDao().getIdsSiteByOrientation(critereOrientation);	
 			
-				listIdsSiteProvisoire = this.getDaoFactory().getSecteurDao().getIdsSiteByOrientation(critereOrientation);	
-				
-				if(listIdsSiteProvisoire != null) {
-					for(int idSite : listIdsSiteProvisoire) {
-						if(!listIdsSite.contains(idSite)) {
-							listIdsSite.add(idSite);
-						}
+			if(listIdsSiteProvisoire != null) {
+				for(int idSite : listIdsSiteProvisoire) {
+					if(!listIdsSite.contains(idSite)) {
+						listIdsSite.add(idSite);
 					}
 				}
+			}
 		}
-		if(critereLocalisation != null && !critereLocalisation.isEmpty() && listIdsSite != null) {
-
-				listIdsSiteProvisoire = this.getDaoFactory().getSiteDao().getIdsSiteByLocalisation(critereLocalisation);	
+		if(critereType != null && !critereType.isEmpty() && listIdsSite != null) {	
 				
 				if(listIdsSiteProvisoire != null) {
 					for(int idSite : listIdsSiteProvisoire) {
@@ -111,15 +113,15 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager {
 				}
 			}
 			
-			List<Integer> listIdsTopoProvisoir = new ArrayList<Integer>();
-			List<Integer> listIdsTopo = new ArrayList<Integer>();
+			List<TamponSiteTopo> listTamponProvisoir = new ArrayList<TamponSiteTopo>();
+			List<TamponSiteTopo> listTampon = new ArrayList<TamponSiteTopo>();
 				
 			for(int idSite : newListIdsSite) {
-				listIdsTopoProvisoir = this.getDaoFactory().getTamponSiteTopoDao().getTamponBySite(idSite);
+				listTamponProvisoir = this.getDaoFactory().getTamponSiteTopoDao().getTamponBySite(idSite);
 					
-				for(int idTopo : listIdsTopoProvisoir) {
-					if(!listIdsTopo.contains(idTopo)) {
-						listIdsTopo.add(idTopo);
+				for(TamponSiteTopo tampon : listTamponProvisoir) {
+					if(!listTampon.contains(tampon)) {
+						listTampon.add(tampon);
 					}
 				}
 			}
@@ -130,11 +132,10 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager {
 			 * 
 			 * Sinon => Voir derniere condition avant le return
 			 */
-			if(!listIdsTopo.isEmpty()) {
-				listTopo = new ArrayList<Topo>();
+			if(!listTampon.isEmpty()) {
 					
-				for(int idTopo : listIdsTopo) {
-					listTopo.add(this.getDaoFactory().getTopoDao().getTopo(String.valueOf(idTopo)));
+				for(TamponSiteTopo tampon : listTampon) {
+					listTopo.add(this.getDaoFactory().getTopoDao().getTopo(String.valueOf(tampon.getTopo().getIdTopo())));
 				}
 			}
 		}
@@ -190,6 +191,31 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager {
 			vResult = true;
 		}
 		return vResult;
+	}
+	
+	
+	
+	/**
+	 * @see TopoManager#getList(String)
+	 * @see Topo
+	 */
+	@Override
+	public List<Topo> getList(String idSite) throws Exception {
+		
+		List<Topo> listTopo = null;
+		
+		if(idSite != null && !idSite.isEmpty()) {
+			List<TamponSiteTopo> tampons = this.getDaoFactory().getTamponSiteTopoDao().getTamponBySite(Integer.valueOf(idSite));
+			
+			listTopo = new ArrayList<Topo>();
+			
+			for(TamponSiteTopo tampon : tampons) {
+				
+				listTopo.add(this.getDaoFactory().getTopoDao().getTopo(String.valueOf(tampon.getTopo().getIdTopo())));
+			}
+		}
+		
+		return listTopo;
 	}
 
 }

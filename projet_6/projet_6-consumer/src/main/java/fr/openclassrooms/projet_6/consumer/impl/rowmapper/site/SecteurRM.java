@@ -35,6 +35,7 @@ public class SecteurRM implements RowMapper<Secteur> {
 		Secteur secteur = new Secteur();
 		
 		secteur.setIdSecteur(rs.getInt("id_secteur"));
+		secteur.setNumero(rs.getInt("numero"));
 		secteur.setNom(rs.getString("nom"));
 		secteur.setType(rs.getString("type"));
 		secteur.setOrientation(rs.getString("orientation"));

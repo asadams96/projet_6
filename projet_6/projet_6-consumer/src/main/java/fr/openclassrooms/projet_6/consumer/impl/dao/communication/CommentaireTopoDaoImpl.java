@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.communication.CommentaireTopoDao;
@@ -33,6 +34,7 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * @see RowMapper
  * @see CommentaireTopoRM
  * @see AbstractDao
+ * @see NamedParameterJdbcTemplate
  * 
  * 
  * @version 1.0

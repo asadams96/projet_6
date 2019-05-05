@@ -1,8 +1,6 @@
 package fr.openclassrooms.projet_6.webapp.interceptor;
 
 
-import java.util.Map;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 

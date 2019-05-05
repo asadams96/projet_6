@@ -16,6 +16,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * <p>Est composé:</p>
  * <u>
  * 		<li>d'un identifiant => idSecteur</li>
+ * 		<li>d'un numero de secteur => numero</li>
  * 		<li>d'un nom => nom</li>
  * 		<li>d'un type => type</li>
  * 		<li>d'une orientation => orientation</li>
@@ -27,6 +28,9 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see Secteur#idSecteur
  * @see Secteur#getIdSecteur()
  * @see Secteur#setIdSecteur(int)
+ * @see Secteur#numero
+ * @see Secteur#getNumero()
+ * @see Secteur#setNumero(int)
  * @see Secteur#nom
  * @see Secteur#getNom()
  * @see Secteur#setNom(String)
@@ -73,6 +77,15 @@ public class Secteur {
 	 */
 	private int idSecteur;
 	
+	
+	
+	/**
+	 * <p>Représente le numero d'un secteur</p>
+	 * 
+	 * @see Secteur#getNumeroSecteur()
+	 * @see Secteur#setNumeroSecteur(int)
+	 */
+	private int numero;
 	
 	
 	/**
@@ -150,15 +163,15 @@ public class Secteur {
 	
 	
 	/**
-	 * <p>Setter du parametre 'idSecteur'</p>
+	 * <p>Getter du parametre 'numero'</p>
 	 * 
-	 * @param idVoie L'identifiant d'un secteur
+	 * @return Le numero d'un secteur
 	 * 
-	 * @see Secteur#idSecteur
-	 * @see Secteur#getIdSecteur()
+	 * @see Secteur#numero
+	 * @see Secteur#setNumero(int)
 	 */
-	public void setIdSecteur(int idSecteur) {
-		this.idSecteur = idSecteur;
+	public int getNumero() {
+		return numero;
 	}
 	
 	
@@ -178,20 +191,6 @@ public class Secteur {
 	
 	
 	/**
-	 * <p>Setter du parametre 'nom'</p>
-	 * 
-	 * @param nom Le nom d'un secteur
-	 * 
-	 * @see Secteur#nom
-	 * @see Secteur#getNom()
-	 */
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-	
-	
-	
-	/**
 	 * <p>Getter du parametre 'type'</p>
 	 * 
 	 * @return Le type d'un secteur
@@ -202,23 +201,9 @@ public class Secteur {
 	public String getType() {
 		return type;
 	}
-	
-	
-	
-	/**
-	 * <p>Setter du parametre 'type'</p>
-	 * 
-	 * @param type Le type d'un secteur
-	 * 
-	 * @see Secteur#type
-	 * @see Secteur#getType()
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	
-	
+
+
+
 	/**
 	 * <p>Getter du parametre 'orientation'</p>
 	 * 
@@ -229,6 +214,104 @@ public class Secteur {
 	 */
 	public String getOrientation() {
 		return orientation;
+	}
+
+
+
+	/**
+	 * <p>Getter du parametre 'info'</p>
+	 * 
+	 * @return Les informations d'un secteur
+	 * 
+	 * @see Secteur#info
+	 * @see Secteur#setInfo(String)
+	 */
+	public String getInfo() {
+		return info;
+	}
+
+
+
+	/**
+	 * <p>Getter du parametre 'urlImage'</p>
+	 * 
+	 * @return Le chemin vers l'image d'un secteur
+	 * 
+	 * @see Secteur#urlImage
+	 * @see Secteur#setUrlImage(String)
+	 */
+	public String getUrlImage() {
+		return urlImage;
+	}
+
+
+
+	/**
+	 * <p>Getter du parametre 'idSite'</p>
+	 * 
+	 * @return L'identifiant du site d'un secteur
+	 * 
+	 * @see Secteur#idSite
+	 * @see Secteur#setIdSite(int)
+	 */
+	public int getIdSite() {
+		return idSite;
+	}
+
+
+
+	/**
+	 * <p>Setter du parametre 'idSecteur'</p>
+	 * 
+	 * @param idSecteur L'identifiant d'un secteur
+	 * 
+	 * @see Secteur#idSecteur
+	 * @see Secteur#getIdSecteur()
+	 */
+	public void setIdSecteur(int idSecteur) {
+		this.idSecteur = idSecteur;
+	}
+	
+	
+	
+	/**
+	 * <p>Setter du parametre 'numero'</p>
+	 * 
+	 * @param numero Le numero d'un secteur
+	 * 
+	 * @see Secteur#numero
+	 * @see Secteur#getNumero()
+	 */
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
+
+
+
+	/**
+	 * <p>Setter du parametre 'nom'</p>
+	 * 
+	 * @param nom Le nom d'un secteur
+	 * 
+	 * @see Secteur#nom
+	 * @see Secteur#getNom()
+	 */
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+
+
+	/**
+	 * <p>Setter du parametre 'type'</p>
+	 * 
+	 * @param type Le type d'un secteur
+	 * 
+	 * @see Secteur#type
+	 * @see Secteur#getType()
+	 */
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	
@@ -248,20 +331,6 @@ public class Secteur {
 	
 	
 	/**
-	 * <p>Getter du parametre 'info'</p>
-	 * 
-	 * @return Les informations d'un secteur
-	 * 
-	 * @see Secteur#info
-	 * @see Secteur#setInfo(String)
-	 */
-	public String getInfo() {
-		return info;
-	}
-	
-	
-	
-	/**
 	 * <p>Setter du parametre 'info'</p>
 	 * 
 	 * @param info Les informations d'un secteur
@@ -276,20 +345,6 @@ public class Secteur {
 	
 	
 	/**
-	 * <p>Getter du parametre 'urlImage'</p>
-	 * 
-	 * @return Le chemin vers l'image d'un secteur
-	 * 
-	 * @see Secteur#urlImage
-	 * @see Secteur#setUrlImage(String)
-	 */
-	public String getUrlImage() {
-		return urlImage;
-	}
-	
-	
-	
-	/**
 	 * <p>Setter du parametre 'urlImage'</p>
 	 * 
 	 * @param urlImage Le chemin vers l'image d'un secteur
@@ -299,20 +354,6 @@ public class Secteur {
 	 */
 	public void setUrlImage(String urlImage) {
 		this.urlImage = urlImage;
-	}
-	
-	
-	
-	/**
-	 * <p>Getter du parametre 'idSite'</p>
-	 * 
-	 * @return L'identifiant du site d'un secteur
-	 * 
-	 * @see Secteur#idSite
-	 * @see Secteur#setIdSite(int)
-	 */
-	public int getIdSite() {
-		return idSite;
 	}
 	
 	
