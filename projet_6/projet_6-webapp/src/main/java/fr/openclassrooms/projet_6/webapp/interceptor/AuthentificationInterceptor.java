@@ -81,7 +81,7 @@ public class AuthentificationInterceptor extends AbstractInterceptor {
 			Utilisateur utilisateur = (Utilisateur) invocation.getInvocationContext().getSession().get("utilisateur");
 			
 			if(utilisateur != null) {
-				if(managerFactory.getUtilisateurManager().getCheckCoupleIdPass(utilisateur)) {
+				if(managerFactory.getUtilisateurManager().getCheckUtilisateur(utilisateur)) {
 					
 					vResult = invocation.invoke();
 				}

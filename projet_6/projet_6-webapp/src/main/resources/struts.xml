@@ -4,63 +4,97 @@
         "http://struts.apache.org/dtds/struts-2.5.dtd">
 <struts>
 
-	<!-- ============================================================== Package de base ============================================================== -->
+
+
+	<!-- ============================================================== PACKAGE DE BASE ============================================================== -->
     
     
     
     <package name="base" abstract="true" extends="struts-default">
+    	
+    	
+    	
+       <!-- ======================================= Interceptors ======================================= -->
+       
        <interceptors>
+       		<!-- ==================== Déclaration des interceptors personnalisés ==================== -->
+       		
         	<interceptor name="authentification" class="authentificationInterceptor" />
+        	<interceptor name="index" class="indexInterceptor" />
         	<interceptor name="encoding" class="encodingInterceptor" />
         	
-        	<interceptor-stack name="baseStack">
+        	
+        	<!-- ==================== Définition des piles d'interceptor ==================== -->
+        	
+        	<interceptor-stack name="publicStack">
                 <interceptor-ref name="encoding" />
                 <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+            
+        	<interceptor-stack name="halfPrivateStack">
+                <interceptor-ref name="index" />
+                <interceptor-ref name="publicStack" />
             </interceptor-stack>
         	
             <interceptor-stack name="authenticatedStack">
                 <interceptor-ref name="authentification" />
-                <interceptor-ref name="baseStack" />
+                <interceptor-ref name="publicStack" />
             </interceptor-stack>
         </interceptors>
         
         
         
         
-        <!-- Results globaux -->
+        <!-- ====================================== Results globaux ======================================-->
+        
         <global-results>
         	<result name="error-forbidden" type="httpheader">
                 <param name="error">403</param>
             </result>
+            
+            <result name="error-forbidden-bis" type= "redirectAction" >
+                <param name="actionName">index</param>
+            </result>   
             
             <result name="error">/WEB-INF/jsp/other/error.jsp</result>      
         </global-results>
                 
      </package>
      
-     <!-- ============================================================== Package public ============================================================== -->
      
      
      
+     <!-- ============================================================== PACKAGE PUBLIC ============================================================== -->
+     
+     
+     
+     <!-- ==============================================  Définition du package ============================================== -->
      <package name="public" extends="base">
      
-        <default-interceptor-ref name="baseStack" />
      
-		<!-- Action par défaut -->
+     
+     	<!-- ======================= Définition de PUBLIC STACK, l'interceptor de reference du package ======================= -->
+        <default-interceptor-ref name="publicStack" />
+     
+     
+     
+		<!-- ========================== Définition de l'action par défaut ============================== -->
     	<default-action-ref name="index" />
     	
-             <!-- Action "index" -->
+    	
+    	
+        <!-- ===========================  Action INDEX" ============================== -->
         <action name="index">
             <result>/WEB-INF/jsp/other/index.jsp</result>
         </action>
         
         
         
-     <!-- ====================================== GestionTopoAction ===================================== -->
+     <!-- ===================================================== GESTION TOPO ACTION ==================================================== -->
         
         
         
-        <!-- Action permettant d'afficher la liste des topos -->
+        <!-- =============== Action TOPO_LIST permettant d'afficher la liste des topos =============== -->
         <action name="topo_list"
         		class="gestionTopoAction"
         		method="doList">
@@ -68,13 +102,14 @@
         </action>
         
         
-        <!-- Action permettant d'afficher les détails d'un topo -->
+        
+        <!-- =============== Action TOPO_DETAIL permettant d'afficher les détails d'un topo =============== -->
         <action name="topo_detail"
         		class="gestionTopoAction"
         		method="doDetail">
         	
-        	<!-- Interceptor necessaire dans le cas ou on arrive sur cette page suite à une redirection (ex :deposer commentaire)  -->	
-        	<interceptor-ref name="baseStack" />
+        	<!-- Interceptor necessaire dans le cas ou on arrive sur cette page suite à une redirection (ex :deposer commentaire, input à l'ajout d'un topo)  -->	
+        	<interceptor-ref name="publicStack" />
         	<interceptor-ref name="store">
         		<param name="operationMode">RETRIEVE</param>
    		 	</interceptor-ref>
@@ -85,10 +120,10 @@
         
         
         
-        <!-- ====================================== GestionSiteAction ===================================== -->
+        <!-- ===================================================== GESTION SITE ACTION ==================================================== -->
         
         
-        <!-- Action permettant d'afficher la liste des sites -->
+        <!--  =============== Action SITE_LIST permettant d'afficher la liste des sites =============== -->
         <action name="site_list"
         		class="gestionSiteAction"
         		method="doList">
@@ -97,13 +132,13 @@
         
         
         
-        <!-- Action permettant d'afficher les détails d'un site -->
+        <!-- =============== Action SITE_DETAIL permettant d'afficher les détails d'un site =============== -->
         <action name="site_detail"
         		class="gestionSiteAction"
         		method="doDetail">
         	
         	<!-- Interceptor necessaire dans le cas ou on arrive sur cette page suite à une redirection (ex :deposer commentaire)  -->	
-        	<interceptor-ref name="baseStack" />
+        	<interceptor-ref name="publicStack" />
         	<interceptor-ref name="store">
         		<param name="operationMode">RETRIEVE</param>
    		 	</interceptor-ref>
@@ -114,30 +149,112 @@
         
         
         
+        <!-- ===================================================== GESTION UTILISATEUR ACTION ==================================================== -->
+                
+        
+        
+        <!-- =============== Action UTILISATEUR_DETAIL permettant d'afficher les détails d'un utilisateur =============== -->
+        <action name="utilisateur_detail"
+        		class="gestionUtilisateurAction"
+        		method="doDetail">
+        		
+        	<!-- Interceptor necessaire pour récupérer le message de succes de l'inscription, ou les entrées du champs mails et pseudo suite à un input -->	
+        	<interceptor-ref name="publicStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+   		 	</interceptor-ref>
+        		    		
+        	<result name="success">/WEB-INF/jsp/utilisateur/profil.jsp</result>
+        </action>
+        
+        
         
      </package>
      
-     <!-- ============================================================== Package privé ============================================================== -->
+     
+     
+     
+     
+     
+     <!-- ============================================================== PACKAGE SEMI-PRIVÉ ============================================================== -->
+     
+     
+     
+     <!-- ==============================================  Définition du package ============================================== -->
+     <package name="halfPrivate" extends="base">
+     
+     
+     
+     	<!-- ========================================== Définition de HALF STACK, l'interceptor de reference du package ================================ -->
+     	<default-interceptor-ref name="halfPrivateStack" />
+     	
+        
+           
+     	<!-- ===================================================== GESTION UTILISATEUR ACTION ==================================================== -->
+        
+        
+        
+        <!-- =============== Action INSCRIPTION permettant de s'inscrire =============== -->
+        <action name="inscription"
+        		class="gestionUtilisateurAction"
+        		method="doInscription">
+        	
+        	<!-- Interceptor necessaire pour stocker le message de succes de l'inscription (succes = redirection = securité)  -->	
+        	<interceptor-ref name="halfPrivateStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+    
+        	<result name="success" type="redirectAction">login</result>
+        	<result name="input">/WEB-INF/jsp/utilisateur/inscription.jsp</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action LOGIN permettant de se connecter =============== -->
+        <action name="login"
+        		class="gestionUtilisateurAction"
+        		method="doLogin">
+        		
+        	<!-- Interceptor necessaire pour récupérer le message de succes de l'inscription, ou les messages et entrées liés aux inputs -->	
+        	<interceptor-ref name="halfPrivateStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">index</result>
+        	<result name="input">/WEB-INF/jsp/utilisateur/connexion.jsp</result>
+        </action>
+     
+     
+     
+     </package>
+     
+     
+     
+     <!-- ============================================================== PACKAGE PRIVÉ ============================================================== -->
       
       
-      
+      <!-- ==============================================  Définition du package ============================================== -->
       <package name="private" extends="base">
       
-      	<!-- Pile d'interceptor par defaut pour le package private (composition dans le package 'base') -->
-      	<!-- Permet de restreindre les action du package au utilisateur connecté -->
+      
+      
+      	<!-- ======================= Définition de AUTHENTICATED STACK l'interceptor de reference du package ======================= -->
       	<default-interceptor-ref name="authenticatedStack" />
      
      
      
-     <!-- ====================================== GestionTopoAction ===================================== -->
+     <!-- ===================================================== GESTION TOPO ACTION ==================================================== -->
      
      
      
-     	<!-- Action permettant d'afficher la bibliotheque de l'utilisateur -->
+     	<!-- =============== Action LIBRARY permettant d'afficher la bibliotheque de l'utilisateur =============== -->
 		<action name="library"
         		class="gestionTopoAction"
         		method="doLibrary">
-        		
+        	
+        	<!-- Interceptor necessaire pour récupérer les messages et entrées liés aux inputs (ex: Retirer topo) -->	
         	<interceptor-ref name="authenticatedStack" />
     	 	<interceptor-ref name="store">
         		<param name="operationMode">RETRIEVE</param>
@@ -148,11 +265,12 @@
      
      
      
-     	<!-- Action permettant d'ajouter un topo à la bibliotheque de l'utilisateur -->
+     	<!-- =============== Action ADD_LIBRARY permettant d'ajouter un topo à la bibliotheque de l'utilisateur =============== -->
 		<action name="add_library"
         		class="gestionTopoAction"
         		method="doAddLibrary">
-        		
+        	
+        	<!-- Interceptor necessaire pour stocker l'id du topo et la quantité suite à (un input) une redirection obligatoire (action dans une action) -->		
         	<interceptor-ref name="authenticatedStack" />
     	 	<interceptor-ref name="store">
         		<param name="operationMode">STORE</param>
@@ -163,33 +281,38 @@
         	<result name ="input" type="redirectAction">
         		<param name="actionName">topo_detail</param>
         		<param name="idTopo">${idTopo}</param>
+        		<param name="quantiteTopo">${quantiteTopo}</param>
     		</result>
         </action>
         
         
         
-        <!-- Action permettant de supprimer un topo de la bibliotheque de l'utilisateur -->
+        <!-- =============== Action REMOVE_LIBRARY permettant de supprimer un topo de la bibliotheque de l'utilisateur =============== -->
 		<action name="remove_library"
         		class="gestionTopoAction"
         		method="doRemoveLibrary">
-        		
+        	
+        	<!-- Interceptor necessaire pour stocker la quantité suite à (un input) une redirection obligatoire (action dans une action) -->	
         	<interceptor-ref name="authenticatedStack" />
     	 	<interceptor-ref name="store">
         		<param name="operationMode">STORE</param>
     		</interceptor-ref>
     		
         	<result name="success" type="redirectAction">library</result>
-        	<result name="input" type="redirectAction">library</result>
+        	<result name ="input" type="redirectAction">
+        		<param name="actionName">library</param>
+        		<param name="quantiteTopo">${quantiteTopo}</param>
+    		</result>
         </action>
         
         
         
-        <!-- Action permettant d'ajouter un commentaire de topo -->        
+        <!-- =============== Action TOPO_COMMENT permettant d'ajouter un commentaire de topo =============== -->        
         <action name="topo_comment"
         		class="gestionTopoAction"
         		method="doAddComment">
         	
-        	<!-- Interceptor necessaire en cas de succes (redirection = securité) pour stocker le nouveau commentaire en session  -->
+        	<!-- Interceptor necessaire pour stocker l'id du topo (et le contenu => en fonction du result)=> redirection obligatoire (action dans une action et ecriture de donnée) -->
 			<interceptor-ref name="authenticatedStack" />
     	 	<interceptor-ref name="store">
         		<param name="operationMode">STORE</param>
@@ -202,20 +325,22 @@
     		<result name= "input" type="redirectAction">
         		<param name="actionName">topo_detail</param>
         		<param name="idTopo">${idTopo}</param>
+        		<param name="contenu">${contenu}</param>
     		</result>
         </action>
         
         
         
-        <!-- ====================================== GestionSiteAction ===================================== -->
+        <!-- ===================================================== GESTION SITE ACTION ==================================================== -->
         
         
-         <!-- Action permettant d'ajouter un commentaire de site -->        
+        
+         <!-- =============== Action SITE_COMMENT permettant d'ajouter un commentaire de site =============== -->        
         <action name="site_comment"
         		class="gestionSiteAction"
         		method="doAddComment">
         	
-        	<!-- Interceptor necessaire en cas de succes (redirection = securité) pour stocker le nouveau commentaire en session  -->
+        	<!-- Interceptor necessaire pour stocker l'id du site (et le contenu => en fonction du result)=> redirection obligatoire (action dans une action et ecriture de donnée) -->
 			<interceptor-ref name="authenticatedStack" />
     	 	<interceptor-ref name="store">
         		<param name="operationMode">STORE</param>
@@ -228,11 +353,120 @@
     		<result name= "input" type="redirectAction">
         		<param name="actionName">site_detail</param>
         		<param name="idSite">${idSite}</param>
+        		<param name="contenu">${contenu}</param>
     		</result>
         </action>
         
         
+        
+        <!-- ===================================================== GESTION UTILISATEUR ACTION ==================================================== -->
+        
+        
+        
+        <!-- =============== Action LOGOUT permettant de se déconnecter =============== -->
+        <action name="logout"
+        		class="gestionUtilisateurAction"
+        		method="doLogout">
+        	<result name="success" type="redirectAction">index</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action MODIFY_MAIL permettant de modifier l'adresse mail =============== -->
+        <action name="modify_mail"
+        		class="gestionUtilisateurAction"
+        		method="doModifyMail">
+        		
+        	<!-- Interceptor necessaire pour envoyer l'id l'utilisateur et les messages en cas de succes de la modification (et juste fieldError en input)   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+   		 	
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        </action>
+        
+        
+        <!-- =============== Action MODIFY_PSEUDO permettant de modifier le pseudo =============== -->
+        <action name="modify_pseudo"
+        		class="gestionUtilisateurAction"
+        		method="doModifyPseudo">
+        		
+        	<!-- Interceptor necessaire pour envoyer l'id l'utilisateur et les messages en cas de succes de la modification (et juste fieldError en input)   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+   		 	
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        </action>
+        
+        
+        <!-- =============== Action MODIFY_LOCALISATION permettant de modifier la localisation =============== -->
+        <action name="modify_localisation"
+        		class="gestionUtilisateurAction"
+        		method="doModifyLocalisation">
+        		
+        	<!-- Interceptor necessaire pour envoyer l'id l'utilisateur et les messages en cas de succes de la modification (et juste fieldError en input)   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+   		 	
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        </action>
+        
+        
+        <!-- =============== Action MODIFY_PASS permettant de modifier le mot de passe =============== -->
+        <action name="modify_pass"
+        		class="gestionUtilisateurAction"
+        		method="doModifyPass">
+        		
+        	<!-- Interceptor necessaire pour envoyer l'id l'utilisateur et les messages en cas de succes de la modification (et juste fieldError en input)   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+   		 	
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">utilisateur_detail</param>
+        		<param name="idUtilisateur">${idUtilisateur}</param>
+        	</result>
+        </action>
+        
+        
+        
      </package>
+    
     
     
 </struts>

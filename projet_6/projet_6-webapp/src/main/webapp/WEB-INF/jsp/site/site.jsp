@@ -17,9 +17,11 @@
 <body>
 	<s:include value="../_include/body_header.jsp" />
 
+
+
 	<!-- =========================== Présentation site ===========================-->
-	<h3><s:property value="site.nom" /></h3>
 	
+	<h3><s:property value="site.nom" /></h3>
 	<p>Localisation : <s:property value="site.localisation" /></p>
 	
 	<!-- image site -->
@@ -35,7 +37,9 @@
 	<s:property value="site.infoProximite" />
 	
 	
+	
 	<!-- =========================== Secteus et voies associés au site ===========================-->
+	
 	 <h4>Secteur associés</h4>
 	<ul>
 		<s:iterator value="secteurListVoie" status="status">
@@ -59,7 +63,9 @@
 	</ul>
 	
 	
+	
 	<!-- =========================== Topos associés au site ===========================-->
+	
 	<h4>Topos associés</h4>
 	<ul>
 		<s:iterator value="listTopo">
@@ -74,7 +80,9 @@
 	</ul>
 	
 	
+	
 	<!-- =========================== Commentaires associés au site ===========================-->
+	
 	<h4>Commentaires</h4>
 	<ul>
 		<s:iterator value="listCommentaire">
@@ -87,7 +95,9 @@
 	</ul>
 	
 	
+	
 	<!-- =========================== Si connecté => Possibilité d'ajout d'un commentaire ===========================-->
+	
 	<s:if test="#session.utilisateur">
 		<s:form action="site_comment">
 			<s:hidden name="idSite" value="%{ site.idSite }"/>

@@ -15,11 +15,112 @@ import fr.openclassrooms.projet_6.model.communication.CommentaireSite;
 import fr.openclassrooms.projet_6.model.communication.Message;
 import fr.openclassrooms.projet_6.model.site.Secteur;
 import fr.openclassrooms.projet_6.model.site.Site;
+import fr.openclassrooms.projet_6.model.site.Voie;
 import fr.openclassrooms.projet_6.model.topo.Topo;
 import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 import fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle;
+import fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor;
+import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
 
+
+
+/**
+ * <p>Classe action gérant la gestion des sites</p>
+ * 
+ * <p>Elle est implémenté de 3 actions :</p>
+ * <ul>
+ * 		<li>Afficher le catalogue de site (avec critères de recherche) => doList()</li>
+ * 		<li>Afficher la fiche d'un site => doDetail()</li>
+ * 		<li>Deposer un commentaire (sur une fiche de site) => doAddComment();</li>
+ * </ul>
+ * 
+ * <p>La méthode inputFormat(String) sert à formatter les saisis utilisateurs.</p>
+ * 
+ * <p>
+ * 	La méthode validation(String, int, int) sert à vérifier que le contenu du commentaire
+ * 	saisi par l'utilisateur respecte bien les contraintes défini dans cette même métode.
+ * </p>
+ * 
+ * 
+ * @see GestionSiteAction#doList()
+ * @see GestionSiteAction#doDetail()
+ * @see GestionSiteAction#doAddComment()
+ * @see GestionSiteAction#inputFormat(String)
+ * @see GestionSiteAction#validation(String, int, int)
+ * @see GestionSiteAction#MIN_CONTENU
+ * @see GestionSiteAction#MAX_CONTENU
+ * @see GestionSiteAction#request
+ * @see GestionSiteAction#managerFactory
+ * @see GestionSiteAction#resourcesBundle
+ * @see GestionSiteAction#contenu
+ * @see GestionSiteAction#listTopo
+ * @see GestionSiteAction#listSite
+ * @see GestionSiteAction#listCommentaire
+ * @see GestionSiteAction#criteresType
+ * @see GestionSiteAction#criteresOrientation
+ * @see GestionSiteAction#criteresLocalisation
+ * @see GestionSiteAction#Site
+ * @see GestionSiteAction#idSite
+ * @see GestionSiteAction#secteurListVoie
+ * @see GestionSiteAction#setServletRequest(HttpServletRequest)
+ * @see GestionSiteAction#setManagerFactory(ManagerFactory)
+ * @see GestionSiteAction#setResourcesBundle(ResourcesBundle)
+ * @see GestionSiteAction#setCriteresType(String)
+ * @see GestionSiteAction#setCriteresOrientation(String)
+ * @see GestionSiteAction#setCriteresLocalisation(String)
+ * @see GestionSiteAction#setContenu(String)
+ * @see GestionSiteAction#setIdSite(int)
+ * @see GestionSiteAction#getListTopo()
+ * @see GestionSiteAction#getListSite()
+ * @see GestionSiteAction#getListCommentaire()
+ * @see GestionSiteAction#getResourcesBundle()
+ * @see GestionSiteAction#getCriteresType()
+ * @see GestionSiteAction#getCriteresOrientation()
+ * @see GestionSiteAction#getCriteresLocalisation()
+ * @see GestionSiteAction#getIdSite()
+ * @see GestionSiteAction#getSite()
+ * @see GestionSiteAction#getSecteurListVoie()
+ * @see ResourcesBundle
+ * @see GestionPretAction
+ * @see GestionTopoAction
+ * @see GestionUtilisateurAction
+ * @see AuthentificationInterceptor
+ * @see EncodingInterceptor
+ * @see Topo
+ * @see Message
+ * @see Site
+ * @see CommentaireSite
+ * @see ManagerFactory
+ * @see HttpServletRequest
+ * @see ServletRequestAware
+ * @see ActionSupport
+ * 
+ * 
+ * @version 1.0
+ * @author Ayrton De Abreu Miranda
+ *
+ */
 public class GestionSiteAction extends ActionSupport implements ServletRequestAware {
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see GestionSiteAction#contenu
+	 * @see GestionSiteAction#validation(String, int, int)
+	 */
+	private final int MIN_CONTENU = 25;
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see GestionSiteAction#contenu
+	 * @see GestionSiteAction#validation(String, int, int)
+	 */
+	private final int MAX_CONTENU = 500;
 	
 	
 	
@@ -63,13 +164,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	
 	
-	// ------------------------ Elements en entrée ------------------------
+	// ------------------------ Elements en entrée et sortie------------------------
 	
 	
 	
 	/**
 	* <p>Objet servant à stocker le critère de type choisi par l'utilisateur</p>
 	* 
+	* @see GestionSiteAction#getCriteresType()
 	* @see GestionSiteAction#setCriteresType(String)
 	* @see GestionSiteAction#doList()
 	*/
@@ -80,6 +182,7 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	* <p>Objet servant à stocker le critère d'orientation choisi par l'utilisateur</p>
 	* 
+	* @see GestionSiteAction#getCriteresOrientation()
 	* @see GestionSiteAction#setCriteresOrientation(String)
 	* @see GestionSiteAction#doList()
 	*/
@@ -90,10 +193,33 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	* <p>Objet servant à stocker le critère de localisation choisi par l'utilisateur</p>
 	* 
+	* @see GestionSiteAction#getCriteresLocalisation()
 	* @see GestionSiteAction#setCriteresLocalisation(String)
 	* @see GestionSiteAction#doList()
 	*/
 	private String criteresLocalisation;
+	
+	
+	
+	/**
+	* <p>Object servant à stocker une identifiant de 'Site'</p>
+	* 
+	* @see GestionSiteAction#getIdSite()
+	* @see GestionSiteAction#setIdSite(int)
+	* @see GestionSiteAction#doDetail()
+	* @see Site
+	*/
+	private String idSite;
+	
+
+	
+	/**
+	 * <p>Objet servant à stocker le contenu du commentaire saisi par l'utilisateur</p>
+	 * 
+	 * @see GestionSiteAction#setContenu(String)
+	 * @see GestionSiteAction#doAddComment()
+	 */
+	private String contenu;
 		
 		
 		
@@ -109,17 +235,6 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	* @see Site
 	*/
 	private List<Site> listSite;
-		
-		
-	
-	/**
-	* <p>Object servant à stocker une identifiant de 'Site'</p>
-	* 
-	* @see GestionSiteAction#getIdSite()
-	* @see GestionSiteAction#doDetail()
-	* @see Site
-	*/
-	private String idSite;
 	
 	
 	
@@ -166,16 +281,6 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * @see Message
 	 */
 	private List<CommentaireSite> listCommentaire;
-	
-	
-	
-	/**
-	 * <p>Objet servant à stocker le contenu du commentaire saisi par l'utilisateur</p>
-	 * 
-	 * @see GestionSiteAction#setContenu(String)
-	 * @see GestionSiteAction#doAddComment()
-	 */
-	private String contenu;
 	
 	
 	
@@ -305,6 +410,39 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	
 	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresType' depuis la vue 'list-site.jsp'</p>
+	 * 
+	 * @see GestionSiteAction#criteresType
+	 */
+	public String getCriteresType() {
+		return criteresType;
+	}
+
+
+	
+	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresOrientation' depuis la vue 'list-site.jsp'</p>
+	 * 
+	 * @see GestionSiteAction#criteresOrientation
+	 */
+	public String getCriteresOrientation() {
+		return criteresOrientation;
+	}
+
+
+
+	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresLocalisation' depuis la vue 'list-site.jsp'</p>
+	 * 
+	 * @see GestionSiteAction#criteresLocalisation
+	 */
+	public String getCriteresLocalisation() {
+		return criteresLocalisation;
+	}
+
+
+
+	/**
 	 * <p>Getter permettant de récupérer l'objet 'listSite' depuis la vue 'list-site.jsp'</p>
 	 * 
 	 * @see GestionSiteAction#listSite
@@ -319,7 +457,7 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * <p>Getter permettant de récupérer l'objet 'idSite' depuis struts.xml</p>
 	 * <p>Plus precisement l'action, 'site_comment'</p>
 	 * 
-	 * @see GestionTopoAction#resourcesBundle
+	 * @see GestionSiteAction#resourcesBundle
 	 */
 	public String getIdSite() {
 		return idSite;
@@ -366,6 +504,19 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 */
 	public List<CommentaireSite> getListCommentaire() {
 		return listCommentaire;
+	}
+	
+	
+	
+	/**
+	 * <p>Permet à la vue 'site.jsp' de récupérer le champs 'contenu' après un input</p>
+	 * 
+	 * @return Le contenu du commentaire
+	 * 
+	 * @see GestionSiteAction#contenu
+	 */
+	public String getContenu() {
+		return contenu;
 	}
 	
 	
@@ -486,32 +637,33 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * @see GestionSiteAction#contenu
 	 * @see GestionSiteAction#request
 	 * @see GestionSiteAction#managerFactory
-	 * @see GestionSiteAction#contenuValidation(String)
+	 * @see GestionSiteAction#validation(String, int, int)
 	 */
 	public String doAddComment() {
-		String vResult = ActionSupport.SUCCESS;
+		String vResult = ActionSupport.ERROR;
 		
 		if(idSite != null && !idSite.isEmpty()) {
-			if(contenu != null && !contenu.isEmpty() && this.contenuValidation(contenu)) {
+			if(contenu != null && !contenu.isEmpty() && this.validation(contenu, MIN_CONTENU, MAX_CONTENU)) {
 				try {
 					int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
 					
 					if(managerFactory.getCommentaireSiteManager().addComment(idUtilisateur, idSite, contenu)) {
+						vResult = ActionSupport.SUCCESS;
 						this.addActionMessage("Le commentaire a été ajouté avec succès.");
 					}
+					else {
+						this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					}
 				}catch(Exception e) {
-					vResult = ActionSupport.ERROR;
-					e.printStackTrace();
 					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 				}
 			}
 			else {
 				vResult = ActionSupport.INPUT;
-				this.addFieldError("contenu", "Le commentaire doit etre compris entre 25 et 500 caractères.");
+				this.addFieldError("contenu", "Le commentaire doit etre compris entre "+MIN_CONTENU+" et "+MAX_CONTENU+" caractères.");
 			}
 		}
 		else {
-			vResult = ActionSupport.ERROR;
 			this.addActionError("Site inconnu, ajout de commentaire impossible");
 		}
 
@@ -521,28 +673,29 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	
 	/**
-	 * <p>Méthode servant à vérifier le contenu d'un commentaire<p>
+	 * <p>Méthode servant à vérifier les inputs<p>
 	 * 
 	 * <p>Il y a deux critères de validation :<p>
 	 * <ul>
-	 * 		<li>La taille minimal du champs de 25 caractères</li>
-	 * 		<li>La taille maximal du champs de 500 caractères (lié à l'espace alloué en BDD)</li>
+	 * 		<li>La taille minimal du champs</li>
+	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
 	 * </ul>
 	 * 
-	 * @param contenu => Le contenu du commentaire
-	 * @return Retourne le résultat de la validation => validé (=true) / refusé (=false)
+	 * @param input  L'entrée à valider
+	 * @param longueurMin La longueur minimale du chammps
+	 * @param longueurMax La longueur maximale du champs
+	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
 	 * 
-	 * @see GestionSiteAction#contenu
 	 * @see GestionSiteAction#doAddComment()
+	 * @see GestionSiteAction#MIN_CONTENU
+	 * @see GestionSiteAction#MAX_CONTENU
 	 */
-	public Boolean contenuValidation(String contenu) {
-		
-		int longueurMin = 25, longueurMax = 500;
-		
+	public Boolean validation(String input, int longueurMin, int longueurMax) {
+				
 		Boolean vReturn = false;
 		
 		
-		if(contenu.length() >= longueurMin && contenu.length() <= longueurMax) {
+		if(input.length() >= longueurMin && input.length() <= longueurMax) {
 			vReturn = true;
 		}
 		

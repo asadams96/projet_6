@@ -23,8 +23,9 @@
     	<property name="managerFactory" ref="managerFactory" />
     	<property name="resourcesBundle" ref="resourcesBundle" />
     </bean>
-    <bean id="gestionUtilisateurAction" class="fr.openclassrooms.projet_6.webapp.action.GestionUtilisateurAction">
+    <bean id="gestionUtilisateurAction" class="fr.openclassrooms.projet_6.webapp.action.GestionUtilisateurAction" scope="prototype">
     	<property name="managerFactory" ref="managerFactory" />
+    	<property name="resourcesBundle" ref="resourcesBundle" />
     </bean>  
     
     <!-- =========================================== Interceptors =========================================== -->
@@ -35,6 +36,9 @@
     
     <!-- Interceptor id utilisé dans struts.xml -->
     <bean id="encodingInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor" />
+    
+    <!-- Interceptor id utilisé dans struts.xml -->
+    <bean id="indexInterceptor" class="fr.openclassrooms.projet_6.webapp.interceptor.IndexInterceptor" />
     
      
 </beans>

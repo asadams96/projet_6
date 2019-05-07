@@ -21,9 +21,11 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * <p>Dédié au traitement métier de la classe 'CommentaireSite'</p>
  * 
  * 
+ * @see CommentaireSiteManagerImpl#MIN_CONTENU
+ * @see CommentaireSiteManagerImpl#MAX_CONTENU
  * @see CommentaireSiteManagerImpl#getList(String)
  * @see CommentaireSiteManagerImpl#addComment(int, String, String)
- * @see CommentaireSiteManagerImpl#contenuValidation(String)
+ * @see CommentaireSiteManagerImpl#validation(String, int, int)
  * @see CommentaireSiteManager#getList(String)
  * @see CommentaireSiteManager#addComment(int, String, String)
  * @see ManagerFactory#getCommentaireSiteManager()
@@ -39,7 +41,26 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  *
  */
 public class CommentaireSiteManagerImpl extends AbstractManager implements CommentaireSiteManager {
-
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see CommentaireSiteManagerImpl#contenu
+	 * @see CommentaireSiteManagerImpl#validation(String, int, int)
+	 */
+	private final int MIN_CONTENU = 25;
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see CommentaireSiteManagerImpl#contenu
+	 * @see CommentaireSiteManagerImpl#validation(String, int, int)
+	 */
+	private final int MAX_CONTENU = 500;
 	
 	
 	/**
@@ -75,7 +96,7 @@ public class CommentaireSiteManagerImpl extends AbstractManager implements Comme
 	
 	/**
 	 * @see CommentaireSiteManager#addComment(int, String, String)
-	 * @see CommentaireSiteManagerImpl#contenuValidation(String)
+	 * @see CommentaireSiteManagerImpl#validation(String, int, int)
 	 * @see CommentaireSite
 	 * @see Message
 	 */
@@ -86,7 +107,7 @@ public class CommentaireSiteManagerImpl extends AbstractManager implements Comme
 		
 		if(String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty() 
 																&& idSite != null && !idSite.isEmpty() 
-																&& contenu != null && this.contenuValidation(contenu)) {
+																&& contenu != null && this.validation(contenu, MIN_CONTENU, MAX_CONTENU)) {
 						
 			Timestamp date = new Timestamp(new Date().getTime());			
 			
@@ -104,21 +125,29 @@ public class CommentaireSiteManagerImpl extends AbstractManager implements Comme
 	
 	
 	/**
-	 * <p>Permet d'effectuer une validation du commentaire</p>
+	 * <p>Méthode servant à vérifier les inputs<p>
 	 * 
-	 * @param contenu Le contenu du commentaire
-	 * @return Un boolean informant dur le resultat de l'opération
+	 * <p>Il y a deux critères de validation :<p>
+	 * <ul>
+	 * 		<li>La taille minimal du champs</li>
+	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
+	 * </ul>
+	 * 
+	 * @param input  L'entrée à valider
+	 * @param longueurMin La longueur minimale du chammps
+	 * @param longueurMax La longueur maximale du champs
+	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
 	 * 
 	 * @see CommentaireSiteManagerImpl#addComment(int, String, String)
+	 * @see CommentaireSiteManagerImpl#MIN_CONTENU
+	 * @see CommentaireSiteManagerImpl#MAX_CONTENU
 	 */
-	public Boolean contenuValidation(String contenu) {
-		
-		int longueurMin = 25, longueurMax = 500;
-		
+	public Boolean validation(String input, int longueurMin, int longueurMax) {
+				
 		Boolean vReturn = false;
 		
 		
-		if(contenu.length() >= longueurMin && contenu.length() <= longueurMax) {
+		if(input.length() >= longueurMin && input.length() <= longueurMax) {
 			vReturn = true;
 		}
 		

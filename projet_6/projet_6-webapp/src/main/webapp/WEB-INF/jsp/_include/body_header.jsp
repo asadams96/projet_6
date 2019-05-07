@@ -16,8 +16,15 @@
 <nav>
 	<s:a action="site_list">Consulter les sites</s:a>
 	<s:a action="topo_list">Consulter les topos</s:a>
-	<s:if test="#session.utilisateur"><s:a action="library">Ma bibliothèque</s:a></s:if>
-	<s:a action="#">#</s:a>
+	<s:if test="#session.utilisateur">
+		<s:a action="library">Ma bibliothèque</s:a>
+	</s:if>
+	<s:if test="#session.utilisateur">
+		<s:a action="utilisateur_detail">
+		<s:param name="idUtilisateur" value="#session.utilisateur.idUtilisateur"/>
+		Profil
+		</s:a>
+	</s:if>
 	<s:a action="#">#</s:a>
 	<s:a action="#">#</s:a>
 	<s:a action="#">#</s:a>

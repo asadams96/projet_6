@@ -6,9 +6,10 @@
 <body>
 	<s:include value="../_include/body_header.jsp" />
 		
-	<h2>Liste des topos :</h2>
+
 	
 		<!-- =========================== Formulaire de sélection des critères de recherche ===========================-->
+		
 		<s:form action="topo_list">
 			<s:select name="criteresType" label="Type" id="type"
                   list="resourcesBundle.listType"
@@ -28,11 +29,18 @@
         	<s:submit value="Rechercher"/>
         </s:form>       
                  
+                 
+                 
    <!-- =========================== Si aucun topo => Affiche message 'aucun topo' ===========================-->
+   
 	<s:if test="listTopo.isEmpty">
 		<p>Aucun topo ne correspond aux critères de recherche saisi.</p>
 	</s:if>
+	
+	
+	
 	 <!-- =========================== Sinon => Affiche la liste des topos avec un lien vers leur fiche (topo.jsp) ===========================-->
+	 
 	<s:else>
 		<ul>
 	        <s:iterator value="listTopo">

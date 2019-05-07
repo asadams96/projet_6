@@ -38,7 +38,7 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * <p>La méthode inputFormat(String) sert à formatter les saisis utilisateurs.</p>
  * 
  * <p>
- * 	La méthode contenuValidation(String) sert à vérifier que le contenu du commentaire
+ * 	La méthode validation(String, int, int) sert à vérifier que le contenu du commentaire
  * 	saisi par l'utilisateur respecte bien les contraintes défini dans cette même métode.
  * </p>
  * 
@@ -50,7 +50,42 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * @see GestionTopoAction#doRemoveLibrary()
  * @see GestionTopoAction#doAddComment()
  * @see GestionTopoAction#inputFormat(String)
- * @see GestionTopoAction#contenuValidation(String)
+ * @see GestionTopoAction#validation(String, int, int)
+ * @see GestionTopoAction#MIN_CONTENU
+ * @see GestionTopoAction#MAX_CONTENU
+ * @see GestionTopoAction#request
+ * @see GestionTopoAction#managerFactory
+ * @see GestionTopoAction#resourcesBundle
+ * @see GestionTopoAction#contenu
+ * @see GestionTopoAction#quantiteTopo
+ * @see GestionTopoAction#listTopo
+ * @see GestionTopoAction#bibliotheque
+ * @see GestionTopoAction#topo
+ * @see GestionTopoAction#listSite
+ * @see GestionTopoAction#listCommentaire
+ * @see GestionTopoAction#criteresType
+ * @see GestionTopoAction#criteresOrientation
+ * @see GestionTopoAction#criteresLocalisation
+ * @see GestionTopoAction#idTopo
+ * @see GestionTopoAction#setServletRequest(HttpServletRequest)
+ * @see GestionTopoAction#setManagerFactory(ManagerFactory)
+ * @see GestionTopoAction#setResourcesBundle(ResourcesBundle)
+ * @see GestionTopoAction#setCriteresType(String)
+ * @see GestionTopoAction#setCriteresOrientation(String)
+ * @see GestionTopoAction#setCriteresLocalisation(String)
+ * @see GestionTopoAction#setIdTopo(int)
+ * @see GestionTopoAction#setContenu(String)
+ * @see GestionTopoAction#setQuantiteTopo(String)
+ * @see GestionTopoAction#getListTopo()
+ * @see GestionTopoAction#getBibliotheque()
+ * @see GestionTopoAction#getTopo()
+ * @see GestionTopoAction#getListSite()
+ * @see GestionTopoAction#getListCommentaire()
+ * @see GestionTopoAction#getResourcesBundle()
+ * @see GestionTopoAction#getCriteresType()
+ * @see GestionTopoAction#getCriteresOrientation()
+ * @see GestionTopoAction#getCriteresLocalisation()
+ * @see GestionTopoAction#getIdTopo()
  * @see ResourcesBundle
  * @see GestionPretAction
  * @see GestionSiteAction
@@ -72,6 +107,26 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  *
  */
 public class GestionTopoAction extends ActionSupport implements ServletRequestAware {
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see GestionTopoAction#contenu
+	 * @see GestionTopoAction#validation(String, int, int)
+	 */
+	private final int MIN_CONTENU = 25;
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see GestionTopoAction#contenu
+	 * @see GestionTopoAction#validation(String, int, int)
+	 */
+	private final int MAX_CONTENU = 500;
 	
 	
 	
@@ -119,62 +174,7 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	
 	
 	// ------------------------ Elements en entrée ------------------------
-	
-	
-	
-	/**
-	 * <p>Objet servant à stocker le critère de type choisi par l'utilisateur</p>
-	 * 
-	 * @see GestionTopoAction#setCriteresType(String)
-	 * @see GestionTopoAction#doList()
-	 */
-	private String criteresType;
-	
-	
-	
-	/**
-	 * <p>Objet servant à stocker le critère d'orientation choisi par l'utilisateur</p>
-	 * 
-	 * @see GestionTopoAction#setCriteresOrientation(String)
-	 * @see GestionTopoAction#doList()
-	 */
-	private String criteresOrientation;
-	
-	
-	
-	/**
-	 * <p>Objet servant à stocker le critère de localisation choisi par l'utilisateur</p>
-	 * 
-	 * @see GestionTopoAction#setCriteresLocalisation(String)
-	 * @see GestionTopoAction#doList()
-	 */
-	private String criteresLocalisation;
-	
-	
-	
-	
-	/**
-	 * <p>Objet servant à stocker le contenu du commentaire saisi par l'utilisateur</p>
-	 * 
-	 * @see GestionTopoAction#setContenu(String)
-	 * @see GestionTopoAction#doAddComment()
-	 */
-	private String contenu;
-	
-	
-	
-	/**
-	 * <p>
-	 * 	Objet servant à stocker la quantité de topo choisi par l'utilisateur
-	 * 	pour un ajout ou une suppression dans sa bibliothèque
-	 * </p>
-	 * 
-	 * @see GestionTopoAction#setQuantiteTopo(String)
-	 * @see GestionTopoAction#doAddLibrary()
-	 * @see GestionTopoAction#doRemoveLibrary()
-	 */
-	private String quantiteTopo;
-	
+		
 	
 	
 	// ------------------------ Elements en sortie ------------------------
@@ -249,6 +249,39 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	
 	
 	/**
+	* <p>Objet servant à stocker le critère de type choisi par l'utilisateur</p>
+	* 
+	* @see GestionTopoAction#getCriteresType()
+	* @see GestionTopoAction#setCriteresType(String)
+	* @see GestionTopoAction#doList()
+	*/
+	private String criteresType;
+		
+		
+		
+	/**
+	* <p>Objet servant à stocker le critère d'orientation choisi par l'utilisateur</p>
+	* 
+	* @see GestionTopoAction#getCriteresOrientation()
+	* @see GestionTopoAction#setCriteresOrientation(String)
+	* @see GestionTopoAction#doList()
+	*/
+	private String criteresOrientation;
+		
+		
+		
+	/**
+	* <p>Objet servant à stocker le critère de localisation choisi par l'utilisateur</p>
+	* 
+	* @see GestionTopoAction#getCriteresLocalisation()
+	* @see GestionTopoAction#setCriteresLocalisation(String)
+	* @see GestionTopoAction#doList()
+	*/
+	private String criteresLocalisation;
+
+	
+	
+	/**
 	 * <p>Objet servant à stocker un id de topo</p>
 	 * 
 	 * @see GestionTopoAction#setIdTopo(int)
@@ -259,6 +292,29 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	 */
 	private String idTopo;
 	
+	
+	
+	/**
+	 * <p>Objet servant à stocker le contenu du commentaire saisi par l'utilisateur</p>
+	 * 
+	 * @see GestionTopoAction#setContenu(String)
+	 * @see GestionTopoAction#doAddComment()
+	 */
+	private String contenu;
+	
+	
+	
+	/**
+	 * <p>
+	 * 	Objet servant à stocker la quantité de topo choisi par l'utilisateur
+	 * 	pour un ajout ou une suppression dans sa bibliothèque
+	 * </p>
+	 * 
+	 * @see GestionTopoAction#setQuantiteTopo(String)
+	 * @see GestionTopoAction#doAddLibrary()
+	 * @see GestionTopoAction#doRemoveLibrary()
+	 */
+	private String quantiteTopo;
 	
 	
 	
@@ -454,6 +510,39 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	
 	
 	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresType' depuis la vue 'list-topo.jsp'</p>
+	 * 
+	 * @see GestionTopoAction#criteresType
+	 */
+	public String getCriteresType() {
+		return criteresType;
+	}
+
+
+	
+	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresOrientation' depuis la vue 'list-topo.jsp'</p>
+	 * 
+	 * @see GestionTopoAction#criteresOrientation
+	 */
+	public String getCriteresOrientation() {
+		return criteresOrientation;
+	}
+
+
+
+	/**
+	 * <p>Getter permettant de récupérer l'objet 'criteresLocalisation' depuis la vue 'list-topo.jsp'</p>
+	 * 
+	 * @see GestionTopoAction#criteresLocalisation
+	 */
+	public String getCriteresLocalisation() {
+		return criteresLocalisation;
+	}
+
+
+
+	/**
 	 * <p>Getter permettant de récupérer l'objet 'idTopo' depuis struts.xml</p>
 	 * <p>Plus precisement l'action, 'topo_comment' / 'add_library'</p>
 	 * 
@@ -462,13 +551,39 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	public String getIdTopo() {
 		return idTopo;
 	}
+
 	
+	
+	/**
+	 * <p>Permet à la vue 'topo.jsp' de récupérer le champs 'contenu' après un input</p>
+	 * 
+	 * @return Le contenu du commentaire
+	 * 
+	 * @see GestionTopoAction#contenu
+	 */
+	public String getContenu() {
+		return contenu;
+	}
+
+	
+
+	/**
+	 * <p>Permet aux vues 'bibliotheque.jsp', 'topo.jsp' de récupérer le champs 'quantiteTopo' après un input</p>
+	 * 
+	 * @return La quantite de topo saisi
+	 * 
+	 * @see GestionTopoAction#quantiteTopou
+	 */
+	public String getQuantiteTopo() {
+		return quantiteTopo;
+	}
+
 	
 	
 	// --------------------------------- Methodes ---------------------------------
 	
-	
-	
+
+
 	/**
 	 * <p>Méthode servant à récuperer le catalogue de topo avec ou sans critères de recherche.</p>
 	 * 
@@ -700,13 +815,13 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	 * @see GestionTopoAction#contenu
 	 * @see GestionTopoAction#request
 	 * @see GestionTopoAction#managerFactory
-	 * @see GestionTopoAction#contenuValidation(String)
+	 * @see GestionTopoAction#validation(String, int, int)
 	 */
 	public String doAddComment() {
 		String vResult = ActionSupport.SUCCESS;
 		
 		if(idTopo != null && !idTopo.isEmpty()) {
-			if(contenu != null && !contenu.isEmpty() && this.contenuValidation(contenu)) {
+			if(contenu != null && !contenu.isEmpty() && this.validation(contenu, MIN_CONTENU, MAX_CONTENU)) {
 				try {
 					int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
 					
@@ -772,28 +887,29 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	} 
 	
 	/**
-	 * <p>Méthode servant à vérifier le contenu d'un commentaire<p>
+	 * <p>Méthode servant à vérifier les inputs<p>
 	 * 
 	 * <p>Il y a deux critères de validation :<p>
 	 * <ul>
-	 * 		<li>La taille minimal du champs de 25 caractères</li>
-	 * 		<li>La taille maximal du champs de 500 caractères (lié à l'espace alloué en BDD)</li>
+	 * 		<li>La taille minimal du champs</li>
+	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
 	 * </ul>
 	 * 
-	 * @param contenu => Le contenu du commentaire
-	 * @return Retourne le résultat de la validation => validé (=true) / refusé (=false)
+	 * @param input L'entrée à valider
+	 * @param longueurMin La longueur minimale du chammps
+	 * @param longueurMax La longueur maximale du champs
+	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
 	 * 
-	 * @see GestionTopoAction#contenu
 	 * @see GestionTopoAction#doAddComment()
+	 * @see GestionTopoAction#MIN_CONTENU
+	 * @see GestionTopoAction#MAX_CONTENU
 	 */
-	public Boolean contenuValidation(String contenu) {
-		
-		int longueurMin = 25, longueurMax = 500;
-		
+	public Boolean validation(String input, int longueurMin, int longueurMax) {
+				
 		Boolean vReturn = false;
 		
 		
-		if(contenu.length() >= longueurMin && contenu.length() <= longueurMax) {
+		if(input.length() >= longueurMin && input.length() <= longueurMax) {
 			vReturn = true;
 		}
 		

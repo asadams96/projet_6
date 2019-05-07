@@ -51,6 +51,10 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  * @see Utilisateur#pass
  * @see Utilisateur#getPass()
  * @see Utilisateur#setPass(String)
+ * @see Utilisateur#Utilisateur()
+ * @see Utilisateur#Utilisateur(int)
+ * @see Utilisateur#Utilisateur(String, String, String, String, String, String, String)
+ * @see Utilisateur#Utilisateur(Integer, String)
  * @see Topo
  * @see Voie
  * @see Site
@@ -155,6 +159,8 @@ public class Utilisateur {
 	 * <p>Constructeur par défaut</p>
 	 * 
 	 * @see Utilisateur#Utilisateur(int)
+	 * @see Utilisateur#Utilisateur(String, String, String, String, String, String, String)
+	 * @see Utilisateur#Utilisateur(Integer, String)
 	 */
 	public Utilisateur() {}
 
@@ -166,11 +172,57 @@ public class Utilisateur {
 	 * 
 	 * @see Utilisateur#Utilisateur()
 	 * @see Utilisateur#idUtilisateur
+	 * @see Utilisateur#Utilisateur(String, String, String, String, String, String, String)
+	 * @see Utilisateur#Utilisateur(Integer, String)
 	 */
 	public Utilisateur(int idUtilisateur) {
 		this.idUtilisateur = idUtilisateur;
 	}
 	
+	
+	
+	/**
+	 * <p>Constructeur avec paramètres</p>
+	 * 
+	 * @param mail Le mail de l'utilisateur
+	 * @param civilite La civilite de l'utilisateur
+	 * @param nom Le nom de l'utilisateur
+	 * @param prenom Le prenom de l'utilisateur
+	 * @param pseudo Le pseudo de l'utilisateur
+	 * @param localisation La localisation de l'utilisateur
+	 * @param pass Le mot de passe de l'utilisateur
+	 * 
+	 * @see Utilisateur#Utilisateur()
+	 * @see Utilisateur#Utilisateur(int)
+	 * @see Utilisateur#Utilisateur(Integer, String)
+	 */
+	public Utilisateur(String mail, String civilite, String nom, String prenom, String pseudo, String localisation, String pass) {
+		this.mail = mail;
+		this.civilite = civilite;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.pseudo = pseudo;
+		this.localisation = localisation;
+		this.pass = pass;
+	}
+
+
+	
+	/**
+	 * <p>Constructeur avec paramètres</p>
+	 * 
+	 * @param idUtilisateur L'identifiant d'un utilisateur	
+	 * @param pass Le mot de passe correspondant à l'identifiant
+	 * 
+	 * @see Utilisateur#Utilisateur()
+	 * @see Utilisateur#Utilisateur(int)
+	 * @see Utilisateur#Utilisateur(String, String, String, String, String, String, String)
+	 */
+	public Utilisateur(Integer idUtilisateur, String pass) {
+		this.idUtilisateur = idUtilisateur;
+		this.pass = pass;
+	}
+
 	
 
 	/**

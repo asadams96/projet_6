@@ -84,13 +84,15 @@ public class TopoManagerImpl extends AbstractManager implements TopoManager {
 		}
 		if(critereType != null && !critereType.isEmpty() && listIdsSite != null) {	
 				
-				if(listIdsSiteProvisoire != null) {
-					for(int idSite : listIdsSiteProvisoire) {
-						if(!listIdsSite.contains(idSite)) {
-							listIdsSite.add(idSite);
-						}
+			listIdsSiteProvisoire = this.getDaoFactory().getSecteurDao().getIdsSiteByType(critereType);
+			
+			if(listIdsSiteProvisoire != null) {
+				for(int idSite : listIdsSiteProvisoire) {
+					if(!listIdsSite.contains(idSite)) {
+						listIdsSite.add(idSite);
 					}
 				}
+			}
 		}
 			
 			

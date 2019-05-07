@@ -8,7 +8,10 @@
 	
 	<h2>Liste des sites :</h2>
 	
+	
+	
 		<!-- =========================== Formulaire de sélection des critères de recherche ===========================-->
+		
 		<s:form action="site_list">
 			<s:select name="criteresType" label="Type" id="type"
                   list="resourcesBundle.listType"
@@ -28,11 +31,18 @@
         	<s:submit value="Rechercher"/>
         </s:form>       
                  
-   <!-- =========================== Si aucun site => Affiche message 'aucun site' ===========================-->
+                 
+                 
+   	<!-- =========================== Si aucun site => Affiche message 'aucun site' ===========================-->
+   
 	<s:if test="listSite.isEmpty">
 		<p>Aucun site ne correspond aux critères de recherche saisi.</p>
 	</s:if>
+	
+	
+	
 	 <!-- =========================== Sinon => Affiche la liste des sites avec un lien vers leur fiche (site.jsp) ===========================-->
+	 
 	<s:else>
 		<ul>
 	        <s:iterator value="listSite">
@@ -45,6 +55,7 @@
 	        </s:iterator>
 	    </ul>
     </s:else>
+		
 		
 	
 	<s:include value="../_include/body_footer.jsp" />

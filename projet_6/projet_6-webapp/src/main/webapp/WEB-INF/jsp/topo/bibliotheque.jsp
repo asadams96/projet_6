@@ -17,7 +17,10 @@
 <body>
 	<s:include value="../_include/body_header.jsp" />
 
+
+
 	<!-- =============== Si bibliothèque vide => Affiche message 'bibliotheque vide' avec un lien vers la liste des topos ================-->
+	
 	<s:if test="bibliotheque.isEmpty">
 		<p>
 			Vous n'avez aucun Topo dans votre bibliothèque.
@@ -27,7 +30,11 @@
 			puis une fois sur sa fiche cliqué sur "Ajouter à ma bibliothèque"
 		</p>
 	</s:if>
+	
+	
+	
 	<!-- =========================== Sinon => Affiche la bibliothèque de l'utilisateur ===========================-->
+	
 	<s:else>
 		<ul>
 	        <s:iterator value="bibliotheque">
@@ -41,17 +48,20 @@
 	            		</p>
 	            	</s:a>
 	            	
+	            	<s:debug />
+	            	
 	            	<!-- =========================== Possibilité de supprimer des topos ===========================-->
+	            	
 	            	<s:form action="remove_library" name="formulaire">
 	            		<s:textfield name="quantiteTopo" label="Quantité" requiredLabel="true"/>
 		           		<s:hidden name="idTopo" value="%{topo.idTopo}"/>
 	            		<s:submit type="input" value="Retirer de la bibliothèque" onclick="return Confirmer('%{topo.titre}')"/>
-	            	</s:form>   
-	            			
+	            	</s:form>   	
 	            </li>
 	        </s:iterator>
 	    </ul>
     </s:else>
+	
 	
 	
 	<s:include value="../_include/body_footer.jsp" />

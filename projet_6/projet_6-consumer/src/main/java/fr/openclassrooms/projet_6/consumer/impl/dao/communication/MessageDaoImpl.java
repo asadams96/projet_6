@@ -22,14 +22,16 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
 /**
  * <p>Implémentation de l'interface MessageDao</p>
  * <p>Effectue les actions qui lui sont destinés en interagissant avec une base de donnée</p>
- *  
+ * 
+ * @see MessageDaoImpl#MIN_CONTENU
+ * @see MessageDaoImpl#MAX_CONTENU
  * @see MessageDao#getMessage(int)
  * @see MessageDao#addMessage(int, String, Date)
  * @see MessageDao#getIdMessage(int, Date)
  * @see MessageDaoImpl#getMessage(int)
  * @see MessageDaoImpl#addMessage(int, String, Date)
  * @see MessageDaoImpl#getIdMessage(int, Date)
- * @see MessageDaoImpl#contenuValidation(String)
+ * @see MessageDaoImpl#contenuValidation(String, int, int)
  * @see DaoFactory#getMessageDao()
  * @see DaoFactory#setMessageDao(MessageDao)
  * @see DaoFactoryImpl#getMessageDao()
@@ -51,6 +53,26 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
 
 	 
 	 
+	/**
+	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see MessageDaoImpl#contenu
+	 * @see MessageDaoImpl#validation(String, int, int)
+	 */
+	private final int MIN_CONTENU = 25;
+		
+		
+		
+	/**
+	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see MessageDaoImpl#contenu
+	 * @see MessageDaoImpl#validation(String, int, int)
+	 */
+	private final int MAX_CONTENU = 500;
+	
+	
+	
 	/**
 	 * <p>
 	 * 	Construit une instance de la classe Message suite à une lecture 
@@ -140,7 +162,7 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
 		Boolean vResult = false;
 		
 		if(String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty() 
-												&& contenu != null && this.contenuValidation(contenu) && date != null) {
+												&& contenu != null && this.validation(contenu, MIN_CONTENU, MAX_CONTENU) && date != null) {
 			
 			String sql = "INSERT INTO public.message (date, contenu, id_auteur) "
 							+ "VALUES (:date, :contenu , :id_utilisateur)";
@@ -160,21 +182,29 @@ import fr.openclassrooms.projet_6.model.communication.MessagePret;
 	
 	
 	/**
-	 * <p>Valide ou non le contenu d'un message</p>
+	 * <p>Méthode servant à vérifier les inputs<p>
 	 * 
-	 * @param contenu Le contenu du message
-	 * @return Un boolean contenant, en fonction de son état,le résultat sur la réussite de l'opération.
+	 * <p>Il y a deux critères de validation :<p>
+	 * <ul>
+	 * 		<li>La taille minimal du champs</li>
+	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
+	 * </ul>
+	 * 
+	 * @param input L'entrée à valider
+	 * @param longueurMin La longueur minimale du chammps
+	 * @param longueurMax La longueur maximale du champs
+	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
 	 * 
 	 * @see MessageDaoImpl#addMessage(int, String, Date)
+	 * @see MessageDaoImpl#MIN_CONTENU
+	 * @see MessageDaoImpl#MAX_CONTENU
 	 */
-	public Boolean contenuValidation(String contenu) {
-		
-		int longueurMin = 25, longueurMax = 500;
-		
+	public Boolean validation(String input, int longueurMin, int longueurMax) {
+				
 		Boolean vReturn = false;
 		
 		
-		if(contenu.length() >= longueurMin && contenu.length() <= longueurMax) {
+		if(input.length() >= longueurMin && input.length() <= longueurMax) {
 			vReturn = true;
 		}
 		

@@ -18,6 +18,8 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * <p>Implémentation de l'interface 'CommentaireTopoManager'</p>
  * <p>Dédié au traitement métier de la classe 'CommentaireTopo'</p>
  * 
+ * @see CommentaireTopoManage#MIN_CONTENU
+ * @see CommentaireTopoManage#MAX_CONTENU
  * @see CommentaireTopoManager#getList(String)
  * @see CommentaireTopoManager#addComment(int, String, String)
  * @see CommentaireTopoManagerImpl#getList(String)
@@ -34,6 +36,26 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  */
 public class CommentaireTopoManagerImpl extends AbstractManager implements CommentaireTopoManager {
 
+	
+	
+	/**
+	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see CommentaireTopoManagerImpl#contenu
+	 * @see CommentaireTopoManagerImpl#validation(String, int, int)
+	 */
+	private final int MIN_CONTENU = 25;
+	
+	
+	
+	/**
+	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
+	 * 
+	 * @see CommentaireTopoManagerImpl#contenu
+	 * @see CommentaireTopoManagerImpl#validation(String, int, int)
+	 */
+	private final int MAX_CONTENU = 500;
+	
 	
 	
 	/**
@@ -69,7 +91,7 @@ public class CommentaireTopoManagerImpl extends AbstractManager implements Comme
 	
 	/**
 	 * @see CommentaireTopoManager#addComment(int, String, String)
-	 * @see CommentaireTopoManagerImpl#contenuValidation(String)
+	 * @see CommentaireTopoManagerImpl#contenuValidation(String, int, int)
 	 * @see CommentaireTopo
 	 * @see Message
 	 */
@@ -80,7 +102,7 @@ public class CommentaireTopoManagerImpl extends AbstractManager implements Comme
 		
 		if(String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty() 
 																&& idTopo != null && !idTopo.isEmpty() 
-																&& contenu != null && this.contenuValidation(contenu)) {
+																&& contenu != null && this.validation(contenu, MIN_CONTENU, MAX_CONTENU)) {
 						
 			Timestamp date = new Timestamp(new Date().getTime());			
 			
@@ -98,21 +120,29 @@ public class CommentaireTopoManagerImpl extends AbstractManager implements Comme
 	
 	
 	/**
-	 * <p>Permet d'effectuer une validation du commentaire</p>
+	 * <p>Méthode servant à vérifier les inputs<p>
 	 * 
-	 * @param contenu Le contenu du commentaire
-	 * @return Un boolean informant dur le resultat de l'opération
+	 * <p>Il y a deux critères de validation :<p>
+	 * <ul>
+	 * 		<li>La taille minimal du champs</li>
+	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
+	 * </ul>
+	 * 
+	 * @param input L'entrée à valider
+	 * @param longueurMin La longueur minimale du chammps
+	 * @param longueurMax La longueur maximale du champs
+	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
 	 * 
 	 * @see CommentaireTopoManagerImpl#addComment(int, String, String)
+	 * @see CommentaireTopoManagerImpl#MIN_CONTENU
+	 * @see CommentaireTopoManagerImpl#MAX_CONTENU
 	 */
-	public Boolean contenuValidation(String contenu) {
-		
-		int longueurMin = 25, longueurMax = 500;
-		
+	public Boolean validation(String input, int longueurMin, int longueurMax) {
+				
 		Boolean vReturn = false;
 		
 		
-		if(contenu.length() >= longueurMin && contenu.length() <= longueurMax) {
+		if(input.length() >= longueurMin && input.length() <= longueurMax) {
 			vReturn = true;
 		}
 		

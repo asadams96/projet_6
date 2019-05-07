@@ -17,7 +17,10 @@
 <body>
 	<s:include value="../_include/body_header.jsp" />
 
+
+
 	<!-- =========================== Présentation topo ===========================-->
+	
 	<h3><s:property value="topo.titre" /></h3>
 	<p>
 		<s:property value="topo.auteur" />
@@ -26,7 +29,9 @@
 	</p>
 	
 	
+	
 	<!-- =========================== Si connecté => Possibilité d'ajout du topo en bibliothèque ===========================-->
+	
 	<s:if test="#session.utilisateur">
 		<s:form action="add_library" name="formulaire">
 	    	<s:textfield name="quantiteTopo" label="Quantité" requiredLabel="true"/>
@@ -36,7 +41,9 @@
 	</s:if>
 	
 	
+	
 	<!-- =========================== Sites associés au topo ===========================-->
+	
 	<h4>Sites associés</h4>
 	<ul>
 		<s:iterator value="listSite">
@@ -50,20 +57,27 @@
 	</ul>
 	
 	
+	
 	<!-- =========================== Commentaires associés au topo ===========================-->
+	
 	<h4>Commentaires</h4>
 	<ul>
 		<s:iterator value="listCommentaire">
 			<li>
 				<s:property value="date"/>
-				<s:property value="auteur.pseudo"/>
+				<s:a action="utilisateur_detail">
+					<s:param name="idUtilisateur" value="auteur.idUtilisateur"/>
+					<s:property value="auteur.pseudo"/>
+				</s:a>
 				<s:property value="contenu"/>
 			</li>
 		</s:iterator>
 	</ul>
 	
 	
+	
 	<!-- =========================== Si connecté => Possibilité d'ajout d'un commentaire ===========================-->
+	
 	<s:if test="#session.utilisateur">
 		<s:form action="topo_comment">
 			<s:hidden name="idTopo" value="%{ topo.idTopo }"/>
