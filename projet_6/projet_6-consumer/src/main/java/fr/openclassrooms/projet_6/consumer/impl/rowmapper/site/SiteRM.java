@@ -27,8 +27,6 @@ import fr.openclassrooms.projet_6.model.site.Site;
  */
 public class SiteRM implements RowMapper<Site>{
 	
-	
-	
 	@Override
 	public Site mapRow(ResultSet rs, int rowNum) throws SQLException {
 		

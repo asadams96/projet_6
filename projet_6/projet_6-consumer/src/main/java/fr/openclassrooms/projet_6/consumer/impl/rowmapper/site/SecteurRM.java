@@ -27,8 +27,6 @@ import fr.openclassrooms.projet_6.model.site.Secteur;
  */
 public class SecteurRM implements RowMapper<Secteur> {
 
-	
-	
 	@Override
 	public Secteur mapRow(ResultSet rs, int rowNum) throws SQLException {
 

@@ -41,6 +41,8 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * @see SiteRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see SiteDaoImpl#rowMapper
+ * @see SiteDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -87,16 +89,13 @@ public class SiteDaoImpl extends AbstractDao implements SiteDao {
 	 */
 	@Override
 	public Site getSite(int idSite) throws Exception {
-		
-		Site site = null;
-		
-		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
+							
+		String sql = "SELECT * FROM public.site WHERE id_site = :id_site";
 			
-			String sql = "SELECT * FROM public.site WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			site = this.getJdbcTemplate().queryForObject(sql, map, this.rowMapper);
-		}
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
+			
+		Site site = this.getJdbcTemplate().queryForObject(sql, map, this.rowMapper);
 
 		return site;
 	}
@@ -110,16 +109,13 @@ public class SiteDaoImpl extends AbstractDao implements SiteDao {
 	@Override
 	public List<Integer> getIdsSiteByLocalisation(String critereLocalisation) throws Exception {
 		
-		List<Integer> listIdSite = null;
-
-		if(critereLocalisation != null && !critereLocalisation.isEmpty()) {
-			
-			String sql = "SELECT id_site FROM public.site WHERE localisation = :localisation";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("localisation", critereLocalisation, Types.VARCHAR);
-			
-			listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
-		}
+					
+		String sql = "SELECT id_site FROM public.site WHERE localisation = :localisation";
+		
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("localisation", critereLocalisation, Types.VARCHAR);
+		
+		List<Integer> listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
 		
 		return listIdSite;
 	}
@@ -132,17 +128,13 @@ public class SiteDaoImpl extends AbstractDao implements SiteDao {
 	 */
 	@Override
 	public String checkLocalisation(int idSite) throws Exception {
+				
+		String sql = "SELECT localisation FROM public.site WHERE id_site = :id_site";
 		
-		String vResult = null;
-
-		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			String sql = "SELECT localisation FROM public.site WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			
-			vResult = this.getJdbcTemplate().queryForObject(sql, map, String.class);
-		}
+		String vResult = this.getJdbcTemplate().queryForObject(sql, map, String.class);
 		
 		return vResult;
 	}
@@ -156,10 +148,9 @@ public class SiteDaoImpl extends AbstractDao implements SiteDao {
 	@Override
 	public List<Site> getList() throws Exception {
 		
-		List<Site> listSite = null;
-		
 		String sql = "SELECT * FROM public.site";
-		listSite = this.getJdbcTemplate().query(sql, this.rowMapper);
+		
+		List<Site> listSite = this.getJdbcTemplate().query(sql, this.rowMapper);
 		
 		return listSite;
 		

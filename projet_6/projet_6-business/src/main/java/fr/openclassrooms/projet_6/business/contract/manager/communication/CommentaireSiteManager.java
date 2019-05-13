@@ -50,7 +50,6 @@ public interface CommentaireSiteManager {
 	
 	/**
 	 * <p>
-	 * 	Apres plusieurs étapes de validation =>
 	 * 	Demande l'ajout d'un commentaire à la couche du dessous.
 	 * </p>
 	 * 

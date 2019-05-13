@@ -34,6 +34,8 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  * @see VoieRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see VoieDaoImpl#rowMapper
+ * @see VoieDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -80,16 +82,13 @@ public class VoieDaoImpl extends AbstractDao implements VoieDao {
 	@Override
 	public List<Voie> getVoies(int idSecteur) throws Exception {
 
-		List<Voie> listVoie = null;
+		String sql = "SELECT * FROM public.voie WHERE id_secteur = :id_secteur";
 		
-		if(String.valueOf(idSecteur) != null && !String.valueOf(idSecteur).isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_secteur", idSecteur, Types.INTEGER);
+		
+		List<Voie> listVoie = this.getJdbcTemplate().query(sql, map, this.rowMapper);
 			
-			String sql = "SELECT * FROM public.voie WHERE id_secteur = :id_secteur";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_secteur", idSecteur, Types.INTEGER);
-			listVoie = this.getJdbcTemplate().query(sql, map, this.rowMapper);
-		}
-		
 		return listVoie;
 	}
 }

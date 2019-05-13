@@ -195,6 +195,13 @@ public class Utilisateur {
 	 * @see Utilisateur#Utilisateur()
 	 * @see Utilisateur#Utilisateur(int)
 	 * @see Utilisateur#Utilisateur(Integer, String)
+	 * @see Utilisateur#mail
+	 * @see Utilisateur#civilite
+	 * @see Utilisateur#nom
+	 * @see Utilisateur#prenom
+	 * @see Utilisateur#pseudo
+	 * @see Utilisateur#localisation
+	 * @see Utilisateur#pass
 	 */
 	public Utilisateur(String mail, String civilite, String nom, String prenom, String pseudo, String localisation, String pass) {
 		this.mail = mail;
@@ -217,6 +224,8 @@ public class Utilisateur {
 	 * @see Utilisateur#Utilisateur()
 	 * @see Utilisateur#Utilisateur(int)
 	 * @see Utilisateur#Utilisateur(String, String, String, String, String, String, String)
+	 * @see Utilisateur#idUtilisateur
+	 * @see Utilisateur#pass
 	 */
 	public Utilisateur(Integer idUtilisateur, String pass) {
 		this.idUtilisateur = idUtilisateur;

@@ -42,6 +42,30 @@
 	
 	
 	
+	<!-- =========================== Si connecté => Possibilité de demander le topo ===========================-->
+	<s:debug />
+	<s:if test="%{ listTamponProprietaireTopo != null && !listTamponProprietaireTopo.isEmpty() }">
+		<s:if test="#session.utilisateur">
+			<s:form action="pret_ask">
+		    	<s:hidden name="idTopo" value="%{ topo.idTopo }"/>
+		    	<s:hidden name="type" value="%{ getText('pret.type2') }"/>
+		    	
+		    	<s:select name="idProprietaire" label="Choisir un proprietaire"
+						  listKey="proprietaire.idUtilisateur"	    		     
+	                   	  list="listTamponProprietaireTopo" 
+	                      listValue="proprietaire.localisation + SPACE + proprietaire.pseudo" 
+	 					  emptyOption="true"
+	                  	  requiredLabel="true"
+	                  	  />
+	                  	  
+	                  
+				<s:textarea name="contenu" label="Message pour le pret" requiredLabel="true" maxlength="500" />
+				<s:submit value="Demander un pret"/>
+			</s:form>
+		</s:if>
+	</s:if>
+	
+	
 	<!-- =========================== Sites associés au topo ===========================-->
 	
 	<h4>Sites associés</h4>
@@ -60,19 +84,21 @@
 	
 	<!-- =========================== Commentaires associés au topo ===========================-->
 	
-	<h4>Commentaires</h4>
-	<ul>
-		<s:iterator value="listCommentaire">
-			<li>
-				<s:property value="date"/>
-				<s:a action="utilisateur_detail">
-					<s:param name="idUtilisateur" value="auteur.idUtilisateur"/>
-					<s:property value="auteur.pseudo"/>
-				</s:a>
-				<s:property value="contenu"/>
-			</li>
-		</s:iterator>
-	</ul>
+	<s:if test="%{ listCommentaire != null && !listCommentaire.isEmpty() }">
+		<h4>Commentaires</h4>
+		<ul>
+			<s:iterator value="listCommentaire">
+				<li>
+					<s:property value="date"/>
+					<s:a action="utilisateur_detail">
+						<s:param name="idUtilisateur" value="auteur.idUtilisateur"/>
+						<s:property value="auteur.pseudo"/>
+					</s:a>
+					<s:property value="contenu"/>
+				</li>
+			</s:iterator>
+		</ul>
+	</s:if>
 	
 	
 	
@@ -81,7 +107,7 @@
 	<s:if test="#session.utilisateur">
 		<s:form action="topo_comment">
 			<s:hidden name="idTopo" value="%{ topo.idTopo }"/>
-			<s:textarea name="contenu" label="Ajouter un commentaire" requiredLabel="true" maxlength="500" />
+			<s:textarea name="contenuCom" label="Ajouter un commentaire" requiredLabel="true" maxlength="500" />
 			<s:submit value="Envoyer"/>
 		</s:form>
 	</s:if>

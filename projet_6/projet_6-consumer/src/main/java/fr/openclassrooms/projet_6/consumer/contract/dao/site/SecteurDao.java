@@ -66,7 +66,7 @@ public interface SecteurDao {
 	
 		
 	/**
-	 * <p>Récupère la liste des types associé à l'id de topo</p>
+	 * <p>Récupère la liste des types associé à l'id de site</p>
 	 * 
 	 * @param idSite L'identifiant d'un site
 	 * @return Une liste de type.
@@ -81,7 +81,7 @@ public interface SecteurDao {
 	
 	
 	/**
-	 * <p>Récupère la liste des orientations associé à l'id de topo</p>
+	 * <p>Récupère la liste des orientations associé à l'id de site</p>
 	 * 
 	 * @param idSite L'identifiant d'un site
 	 * @return Une liste d'orientation.

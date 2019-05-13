@@ -12,6 +12,7 @@ import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.communication.CommentaireSiteDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.rowmapper.communication.CommentaireSiteRM;
 import fr.openclassrooms.projet_6.model.communication.CommentaireSite;
 import fr.openclassrooms.projet_6.model.communication.Message;
@@ -34,6 +35,8 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * @see CommentaireSiteRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see CommentaireSiteDaoImpl#rowMapper
+ * @see CommentaireSiteDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -79,19 +82,14 @@ public class CommentaireSiteDaoImpl extends AbstractDao implements CommentaireSi
 	 */
 	@Override
 	public List<Integer> getIdsComment(String idSite) throws Exception {
-		
-		List<Integer> listIdsComment = null;
-		
-		if(idSite != null && !idSite.isEmpty()) {
+
+		String sql = "SELECT id_message FROM public.commentaire_site WHERE id_site = :id_site";
+
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			String sql = "SELECT id_message FROM public.commentaire_site WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			
-			listIdsComment = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
-			
-		}
-		
+		List<Integer> listIdsComment = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
+					
 		return listIdsComment;
 	}
 	
@@ -104,22 +102,15 @@ public class CommentaireSiteDaoImpl extends AbstractDao implements CommentaireSi
 	@Override
 	public boolean addComment(int idNewMessage, String idSite) throws Exception {
 		
-		Boolean vResult = false;
-		
-			if(String.valueOf(idNewMessage) != null && !String.valueOf(idNewMessage).isEmpty() 
-																	&& idSite != null && !idSite.isEmpty()) {
-				
-				String sql = "INSERT INTO public.commentaire_site (id_message, id_site) "
-								+ "VALUES (:id_message, :id_site)";
-				
-				MapSqlParameterSource map = new MapSqlParameterSource();
-				map.addValue("id_message", idNewMessage, Types.INTEGER);
-				map.addValue("id_site", idSite, Types.INTEGER);
-				
-				this.getJdbcTemplate().update(sql, map);
-				vResult = true;
-			}
-		
-		return vResult;
+		String sql = "INSERT INTO public.commentaire_site (id_message, id_site) "
+					+ "VALUES (:id_message, :id_site)";
+			
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_message", idNewMessage, Types.INTEGER);
+		map.addValue("id_site", idSite, Types.INTEGER);
+			
+		this.getJdbcTemplate().update(sql, map);
+	
+		return true;
 	}
 }

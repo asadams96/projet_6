@@ -325,7 +325,7 @@
     		<result name= "input" type="redirectAction">
         		<param name="actionName">topo_detail</param>
         		<param name="idTopo">${idTopo}</param>
-        		<param name="contenu">${contenu}</param>
+        		<param name="contenuCom">${contenuCom}</param>
     		</result>
         </action>
         
@@ -391,6 +391,7 @@
         	<result name="input" type="redirectAction">
         		<param name="actionName">utilisateur_detail</param>
         		<param name="idUtilisateur">${idUtilisateur}</param>
+        		<param name="mail">${mail}</param>
         	</result>
         </action>
         
@@ -414,6 +415,7 @@
         	<result name="input" type="redirectAction">
         		<param name="actionName">utilisateur_detail</param>
         		<param name="idUtilisateur">${idUtilisateur}</param>
+        		<param name="pseudo">${pseudo}</param>
         	</result>
         </action>
         
@@ -437,6 +439,7 @@
         	<result name="input" type="redirectAction">
         		<param name="actionName">utilisateur_detail</param>
         		<param name="idUtilisateur">${idUtilisateur}</param>
+        		<param name="localisation">${localisation}</param>
         	</result>
         </action>
         
@@ -465,8 +468,164 @@
         
         
         
+        <!-- ===================================================== GESTION PRET ACTION ==================================================== -->
+        
+        
+        
+        <!-- =============== Action PRET_LIST permettant d'afficher la liste des prets / ou emprunts =============== -->
+        <action name="pret_list"
+        		class="gestionPretAction"
+        		method="doList">
+        		
+        	<result name="success">/WEB-INF/jsp/pret/list-pret.jsp</result>
+        </action>
+        
+        <!-- =============== Action PRET_DETAIL permettant d'afficher les détails d'un prêt / ou emprunt =============== -->
+        <action name="pret_detail"
+        		class="gestionPretAction"
+        		method="doDetail">
+        	
+        	<!-- Interceptor necessaire pour récupérer le type de pret,  l'id du pret et les messages en cas de succes et en input, le contenu est également récupéré (MESSAGE_PRET)  -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">RETRIEVE</param>
+   		 	</interceptor-ref>
+        	
+        	<result name="success">/WEB-INF/jsp/pret/pret.jsp</result>
+        </action>
+        
+        
+        
+         <!-- =============== Action PRET_MESSAGE permettant d'envoyer un message sur la fiche d'un prets =============== -->
+        <action name="pret_message"
+        		class="gestionPretAction"
+        		method="doAddMessage">
+        		
+        	<!-- Interceptor necessaire pour envoyer le type de pret, l'id du pret et les messages en cas de succes, en input le contenu est egalement envoyé pour qu'il soit restitué sur pret.jsp   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        	        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="contenu">${contenu}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action PRET_MESSAGE permettant d'envoyer un message sur la fiche d'un prets =============== -->
+        <action name="pret_decide"
+        		class="gestionPretAction"
+        		method="doDecide">
+        		
+        	<!-- Interceptor necessaire pour envoyer le type de pret, l'id du pret et les messages en cas de succes, en input le contenu est egalement envoyé pour qu'il soit restitué sur pret.jsp   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        	        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action PRET_MESSAGE permettant d'envoyer un message sur la fiche d'un prets =============== -->
+        <action name="pret_finish"
+        		class="gestionPretAction"
+        		method="doFinish">
+        		
+        	<!-- Interceptor necessaire pour envoyer le type de pret, l'id du pret et les messages en cas de succes, en input le contenu est egalement envoyé pour qu'il soit restitué sur pret.jsp   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        	        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action PRET_MESSAGE permettant d'envoyer un message sur la fiche d'un prets =============== -->
+        <action name="pret_cancel"
+        		class="gestionPretAction"
+        		method="doCancel">
+        		
+        	<!-- Interceptor necessaire pour envoyer le type de pret, l'id du pret et les messages en cas de succes, en input le contenu est egalement envoyé pour qu'il soit restitué sur pret.jsp   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        	        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">${type}</param>
+        	</result>
+        </action>
+        
+        
+        
+        <!-- =============== Action PRET_ASK permettant de demander un pret =============== -->
+        <action name="pret_ask"
+        		class="gestionPretAction"
+        		method="doAsk">
+        		
+        	<!-- Interceptor necessaire pour envoyer le type de pret, l'id du pret et les messages en cas de succes, en input le contenu est egalement envoyé pour qu'il soit restitué sur pret.jsp   -->	
+        	<interceptor-ref name="authenticatedStack" />
+        	<interceptor-ref name="store">
+        		<param name="operationMode">STORE</param>
+   		 	</interceptor-ref>
+        		
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">pret_detail</param>
+        		<param name="idPret">${idPret}</param>
+        		<param name="type">emprunt</param>
+        	</result>
+        	        	
+        	<result name="input" type="redirectAction">
+        		<param name="actionName">topo_detail</param>
+        		<param name="idTopo">${idTopo}</param>
+        		<param name="idProprietaire">${idProprietaire}</param>
+        		<param name="contenu">${contenu}</param>
+        	</result>
+        </action>
      </package>
-    
-    
-    
+     
+         
 </struts>

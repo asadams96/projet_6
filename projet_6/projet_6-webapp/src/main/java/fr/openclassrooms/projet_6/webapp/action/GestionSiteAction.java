@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.dispatcher.Parameter.Request;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -11,6 +12,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import fr.openclassrooms.projet_6.business.contract.manager.ManagerFactory;
 import fr.openclassrooms.projet_6.business.contract.manager.communication.CommentaireSiteManager;
 import fr.openclassrooms.projet_6.business.contract.manager.site.SiteManager;
+import fr.openclassrooms.projet_6.business.contract.manager.site.VoieManager;
 import fr.openclassrooms.projet_6.model.communication.CommentaireSite;
 import fr.openclassrooms.projet_6.model.communication.Message;
 import fr.openclassrooms.projet_6.model.site.Secteur;
@@ -21,6 +23,8 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 import fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle;
 import fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor;
 import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
+import fr.openclassrooms.projet_6.webapp.interceptor.IndexInterceptor;
+import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
 
 
 
@@ -31,27 +35,17 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * <ul>
  * 		<li>Afficher le catalogue de site (avec critères de recherche) => doList()</li>
  * 		<li>Afficher la fiche d'un site => doDetail()</li>
- * 		<li>Deposer un commentaire (sur une fiche de site) => doAddComment();</li>
+ * 		<li>Deposer un commentaire (sur une fiche de site) => doAddComment()</li>
  * </ul>
- * 
- * <p>La méthode inputFormat(String) sert à formatter les saisis utilisateurs.</p>
- * 
- * <p>
- * 	La méthode validation(String, int, int) sert à vérifier que le contenu du commentaire
- * 	saisi par l'utilisateur respecte bien les contraintes défini dans cette même métode.
- * </p>
  * 
  * 
  * @see GestionSiteAction#doList()
  * @see GestionSiteAction#doDetail()
  * @see GestionSiteAction#doAddComment()
- * @see GestionSiteAction#inputFormat(String)
- * @see GestionSiteAction#validation(String, int, int)
- * @see GestionSiteAction#MIN_CONTENU
- * @see GestionSiteAction#MAX_CONTENU
  * @see GestionSiteAction#request
  * @see GestionSiteAction#managerFactory
  * @see GestionSiteAction#resourcesBundle
+ * @see GestionSiteAction#inputValidation
  * @see GestionSiteAction#contenu
  * @see GestionSiteAction#listTopo
  * @see GestionSiteAction#listSite
@@ -59,12 +53,13 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * @see GestionSiteAction#criteresType
  * @see GestionSiteAction#criteresOrientation
  * @see GestionSiteAction#criteresLocalisation
- * @see GestionSiteAction#Site
+ * @see GestionSiteAction#site
  * @see GestionSiteAction#idSite
  * @see GestionSiteAction#secteurListVoie
  * @see GestionSiteAction#setServletRequest(HttpServletRequest)
  * @see GestionSiteAction#setManagerFactory(ManagerFactory)
  * @see GestionSiteAction#setResourcesBundle(ResourcesBundle)
+ * @see GestionSiteAction#setInputValidation(InputValidation)
  * @see GestionSiteAction#setCriteresType(String)
  * @see GestionSiteAction#setCriteresOrientation(String)
  * @see GestionSiteAction#setCriteresLocalisation(String)
@@ -81,11 +76,13 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * @see GestionSiteAction#getSite()
  * @see GestionSiteAction#getSecteurListVoie()
  * @see ResourcesBundle
+ * @see InputValidation
  * @see GestionPretAction
  * @see GestionTopoAction
  * @see GestionUtilisateurAction
  * @see AuthentificationInterceptor
  * @see EncodingInterceptor
+ * @see IndexInterceptor
  * @see Topo
  * @see Message
  * @see Site
@@ -102,27 +99,7 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  */
 public class GestionSiteAction extends ActionSupport implements ServletRequestAware {
 	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'contenu'</p>
-	 * 
-	 * @see GestionSiteAction#contenu
-	 * @see GestionSiteAction#validation(String, int, int)
-	 */
-	private final int MIN_CONTENU = 25;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'contenu'</p>
-	 * 
-	 * @see GestionSiteAction#contenu
-	 * @see GestionSiteAction#validation(String, int, int)
-	 */
-	private final int MAX_CONTENU = 500;
-	
-	
+		
 	
 	/**
 	 * <p>Objet servant à stocker une instance de la classe 'ManagerFactory'</p>
@@ -149,6 +126,21 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * @see ResourcesBundle
 	 */
 	private ResourcesBundle resourcesBundle;
+	
+	
+	
+	/**
+	 * <p>Objet servant à stocker une instance de la classe 'InputValidation'</p>
+	 * 
+	 * @see GestionSiteAction#setCriteresType(String)
+	 * @see GestionSiteAction#setCriteresOrientation(String)
+	 * @see GestionSiteAction#setCriteresLocalisation(String)
+	 * @see GestionSiteAction#setIdSite(String)
+	 * @see GestionSiteAction#setContenu(String)
+	 * @see GestionSiteAction#setInputValidation(InputValidation)
+	 * @see InputValidation
+	 */
+	private InputValidation inputValidation;
 
 	
 	
@@ -291,6 +283,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Setter servant à définir l'objet 'request' grâce à l'interface 'ServletRequestAware'</p>
 	 * 
+	 * @param request La requête en cours
+	 * 
 	 * @see GestionSiteAction#request
 	 * @see ServletRequestAware
 	 */
@@ -304,17 +298,35 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'managerFactory'</p>
 	 * 
+	 * @param managerFactory Une instance de la classe 'ManagerFactory'
+	 * 
 	 * @see GestionSiteAction#managerFactory
 	 * @see ManagerFactory
 	 */
 	public void setManagerFactory(ManagerFactory managerFactory) {
 		this.managerFactory = managerFactory;
 	}
+
+	
+	
+	/**
+	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'inputValidation'</p>
+	 * 
+	 * @param inputValidation Un instance de la classe 'InputValidation'
+	 * 
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation
+	 */
+	public void setInputValidation(InputValidation inputValidation) {
+		this.inputValidation = inputValidation;
+	}
 	
 	
 	
 	/**
 	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'resourcesBundle'</p>
+	 * 
+	 * @param resourcesBundle Une instance de la classe 'ResourcesBundle'
 	 * 
 	 * @see GestionSiteAction#resourcesBundle
 	 * @see ResourcesBundle
@@ -331,10 +343,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * 	des	paramètres reçu en entrée du formulaire présent dans la page 'list-site.jsp'
 	 * </p>
 	 * 
+	 * @param criteresType Un critère de type
+	 * 
 	 * @see GestionSiteAction#criteresType
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setCriteresType(String criteresType) {
-		this.criteresType = this.inputFormat(criteresType);
+		this.criteresType = inputValidation.inputFormat(criteresType);
 	}
 
 	
@@ -345,10 +361,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * 	des paramètres reçu en entrée du formulaire présent dans la page 'list-site.jsp'
 	 * </p>
 	 * 
+	 * @param criteresOrientation Un critère d'orientation
+	 * 
 	 * @see GestionSiteAction#criteresOrientation
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setCriteresOrientation(String criteresOrientation) {
-		this.criteresOrientation = this.inputFormat(criteresOrientation);
+		this.criteresOrientation = inputValidation.inputFormat(criteresOrientation);
 	}
 
 	
@@ -359,10 +379,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * 	des paramètres reçu en entrée du formulaire présent dans la page 'list-site.jsp'
 	 * </p>
 	 * 
+	 * @param criteresLocalisation Un critère de localisation
+	 * 
 	 * @see GestionSiteAction#criteresLocalisation
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setCriteresLocalisation(String criteresLocalisation) {
-		this.criteresLocalisation = this.inputFormat(criteresLocalisation);
+		this.criteresLocalisation = inputValidation.inputFormat(criteresLocalisation);
 	}
 	
 	
@@ -370,14 +394,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Setter servant à la vue 'site.jsp' pour définir l'objet 'idSite'</p>
 	 * 
-	 * @see GestionSiteAction#idTopo
+	 * @param idSite Un identifiant de site
+	 * 
+	 * @see GestionSiteAction#idSite
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
-	public void setIdSite(int idSite) {
-		try {
-
-			this.idSite = String.valueOf(idSite);
-
-		}catch(Exception e) {}
+	public void setIdSite(String idSite) {
+		this.idSite = inputValidation.inputFormat(idSite);
 		
 	}
 	
@@ -386,10 +410,14 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Setter servant à la vue 'site.jsp' pour définir l'objet 'contenu'</p>
 	 * 
+	 * @param contenu Le contenu d'un commentaire
+	 * 
 	 * @see GestionSiteAction#contenu
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setContenu(String contenu) {
-		this.contenu = this.inputFormat(contenu);
+		this.contenu = inputValidation.inputFormat(contenu);
 	}
 	
 	
@@ -401,7 +429,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'resourcesBundle' depuis la vue 'list-site.jsp'</p>
 	 * 
+	 * @return Une instance de la classe 'ResourcesBundle'
+	 * 
 	 * @see GestionSiteAction#resourcesBundle
+	 * @see ResourcesBundle
 	 */
 	public ResourcesBundle getResourcesBundle() {
 		return resourcesBundle;
@@ -411,6 +442,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'criteresType' depuis la vue 'list-site.jsp'</p>
+	 * 
+	 * @return Un critère de type
 	 * 
 	 * @see GestionSiteAction#criteresType
 	 */
@@ -423,6 +456,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'criteresOrientation' depuis la vue 'list-site.jsp'</p>
 	 * 
+	 * @return Un critère d'orientation
+	 * 
 	 * @see GestionSiteAction#criteresOrientation
 	 */
 	public String getCriteresOrientation() {
@@ -433,6 +468,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'criteresLocalisation' depuis la vue 'list-site.jsp'</p>
+	 * 
+	 * @return Un critère de localisation
 	 * 
 	 * @see GestionSiteAction#criteresLocalisation
 	 */
@@ -445,7 +482,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'listSite' depuis la vue 'list-site.jsp'</p>
 	 * 
+	 * @return Une liste d'instance de la classe 'Site'
+	 * 
 	 * @see GestionSiteAction#listSite
+	 * @see Site
 	 */
 	public List<Site> getListSite() {
 		return listSite;
@@ -457,6 +497,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * <p>Getter permettant de récupérer l'objet 'idSite' depuis struts.xml</p>
 	 * <p>Plus precisement l'action, 'site_comment'</p>
 	 * 
+	 * @return Un identifiant de site
+	 * 
 	 * @see GestionSiteAction#resourcesBundle
 	 */
 	public String getIdSite() {
@@ -467,7 +509,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'site' depuis la vue 'site.jsp'</p>
 	 * 
+	 * @return Un instance de la classe 'Site'
+	 * 
 	 * @see GestionSiteAction#site
+	 * @see Site
 	 */
 	public Site getSite() {
 		return site;
@@ -477,6 +522,8 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'secteurListVoie' depuis la vue 'site.jsp'</p>
+	 * 
+	 * @return Un liste de la classe 'Object'
 	 * 
 	 * @see GestionSiteAction#listTopo
 	 */
@@ -489,7 +536,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'listTopo' depuis la vue 'site.jsp'</p>
 	 * 
+	 * @return Une liste d'instance de la classe 'Topo'
+	 * 
 	 * @see GestionSiteAction#listTopo
+	 * @see Topo
 	 */
 	public List<Topo> getListTopo() {
 		return listTopo;
@@ -500,7 +550,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'listCommentaire' depuis la vue 'site.jsp'</p>
 	 * 
+	 * @return Une liste d'instance de la classe 'CommentaireSite'
+	 * 
 	 * @see GestionSiteAction#listTopo
+	 * @see CommentaireSite
 	 */
 	public List<CommentaireSite> getListCommentaire() {
 		return listCommentaire;
@@ -543,7 +596,11 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	* @see GestionSiteAction#criteresLocalisation
 	* @see GestionSiteAction#resourcesBundle
 	* @see GestionSiteAction#managerFactory
+	* @see GestionSiteAction#listSite
 	* @see SiteManager#getList(String, String, String)
+	* @see ResourcesBundle#getListOrientation()
+	* @see ResourcesBundle#getListType()
+	* @see ResourcesBundle#getListLocalisation()
 	 */
 	public String doList() {
 			
@@ -592,13 +649,15 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * 
 	 * @see GestionSiteAction#idSite
 	 * @see GestionSiteAction#topo
-	 * @see GestionSiteAction#listSite
+	 * @see GestionSiteAction#listTopo
 	 * @see GestionSiteAction#listCommentaire
+	 * @see GestionSiteAction#secteurListVoie
 	 * @see GestionSiteAction#managerFactory
 	 * @see SiteManager#getCheckSite(String)
 	 * @see SiteManager#getSite(String)
 	 * @see SiteManager#getList(String, String, String)
 	 * @see CommentaireSiteManager#getList(String)
+	 * @see VoieManager#getSecteurListVoie(List)
 	 */
 	public String doDetail() {
 
@@ -637,13 +696,19 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	 * @see GestionSiteAction#contenu
 	 * @see GestionSiteAction#request
 	 * @see GestionSiteAction#managerFactory
-	 * @see GestionSiteAction#validation(String, int, int)
+	 * @see CommentaireSiteManager#addComment(int, String, String)
+	 * @see HttpServletRequest
+	 * @see ServletRequestAware
+	 * @see GestionSiteAction#inputValidation
+	 * @see InputValidation#messageValidation(String)
+	 * @see InputValidation#getMIN_CONTENU()
+	 * @see InputValidation#getMAX_CONTENU()
 	 */
 	public String doAddComment() {
 		String vResult = ActionSupport.ERROR;
 		
 		if(idSite != null && !idSite.isEmpty()) {
-			if(contenu != null && !contenu.isEmpty() && this.validation(contenu, MIN_CONTENU, MAX_CONTENU)) {
+			if(contenu != null && !contenu.isEmpty() && inputValidation.messageValidation(contenu)) {
 				try {
 					int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
 					
@@ -660,7 +725,7 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 			}
 			else {
 				vResult = ActionSupport.INPUT;
-				this.addFieldError("contenu", "Le commentaire doit etre compris entre "+MIN_CONTENU+" et "+MAX_CONTENU+" caractères.");
+				this.addFieldError("contenu", "Le commentaire doit etre compris entre "+inputValidation.getMIN_CONTENU()+" et "+inputValidation.getMAX_CONTENU()+" caractères.");
 			}
 		}
 		else {
@@ -704,40 +769,4 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 	
 	
 	
-	/**
-	 * 
-	 * <p>Méthode servant à formatter toutes les entrées saisi par l'utilisateur</p>
-	 * <p>Vérification de l'entrée puis formattage en retirant tous les espaces superflus</p>
-	 * 
-	 * @param input La saisi de l'utilisateur
-	 * @return La saisi de l'utilisateur à présent formatté
-	 * 
-	 * @see GestionSiteAction#setContenu(String)
-	 * @see GestionSiteAction#setCriteresType(String)
-	 * @see GestionSiteAction#setCriteresLocalisation(String)
-	 * @see GestionSiteAction#setCriteresOrientation(String)
-	 */
-	public String inputFormat(String input) {
-		
-		if(input != null && !input.isEmpty()) {
-			for(int i = 0; i < input.length()-1; i++) {
-				String character = input.substring(i, i+1);
-				String characterBis = input.substring(i+1, i+2);
-							
-				if(character.equals(" ") && characterBis.equals(" ")) {
-					input = input.substring(0, i)+input.substring(i+1, input.length());
-					i--;
-				}
-			}
-			if(input.startsWith(" ")) {
-				input = input.substring(1);
-			}
-			
-			if(input.endsWith(" ")) {
-				input = input.substring(0, input.length()-1);
-			}
-		}
-		
-		return input;
-	} 
 }

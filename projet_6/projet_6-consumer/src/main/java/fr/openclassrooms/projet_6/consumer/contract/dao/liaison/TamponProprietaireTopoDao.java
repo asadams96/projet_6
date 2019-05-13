@@ -15,6 +15,8 @@ import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
  * @see TamponProprietaireTopoDao#getQuantity(int, String)
  * @see TamponProprietaireTopoDao#addTampon(int, String, int)
  * @see TamponProprietaireTopoDao#removeTampon(int, String, int, int)
+ * @see TamponProprietaireTopoDao#getList(String)
+ * @see TamponProprietaireTopoDaoImpl#getList(String)
  * @see TamponProprietaireTopoDaoImpl#getTamponByUser(int)
  * @see TamponProprietaireTopoDaoImpl#getQuantity(int, String)
  * @see TamponProprietaireTopoDaoImpl#addTampon(int, String, int)
@@ -93,5 +95,19 @@ public interface TamponProprietaireTopoDao {
 	 * @see TamponProprietaireTopo
 	 */
 	boolean removeTampon(int idUtilisateur, String idTopo, int quantite, int quantiteDispo) throws Exception;
+
+	
+	
+	/**
+	 * <p>Récupère tous les proprietaire concerné par un topo</p>
+	 * 
+	 * @param idTopo l'identifiant d'un topo
+	 * @return Une liste d'instance de classe 'TamponProprietaireTopo'
+	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
+	 * 
+	 * @see TamponProprietaireTopoDaoImpl#getList(String)
+	 * @see TamponProprietaireTopo
+	 */
+	List<TamponProprietaireTopo> getList(String idTopo) throws Exception;
 
 }

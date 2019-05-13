@@ -26,8 +26,6 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  *
  */
 public class UtilisateurRM implements RowMapper<Utilisateur> {
-
-	
 	
 	@Override
 	public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {

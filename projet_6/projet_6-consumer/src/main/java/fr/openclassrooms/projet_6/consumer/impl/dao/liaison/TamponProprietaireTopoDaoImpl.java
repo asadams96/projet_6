@@ -24,11 +24,13 @@ import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
  * @see TamponProprietaireTopoDao#getQuantity(int, String)
  * @see TamponProprietaireTopoDao#addTampon(int, String, int)
  * @see TamponProprietaireTopoDao#removeTampon(int, String, int, int)
+ * @see TamponProprietaireTopoDao#getList(String)
  * @see TamponProprietaireTopoDaoImpl#getTamponByUser(int)
  * @see TamponProprietaireTopoDaoImpl#getQuantity(int, String)
  * @see TamponProprietaireTopoDaoImpl#addTampon(int, String, int)
  * @see TamponProprietaireTopoDaoImpl#removeTampon(int, String, int, int)
  * @see TamponProprietaireTopoDaoImpl#existTampon(int, String)
+ * @see TamponProprietaireTopoDaoImpl#getList(String)
  * @see DaoFactory#getTamponProprietaireTopoDao()
  * @see DaoFactory#setTamponProprietaireTopoDao(TamponProprietaireTopoDao)
  * @see DaoFactoryImpl#getTamponProprietaireTopoDao()
@@ -38,12 +40,15 @@ import fr.openclassrooms.projet_6.model.liaison.TamponProprietaireTopo;
  * @see TamponProprietaireTopoRM 
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see TamponProprietaireTopoDaoImpl#rowMapper
+ * @see TamponProprietaireTopoDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
  *
  */
 public class TamponProprietaireTopoDaoImpl extends AbstractDao implements TamponProprietaireTopoDao {
+	
 	
 	
 	/**
@@ -84,17 +89,12 @@ public class TamponProprietaireTopoDaoImpl extends AbstractDao implements Tampon
 	@Override
 	public List<TamponProprietaireTopo> getTamponByUser(int idUtilisateur) throws Exception {
 		
-		List<TamponProprietaireTopo> tampon = null;
-
-		if(String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty()) {
+		String sql = "SELECT * FROM public.tampon_proprietaire_topo WHERE id_proprietaire = :id_proprietaire";
 			
-			String sql = "SELECT * FROM public.tampon_proprietaire_topo WHERE id_proprietaire = :id_proprietaire";
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_proprietaire", idUtilisateur, Types.INTEGER);
 			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_proprietaire", idUtilisateur, Types.INTEGER);
-			
-			tampon = this.getJdbcTemplate().query(sql, map, this.rowMapper);
-		}
+		List<TamponProprietaireTopo>  tampon = this.getJdbcTemplate().query(sql, map, this.rowMapper);
 		
 		return tampon;
 	}
@@ -108,37 +108,30 @@ public class TamponProprietaireTopoDaoImpl extends AbstractDao implements Tampon
 	@Override
 	public boolean addTampon(int idUtilisateur, String idTopo, int quantite) throws Exception {
 
-		Boolean vResult = false;
-
-		if(idTopo != null && !idTopo.isEmpty() 
-			&& String.valueOf(quantite) != null && !String.valueOf(quantite).isEmpty() && quantite > 0
-						&& String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty()) {
 			
-			String sql;
-			int quantitePresente;
+		String sql;
+		int quantitePresente;
 			
-			if(!this.existTampon(idUtilisateur, idTopo)) {
-				sql = "INSERT INTO public.tampon_proprietaire_topo (id_proprietaire, id_topo, quantite) "
-						+ "VALUES (:id_utilisateur, :id_topo, :quantite)";
-				quantitePresente = 0;
-			}
-			else {
-				sql = "UPDATE public.tampon_proprietaire_topo "
-						+ "SET quantite = :quantite "
-							+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo ";
-				quantitePresente = this.getQuantity(idUtilisateur, idTopo);
-			}
-			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
-			map.addValue("id_topo", idTopo, Types.INTEGER);
-			map.addValue("quantite", (quantite+quantitePresente), Types.INTEGER);
-			 
-			this.getJdbcTemplate().update(sql, map);
-			vResult = true;
-			
+		if(!this.existTampon(idUtilisateur, idTopo)) {
+			sql = "INSERT INTO public.tampon_proprietaire_topo (id_proprietaire, id_topo, quantite) "
+					+ "VALUES (:id_utilisateur, :id_topo, :quantite)";
+			quantitePresente = 0;
 		}
-		return vResult;
+		else {
+			sql = "UPDATE public.tampon_proprietaire_topo "
+					+ "SET quantite = :quantite "
+						+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo ";
+			quantitePresente = this.getQuantity(idUtilisateur, idTopo);
+		}
+			
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
+		map.addValue("id_topo", idTopo, Types.INTEGER);
+		map.addValue("quantite", (quantite+quantitePresente), Types.INTEGER);
+			 
+		this.getJdbcTemplate().update(sql, map);
+			
+		return true;
 	}
 	
 	
@@ -184,29 +177,21 @@ public class TamponProprietaireTopoDaoImpl extends AbstractDao implements Tampon
 	@Override
 	public boolean removeTampon(int idUtilisateur, String idTopo, int quantite, int quantiteDispo)  throws Exception {
 
-		Boolean vResult = false;
+		String sql = "UPDATE public.tampon_proprietaire_topo "
+						+ "SET quantite = :quantite "
+							+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo";
+			
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
+		map.addValue("id_topo", idTopo, Types.INTEGER);
+		map.addValue("quantite", (quantiteDispo-quantite), Types.INTEGER);
+			
+		this.getJdbcTemplate().update(sql, map);
 		
-		if(idTopo != null && !idTopo.isEmpty()
-			&& String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty() 
-			&& String.valueOf(quantite) != null && !String.valueOf(quantite).isEmpty() && quantite > 0
-			&& String.valueOf(quantiteDispo) != null && !String.valueOf(quantiteDispo).isEmpty()) {
-			
-			String sql = "UPDATE public.tampon_proprietaire_topo "
-							+ "SET quantite = :quantite "
-								+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo";
-			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
-			map.addValue("id_topo", idTopo, Types.INTEGER);
-			map.addValue("quantite", (quantiteDispo-quantite), Types.INTEGER);
-			
-			this.getJdbcTemplate().update(sql, map);
-			vResult = true;
-			
-		}
-		return vResult;
+		return true;
 	}
 
+	
 	
 	/**
 	 * @see TamponProprietaireTopoDao#getQuantity(int, String)
@@ -214,23 +199,36 @@ public class TamponProprietaireTopoDaoImpl extends AbstractDao implements Tampon
 	 */
 	@Override
 	public int getQuantity(int idUtilisateur, String idTopo)  throws Exception {
-
-		int vResult = 0;
-		
-		if(idTopo != null && !idTopo.isEmpty()
-			&&	String.valueOf(idUtilisateur) != null && !String.valueOf(idUtilisateur).isEmpty()) {
 			
-			String sql = "SELECT quantite "
-						+ "FROM public.tampon_proprietaire_topo "
-						+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo";
+		String sql = "SELECT quantite "
+					+ "FROM public.tampon_proprietaire_topo "
+					+ "WHERE id_proprietaire = :id_utilisateur AND id_topo = :id_topo";
 			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
-			map.addValue("id_topo", idTopo, Types.INTEGER);
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_utilisateur", idUtilisateur, Types.INTEGER);
+		map.addValue("id_topo", Integer.valueOf(idTopo), Types.INTEGER);
 			
-			vResult = this.getJdbcTemplate().queryForObject(sql, map, Integer.class);
-		}
+		int vResult = this.getJdbcTemplate().queryForObject(sql, map, Integer.class);
 		
 		return vResult;
+	}
+
+
+
+	/**
+	 * @see TamponProprietaireTopoDao#getList(String)
+	 * @see TamponProprietaireTopo
+	 */
+	@Override
+	public List<TamponProprietaireTopo> getList(String idTopo) throws Exception {
+		
+		String sql = "SELECT * FROM public.tampon_proprietaire_topo WHERE id_topo = :id_topo";
+			
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_topo", idTopo, Types.INTEGER);
+			
+		List<TamponProprietaireTopo> listTamponProprietaireTopo = this.getJdbcTemplate().query(sql, map, this.rowMapper);
+		
+		return listTamponProprietaireTopo;
 	}
 }

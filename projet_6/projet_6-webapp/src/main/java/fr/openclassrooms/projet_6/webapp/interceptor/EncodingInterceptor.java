@@ -12,8 +12,10 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 /**
- * Interceptor servant à encoder en 'UTF-8' les requêtes
- * de façon à permettre le bon traitement des caractère spéciaux.
+ * <p>
+ * 	Interceptor servant à encoder en 'UTF-8' les requêtes
+ * 	de façon à permettre le bon traitement des caractère spéciaux.
+ * </p>
  * 
  * @see EncodingInterceptor#intercept(ActionInvocation)
  * @see AbstractInterceptor

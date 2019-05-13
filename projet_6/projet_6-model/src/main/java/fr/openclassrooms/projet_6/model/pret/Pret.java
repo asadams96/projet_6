@@ -289,7 +289,7 @@ public class Pret {
 	/**
 	 * <p>Getter du parametre 'proprietaire'</p>
 	 * 
-	 * @return Le proprietaire du topo aoosicé au prêt
+	 * @return Le proprietaire du topo associé au prêt
 	 * 
 	 * @see Pret#proprietaire
 	 * @see Pret#setProprietaire(Utilisateur)
@@ -303,7 +303,7 @@ public class Pret {
 	/**
 	 * <p>Setter du parametre 'proprietaire'</p>
 	 * 
-	 * @param proprietaire Le proprietaire du topo aoosicé au prêt
+	 * @param proprietaire Le proprietaire du topo associé au prêt
 	 * 
 	 * @see Pret#proprietaire
 	 * @see Pret#getProprietaire()

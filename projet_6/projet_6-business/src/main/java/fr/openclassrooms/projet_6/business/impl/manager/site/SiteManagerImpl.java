@@ -20,14 +20,18 @@ import fr.openclassrooms.projet_6.model.site.Site;
  * @see SiteManagerImpl#getList(String, String, String)
  * @see SiteManagerImpl#getSite(String)
  * @see SiteManagerImpl#getCheckSite(String)
+ * @see SiteManagerImpl#checkLocalisation(int)
+ * @see SiteManagerImpl#getIdsSiteByLocalisation(String)
  * @see SiteManager#getList(String)
  * @see SiteManager#getList(String, String, String)
  * @see SiteManager#getSite(String)
  * @see SiteManager#getCheckSite(String)
+ * @see SiteManager#checkLocalisation(int)
+ * @see SiteManager#getIdsSiteByLocalisation(String)
  * @see ManagerFactory#getSiteManager()
  * @see ManagerFactory#setSiteManager(SiteManager)
  * @see ManagerFactoryImpl#getSiteManager()
- * @see ManagerFactoryImpl#setSiteManager(SiteManager)
+ * @see ManagerFactoryImpl#setSiteManager(SiteManager) 
  * @see Site
  * 
  * @version 1.0
@@ -44,18 +48,13 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 	 */
 	@Override
 	public List<Site> getList(String idTopo) throws Exception {
-		
-		List<Site> listSite = null;
-		
-		if(idTopo != null && !idTopo.isEmpty()) {
-			List<TamponSiteTopo> tampons = this.getDaoFactory().getTamponSiteTopoDao().getTamponByTopo(idTopo);
-			
-			listSite = new ArrayList<Site>();
-			
-			for(TamponSiteTopo tampon : tampons) {
 				
-				listSite.add(this.getDaoFactory().getSiteDao().getSite(tampon.getSite().getIdSite()));
-			}
+		List<TamponSiteTopo> tampons = this.getManagerFactory().getTamponSiteTopoManager().getTamponByTopo(idTopo);
+			
+		List<Site> listSite = new ArrayList<Site>();
+			
+		for(TamponSiteTopo tampon : tampons) {
+			listSite.add(this.getDaoFactory().getSiteDao().getSite(tampon.getSite().getIdSite()));
 		}
 		
 		return listSite;
@@ -97,7 +96,7 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 		}
 		if(critereOrientation != null && !critereOrientation.isEmpty() && listIdsSite != null) {
 			
-				listIdsSiteProvisoire = this.getDaoFactory().getSecteurDao().getIdsSiteByOrientation(critereOrientation);	
+				listIdsSiteProvisoire = this.getManagerFactory().getSecteurManager().getIdsSiteByOrientation(critereOrientation);	
 				
 				if(listIdsSiteProvisoire != null) {
 					for(int idSite : listIdsSiteProvisoire) {
@@ -109,7 +108,7 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 		}
 		if(critereType != null && !critereType.isEmpty() && listIdsSite != null) {
 
-				listIdsSiteProvisoire = this.getDaoFactory().getSecteurDao().getIdsSiteByType(critereType);	
+				listIdsSiteProvisoire = this.getManagerFactory().getSecteurManager().getIdsSiteByType(critereType);	
 				
 				if(listIdsSiteProvisoire != null) {
 					for(int idSite : listIdsSiteProvisoire) {
@@ -132,8 +131,8 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 			List<Integer> newListIdsSite = new ArrayList<Integer>();
 			
 			for(int idSite : listIdsSite) {
-				if((this.getDaoFactory().getSecteurDao().checkType(idSite).contains(critereType) || critereType.isEmpty()) &&
-					(this.getDaoFactory().getSecteurDao().checkOrientation(idSite).contains(critereOrientation) || critereOrientation.isEmpty()) &&
+				if((this.getManagerFactory().getSecteurManager().checkType(idSite).contains(critereType) || critereType.isEmpty()) &&
+					(this.getManagerFactory().getSecteurManager().checkOrientation(idSite).contains(critereOrientation) || critereOrientation.isEmpty()) &&
 						(this.getDaoFactory().getSiteDao().checkLocalisation(idSite).equals(critereLocalisation) || critereLocalisation.isEmpty())) {
 				
 					newListIdsSite.add(idSite);
@@ -168,12 +167,7 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 	@Override
 	public Site getSite(String idSite) throws Exception {
 		
-		Site site = null;
-		
-		if(idSite != null && !idSite.isEmpty()) {
-			
-			site = this.getDaoFactory().getSiteDao().getSite(Integer.valueOf(idSite));
-		}
+		Site site = this.getDaoFactory().getSiteDao().getSite(Integer.valueOf(idSite));
 		
 		return site;
 	}
@@ -196,5 +190,27 @@ public class SiteManagerImpl extends AbstractManager implements SiteManager {
 			vResult = true;
 		}
 		return vResult;
+	}
+
+
+
+	/**
+	 * @see SiteManagercheckLocalisation(int)
+	 */
+	@Override
+	public String checkLocalisation(int idSite) throws Exception {
+
+		return this.getDaoFactory().getSiteDao().checkLocalisation(idSite);
+	}
+
+
+
+	/**
+	 * @see SiteManager#getIdsSiteByLocalisation(String)
+	 */
+	@Override
+	public List<Integer> getIdsSiteByLocalisation(String critereLocalisation) throws Exception {
+
+		return this.getDaoFactory().getSiteDao().getIdsSiteByLocalisation(critereLocalisation);
 	}
 }

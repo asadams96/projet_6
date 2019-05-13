@@ -32,6 +32,7 @@
 	<!-- ========================================= Abstract Manager ======================================= -->
 	<bean id="abstractManager" abstract="true">
         <property name="daoFactory" ref="daoFactory" />
+        <property name="managerFactory" ref="managerFactory" />
     </bean>
 
 	<!-- ========================================= Déclaration des Managers ======================================= -->

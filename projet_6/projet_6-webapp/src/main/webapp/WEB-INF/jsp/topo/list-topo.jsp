@@ -10,24 +10,24 @@
 	
 		<!-- =========================== Formulaire de sélection des critères de recherche ===========================-->
 		
-		<s:form action="topo_list">
-			<s:select name="criteresType" label="Type" id="type"
+	<s:form action="topo_list">
+		<s:select name="criteresType" label="Type" id="type"
                   list="resourcesBundle.listType"
                   emptyOption="true"
                   requiredLabel="true"/>
                   
-        	<s:select name="criteresOrientation" label="Orientation"
+       	<s:select name="criteresOrientation" label="Orientation"
                   list="resourcesBundle.listOrientation"
                   emptyOption="true"
                   requiredLabel="true"/>
                   
-         	<s:select name="criteresLocalisation" label="Localisation"
+       	<s:select name="criteresLocalisation" label="Localisation"
                   list="resourcesBundle.listLocalisation"
                   emptyOption="true"
                   requiredLabel="true"/> 
                   
-        	<s:submit value="Rechercher"/>
-        </s:form>       
+        <s:submit value="Rechercher"/>
+       </s:form>       
                  
                  
                  

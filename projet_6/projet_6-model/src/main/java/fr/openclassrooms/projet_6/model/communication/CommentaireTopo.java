@@ -77,6 +77,7 @@ public class CommentaireTopo extends Message {
 	 * @see Message#setDate(String)
 	 * @see Message#setContenu(String)
 	 * @see Message#setAuteur(Utilisateur)
+	 * @see CommentaireTopo#topo
 	 * @see CommentaireTopo#CommentaireTopo()
 	 */
 	public CommentaireTopo(int idMessage, String date, String contenu, Utilisateur auteur, Topo topo) {

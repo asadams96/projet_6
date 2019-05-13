@@ -30,6 +30,8 @@ import fr.openclassrooms.projet_6.model.communication.CommentaireTopo;
  */
 public interface CommentaireTopoDao {
 
+	
+	
 	/**
 	 * <p>Récupère une liste d'id de commentaire en fonction de l'identifiant d'un topo</p>
 	 * 
@@ -42,6 +44,7 @@ public interface CommentaireTopoDao {
 	 */
 	List<Integer> getIdsComment(String idTopo) throws Exception;
 
+	
 	
 	/**
 	 * <p>Enregistrer le commentaire souhaité</p>

@@ -16,6 +16,8 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 import fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle;
 import fr.openclassrooms.projet_6.webapp.interceptor.AuthentificationInterceptor;
 import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
+import fr.openclassrooms.projet_6.webapp.interceptor.IndexInterceptor;
+import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
 
 
 
@@ -33,29 +35,11 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * 		<li>Modifier la localisation d'un utilisateur => doModifLocalisation()</li>
  * 		<li>Modifier le mot de passe d'un utilisateur => doModifyPass()</li>
  * </ul>
+ *  
  * 
- * <p>La méthode inputFormat(String) sert à formatter les saisis utilisateurs.</p>
- * 
- * <p>
- * 	La méthode validation(String) sert à vérifier que les entrées saisi par 
- * 	l'utilisateur respecte bien les contraintes défini dans cette même métode.
- * </p>
- * 
- * 
- * @see GestionUtilisateurAction#MIN_MAIL
- * @see GestionUtilisateurAction#MIN_NOM
- * @see GestionUtilisateurAction#MIN_PRENOM
- * @see GestionUtilisateurAction#MIN_CIVILITE
- * @see GestionUtilisateurAction#MIN_PSEUDO
- * @see GestionUtilisateurAction#MIN_PASS
- * @see GestionUtilisateurAction#MAX_MAIL
- * @see GestionUtilisateurAction#MAX_NOM
- * @see GestionUtilisateurAction#MAX_PRENOM
- * @see GestionUtilisateurAction#MAX_CIVILITE
- * @see GestionUtilisateurAction#MAX_PSEUDO
- * @see GestionUtilisateurAction#MAX_PASS
  * @see GestionUtilisateurAction#managerFactory
  * @see GestionUtilisateurAction#resourcesBundle
+ * @see GestionUtilisateurAction#inputValidation
  * @see GestionUtilisateurAction#request
  * @see GestionUtilisateurAction#mail
  * @see GestionUtilisateurAction#pseudo
@@ -69,6 +53,7 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * @see GestionUtilisateurAction#idUtilisateur
  * @see GestionUtilisateurAction#setManagerFactory(ManagerFactory)
  * @see GestionUtilisateurAction#setResourcesBundle(ResourcesBundle)
+ * @see GestionUtilisateurAction#setInputValidation(InputValidation)
  * @see GestionUtilisateurAction#setServletRequest(HttpServletRequest)
  * @see GestionUtilisateurAction#setMail(String)
  * @see GestionUtilisateurAction#setPseudo(String)
@@ -96,15 +81,15 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
  * @see GestionUtilisateurAction#doModifyPseudo()
  * @see GestionUtilisateurAction#doModifyLocalisation()
  * @see GestionUtilisateurAction#doModifyPass()
- * @see GestionUtilisateurAction#validation(String, int, int)
- * @see GestionUtilisateurAction#inputFormat(String)
  * @see UtilisateurManager
  * @see ResourcesBundle
+ * @see InputValidation
  * @see GestionPretAction
  * @see GestionSiteAction
  * @see GestionTopoAction
  * @see AuthentificationInterceptor
  * @see EncodingInterceptor
+ * @see IndexInterceptor
  * @see Topo
  * @see Message
  * @see Site
@@ -122,128 +107,7 @@ import fr.openclassrooms.projet_6.webapp.interceptor.EncodingInterceptor;
 public class GestionUtilisateurAction extends ActionSupport implements ServletRequestAware {
 
 	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'mail'</p>
-	 * 
-	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_MAIL = 10;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'nom'</p>
-	 * 
-	 * @see GestionUtilisateurAction#nom
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_NOM = 2;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'prenom'</p>
-	 * 
-	 * @see GestionUtilisateurAction#prenom
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_PRENOM = 2;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'civilite'</p>
-	 * 
-	 * @see GestionUtilisateurAction#civilite
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_CIVILITE = 1;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour le paramètre 'pseudo'</p>
-	 * 
-	 * @see GestionUtilisateurAction#pseudo
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_PSEUDO = 5;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille minimale pour les paramètres 'pass'et 'pasBis'</p>
-	 * 
-	 * @see GestionUtilisateurAction#pass
-	 * @see GestionUtilisateurAction#passBis
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MIN_PASS = 8;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'mail'</p>
-	 * 
-	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_MAIL = 50;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'nom'</p>
-	 * 
-	 * @see GestionUtilisateurAction#nom
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_NOM = 30;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'prenom'</p>
-	 * 
-	 * @see GestionUtilisateurAction#prenom
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_PRENOM = 30;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'civilite'</p>
-	 * 
-	 * @see GestionUtilisateurAction#civilite
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_CIVILITE = 10;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'pseudo'</p>
-	 * 
-	 * @see GestionUtilisateurAction#pseudo
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_PSEUDO = 20;
-	
-	
-	
-	/**
-	 * <p>Contrainte de taille maximale pour le paramètre 'pass'</p>
-	 * 
-	 * @see GestionUtilisateurAction#pass
-	 * @see GestionUtilisateurAction#validation(String, int, int)
-	 */
-	private final int MAX_PASS = 30;
-	
-	
-	
+		
 	/**
 	 * <p>Objet servant à stocker une instance de la classe 'ManagerFactory'</p>
 	 * 
@@ -268,6 +132,23 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @see ResourcesBundle
 	 */
 	private ResourcesBundle resourcesBundle;
+	
+	
+	
+	/**
+	 * <p>Objet servant à stocker une instance de la classe 'InputValidation'</p>
+	 * 
+	 * @see GestionUtilisateurAction#setMail(String)
+	 * @see GestionUtilisateurAction#setPseudo(String)
+	 * @see GestionUtilisateurAction#setCivilite(String)
+	 * @see GestionUtilisateurAction#setNom(String)
+	 * @see GestionUtilisateurAction#setPrenom(String)
+	 * @see GestionUtilisateurAction#setLocalisation(String)
+	 * @see GestionUtilisateurAction#setIdUtilisateur(String)
+	 * @see GestionUtilisateurAction#setInputValidation(InputValidation)
+	 * @see InputValidation
+	 */
+	private InputValidation inputValidation;
 	
 	
 	
@@ -423,6 +304,8 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'managerFactory'</p>
 	 * 
+	 * @param managerFactory Une instance de la classe 'ManagerFactory'
+	 * 
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see ManagerFactory
 	 */
@@ -435,6 +318,8 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'resourcesBundle'</p>
 	 * 
+	 * @param resourcesBundle Une instance de la classe 'ResourcesBundle'
+	 * 
 	 * @see GestionSiteAction#resourcesBundle
 	 * @see ResourcesBundle
 	 */
@@ -445,7 +330,23 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	
 	
 	/**
+	 * <p>Setter servant à Spring pour injecter et donc définir l'objet 'inputValidation'</p>
+	 * 
+	 * @param inputValidation Un instance de la classe 'InputValidation'
+	 * 
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation
+	 */
+	public void setInputValidation(InputValidation inputValidation) {
+		this.inputValidation = inputValidation;
+	}
+
+
+
+	/**
 	 * <p>Setter servant à définir l'objet 'request' grâce à l'interface 'ServletRequestAware'</p>
+	 * 
+	 * @param request La requête en cours
 	 * 
 	 * @see GestionUtilisateurAction#request
 	 * @see ServletRequestAware
@@ -466,10 +367,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param mail L'adresse mail saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setMail(String mail) {
-		this.mail = this.inputFormat(mail);
+		this.mail = inputValidation.inputFormat(mail);
 	}
 
 
@@ -483,10 +385,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param pseudo Le pseudo saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#pseudo
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setPseudo(String pseudo) {
-		this.pseudo = this.inputFormat(pseudo);
+		this.pseudo = inputValidation.inputFormat(pseudo);
 	}
 
 
@@ -499,10 +402,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param civilite La civilité saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#civilite
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setCivilite(String civilite) {
-		this.civilite = this.inputFormat(civilite);
+		this.civilite = inputValidation.inputFormat(civilite);
 	}
 
 
@@ -516,10 +420,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param nom Le nom saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#nom
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setNom(String nom) {
-		this.nom = this.inputFormat(nom);
+		this.nom = inputValidation.inputFormat(nom);
 	}
 	
 	
@@ -533,10 +438,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param prenom Le prenom saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#prenom
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setPrenom(String prenom) {
-		this.prenom = this.inputFormat(prenom);
+		this.prenom = inputValidation.inputFormat(prenom);
 	}
 
 
@@ -550,10 +456,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param localisation La localisation choisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#localisation
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setLocalisation(String localisation) {
-		this.localisation = this.inputFormat(localisation);
+		this.localisation = inputValidation.inputFormat(localisation);
 	}
 
 
@@ -567,7 +474,6 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param pass Le mot de passe saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#pass
-	 * @see GestionUtilisateurAction#inputFormat(String)
 	 */
 	public void setPass(String pass) {
 		this.pass = pass;
@@ -584,7 +490,6 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param pass Le mot de passe saisi par l'utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#passBis
-	 * @see GestionUtilisateurAction#inputFormat(String)
 	 */
 	public void setPassBis(String passBis) {
 		this.passBis = passBis;
@@ -601,10 +506,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @param idUtilisateur L'identifiant d'un utilisateur
 	 * 
 	 * @see GestionUtilisateurAction#idUtilisateur
-	 * @see GestionUtilisateurAction#inputFormat(String)
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#inputFormat(String)
 	 */
 	public void setIdUtilisateur(String idUtilisateur) {
-			this.idUtilisateur = this.inputFormat(idUtilisateur);		
+			this.idUtilisateur = inputValidation.inputFormat(idUtilisateur);		
 		
 	}
 	
@@ -617,9 +523,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer l'objet 'resourcesBundle' depuis les vues 'inscription.jsp', 'profil.jsp'</p>
 	 * 
+	 * @return Une instance de la classe 'ResourcesBundle'
+	 * 
 	 * @see GestionUtilisateurAction#resourcesBundle
-	 * @see GestionUtilisateurAction#doInscription()
-	 * @see GestionUtilisateurAction#doDetail()
 	 * @see ResourcesBundle
 	 */
 	public ResourcesBundle getResourcesBundle() {
@@ -631,11 +537,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'mail' depuis les vues 'inscription.jsp', 'profil.jsp', 'connexion.jsp'</p>
 	 * 
+	 * @return L'adresse mail de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#doInscription()
-	 * @see GestionUtilisateurAction#doDetail()
-	 * @see @see GestionUtilisateurAction#doLogin()
-	 */
+	 * */
 	public String getMail() {
 		return mail;
 	}
@@ -644,9 +549,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'pseudo' depuis les vues 'inscription.jsp', 'profil.jsp'</p>
 	 * 
+	 * @return Le pseudo de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#pseudo
-	 * @see GestionUtilisateurAction#doInscription()
-	 * @see GestionUtilisateurAction#doDetail()
 	 */
 	public String getPseudo() {
 		return pseudo;
@@ -656,8 +561,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'civilite' depuis la vue 'inscription.jsp'</p>
 	 * 
+	 * @return La civilité de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#civilite
-	 * @see GestionUtilisateurAction#doInscription()
 	 */
 	public String getCivilite() {
 		return civilite;
@@ -667,8 +573,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'nom' depuis la vue 'inscription.jsp'</p>
 	 * 
+	 * @return Le nom de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#nom
-	 * @see GestionUtilisateurAction#doInscription()
 	 */
 	public String getNom() {
 		return nom;
@@ -678,8 +585,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'prenom' depuis la vue 'inscription.jsp'</p>
 	 * 
+	 * @return Le prenom de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#prenom
-	 * @see GestionUtilisateurAction#doInscription()
 	 */
 	public String getPrenom() {
 		return prenom;
@@ -690,9 +598,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer le paramètre 'localisation' depuis les vues 'inscription.jsp', 'profil.jsp'</p>
 	 * 
+	 * @return La localisation de l'utilisateur
+	 * 
 	 * @see GestionUtilisateurAction#localisation
-	 * @see GestionUtilisateurAction#doInscription()
-	 * @see GestionUtilisateurAction#doDetail()
 	 */
 	public String getLocalisation() {
 		return localisation;
@@ -703,8 +611,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer une instance de la classe Utilisateur depuis la vue 'profil.jsp'</p>
 	 * 
+	 * @return une instance de la classe 'Utilisateur'
+	 * 
 	 * @see GestionUtilisateurAction#utilisateur
-	 * @see GestionUtilisateurAction#doDetail()
 	 */
 	public Utilisateur getUtilisateur() {
 		return utilisateur;
@@ -715,8 +624,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	/**
 	 * <p>Getter permettant de récupérer l'identifiant d'un Utilisateur depuis la vue 'profil.jsp'</p>
 	 * 
-	 * @see GestionUtilisateurAction#utilisateur
-	 * @see GestionUtilisateurAction#doDetail()
+	 * @return L'identifiant de l'utilisateur
+	 * 
+	 * @see GestionUtilisateurAction#idUtilisateur
 	 */
 	public String getIdUtilisateur() {
 		return idUtilisateur;
@@ -740,22 +650,29 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @see GestionUtilisateurAction#pass
 	 * @see GestionUtilisateurAction#passBis
 	 * @see GestionUtilisateurAction#localisation
-	 * @see GestionUtilisateurAction#MIN_CIVILITE
-	 * @see GestionUtilisateurAction#MAX_CIVILITE
-	 * @see GestionUtilisateurAction#MIN_MAIL
-	 * @see GestionUtilisateurAction#MAX_MAIL
-	 * @see GestionUtilisateurAction#MIN_NOM
-	 * @see GestionUtilisateurAction#MAX_NOM
-	 * @see GestionUtilisateurAction#MIN_PRENOM
-	 * @see GestionUtilisateurAction#MAX_PRENOM
-	 * @see GestionUtilisateurAction#MIN_PSEUDO
-	 * @see GestionUtilisateurAction#MAX_PSEUDO
-	 * @see GestionUtilisateurAction#MIN_PASS
-	 * @see GestionUtilisateurAction#MAX_PASS
-	 * @see GestionUtilisateurAction#validation(String, int, int)
 	 * @see GestionUtilisateurAction#resourcesBundle
 	 * @see GestionUtilisateurAction#managerFactory
-	 * @see UtilisateurManager
+	 * @see GestionUtilisateurAction#inputValidation
+	 * @see InputValidation#mailValidation(String)
+	 * @see InputValidation#pseudoValidation(String)
+	 * @see InputValidation#civiliteValidation(String)
+	 * @see InputValidation#nomValidation(String)
+	 * @see InputValidation#prenomValidation(String)
+	 * @see InputValidation#passValidation(String)
+	 * @see InputValidation#getMIN_MAIL()
+	 * @see InputValidation#getMIN_PSEUDO()
+	 * @see InputValidation#getMIN_CIVILITE()
+	 * @see InputValidation#getMIN_NOM()
+	 * @see InputValidation#getMIN_PRENOM()
+	 * @see InputValidation#getMIN_PASS()
+	 * @see InputValidation#getMAX_MAIL()
+	 * @see InputValidation#getMAX_PSEUDO()
+	 * @see InputValidation#getMAX_CIVILITE()
+	 * @see InputValidation#getMAX_NOM()
+	 * @see InputValidation#getMAX_PRENOM()
+	 * @see InputValidation#getMAX_PASS()
+	 * @see ResourcesBundle#getListLocalisation()
+	 * @see UtilisateurManager#addUtilisateur(Utilisateur)
 	 */
 	public String doInscription() {
 		
@@ -763,33 +680,33 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 		Boolean fieldError = false;
 		
 		if(mail != null && civilite != null && nom != null && prenom != null && pseudo != null && pass != null && passBis != null && localisation != null) {
-			if(mail.isEmpty() || !this.validation(mail, MIN_MAIL, MAX_MAIL)) {
+			if(mail.isEmpty() || !inputValidation.mailValidation(mail)) {
 				fieldError = true;
-				this.addFieldError("mail", "Le champs est requis et doit être compris entre "+MIN_MAIL+" et "+MAX_MAIL+" caractères.");
+				this.addFieldError("mail", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_MAIL()+" et "+inputValidation.getMAX_MAIL()+" caractères.");
 			}
-			if(civilite.isEmpty() || !this.validation(civilite, MIN_CIVILITE, MAX_CIVILITE)) {
+			if(civilite.isEmpty() || !inputValidation.civiliteValidation(civilite)) {
 				fieldError = true;
-				this.addFieldError("civilite", "Le champs est requis et doit être compris entre "+MIN_CIVILITE+" et "+MAX_CIVILITE+" caractères.");
+				this.addFieldError("civilite", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_CIVILITE()+" et "+inputValidation.getMAX_CIVILITE()+" caractères.");
 			}
-			if(nom.isEmpty() || !this.validation(nom, MIN_NOM, MAX_NOM)) {
+			if(nom.isEmpty() || !inputValidation.nomValidation(nom)) {
 				fieldError = true;
-				this.addFieldError("nom", "Le champs est requis et doit être compris entre "+MIN_NOM+" et "+MAX_NOM+" caractères.");
+				this.addFieldError("nom", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_NOM()+" et "+inputValidation.getMAX_NOM()+" caractères.");
 			}
-			if(prenom.isEmpty() || !this.validation(prenom, MIN_PRENOM, MAX_PRENOM)) {
+			if(prenom.isEmpty() || !inputValidation.prenomValidation(prenom)) {
 				fieldError = true;
-				this.addFieldError("prenom", "Le champs est requis et doit être compris entre "+MIN_PRENOM+" et "+MAX_PRENOM+" caractères.");
+				this.addFieldError("prenom", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PRENOM()+" et "+inputValidation.getMAX_PRENOM()+" caractères.");
 			}
-			if(pseudo.isEmpty() || !this.validation(pseudo, MIN_PSEUDO, MAX_PSEUDO)) {
+			if(pseudo.isEmpty() || !inputValidation.pseudoValidation(pseudo)) {
 				fieldError = true;
-					this.addFieldError("pseudo", "Le champs est requis et doit être compris entre "+MIN_PSEUDO+" et "+MAX_PSEUDO+" caractères.");
+					this.addFieldError("pseudo", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PSEUDO()+" et "+inputValidation.getMAX_PSEUDO()+" caractères.");
 			}
-			if(pass.isEmpty() || !this.validation(pass, MIN_PASS, MAX_PASS)) {
+			if(pass.isEmpty() || !inputValidation.passValidation(pass)) {
 				fieldError = true;
-				this.addFieldError("pass", "Le champs est requis et doit être compris entre "+MIN_PASS+" et "+MAX_PASS+" caractères.");
+				this.addFieldError("pass", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PASS()+" et "+inputValidation.getMAX_PASS()+" caractères.");
 			}
-			if(passBis.isEmpty() || !this.validation(passBis, MIN_PASS, MAX_PASS)) {
+			if(passBis.isEmpty() || !inputValidation.passValidation(passBis)) {
 				fieldError = true;
-				this.addFieldError("passBis", "Le champs est requis et doit être compris entre "+MIN_PASS+" et "+MAX_PASS+" caractères.");
+				this.addFieldError("passBis", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PASS()+" et "+inputValidation.getMAX_PASS()+" caractères.");
 			}
 			if(!pass.isEmpty() && !passBis.isEmpty() && !pass.equals(passBis)) {
 				fieldError = true;
@@ -844,6 +761,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @see UtilisateurManager
 	 * @see HttpServletRequest
 	 * @see ServletRequestAware
+	 * @see UtilisateurManager#getIdbyMail(String)
+	 * @see UtilisateurManager#getCheckCoupleIdPass(Utilisateur)
+	 * @see Utilisateur#Utilisateur(Integer, String)
 	 */
 	public String doLogin () {
 		
@@ -930,7 +850,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @see GestionUtilisateurAction#idUtilisateur
 	 * @see GestionUtilisateurAction#utilisateur
 	 * @see GestionUtilisateurAction#managerFactory
-	 * @see UtilisateurManager
+	 * @see UtilisateurManager#getUtilisateur(int)
 	 * @see Utilisateur
 	 */
 	public String doDetail() {
@@ -970,25 +890,29 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @return Le résultat de la méthode : 'success', 'input', 'error'
 	 * 
 	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#MIN_MAIL
-	 * @see GestionUtilisateurAction#MAX_MAIL
-	 * @see GestionUtilisateurAction#validation(String, int, int)
 	 * @see GestionUtilisateurAction#idUtilisateur
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see GestionUtilisateurAction#request
+	 * @see GestionUtilisateurAction#inputValidation
 	 * @see HttpServletRequest
 	 * @see ServletRequestAware
+	 * @see InputValidation#mailValidation(String)
+	 * @see InputValidation#getMIN_MAIL()
+	 * @see InputValidation#getMAX_MAIL()
+	 * @see UtilisateurManager#setMailById(String, String)
 	 * 
 	 */
 	public String doModifyMail() {
 		
 		String vResult = ActionSupport.INPUT;
 		
-		if(mail != null && !mail.isEmpty() && this.validation(mail, MIN_MAIL, MAX_MAIL)) {
+		if(mail != null && !mail.isEmpty() && inputValidation.mailValidation(mail)) {
 			
 			try {
 				if(this.managerFactory.getUtilisateurManager().getCheckMail(mail)) {
-					if(this.managerFactory.getUtilisateurManager().setMailById(idUtilisateur, mail)) {
+					if(this.managerFactory.getUtilisateurManager().setMailById(
+							String.valueOf(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur()), mail)) {
+						
 						Utilisateur utilisateur = this.managerFactory.getUtilisateurManager()
 								.getUtilisateur(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur());
 						
@@ -1013,7 +937,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}
 		}
 		else {
-			this.addFieldError("mail", "Le champs est requis et doit être compris entre "+MIN_MAIL+" et "+MAX_MAIL+" caractères.");
+			this.addFieldError("mail", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_MAIL()+" et "+inputValidation.getMAX_MAIL()+" caractères.");
 		}
 		
 		
@@ -1028,24 +952,28 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @return Le résultat de la méthode : 'success', 'input', 'error'
 	 * 
 	 * @see GestionUtilisateurAction#pseudo
-	 * @see GestionUtilisateurAction#MIN_PSEUDO
-	 * @see GestionUtilisateurAction#MAX_PSEUDO
-	 * @see GestionUtilisateurAction#validation(String, int, int)
 	 * @see GestionUtilisateurAction#idUtilisateur
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see GestionUtilisateurAction#request
+	 * @see GestionUtilisateurAction#inputValidation
 	 * @see HttpServletRequest
 	 * @see ServletRequestAware
+	 * @see InputValidation#pseudoValidation(String)
+	 * @see InputValidation#getMIN_PSEUDO()
+	 * @see InputValidation#getMAX_PSEUDO()
+	 * @see UtilisateurManager#setPseudoById(String, String)
 	 * 
 	 */
 	public String doModifyPseudo() {
 		
 		String vResult = ActionSupport.INPUT;
 		
-		if(pseudo != null && !pseudo.isEmpty() && this.validation(pseudo, MIN_PSEUDO, MAX_PSEUDO)) {
+		if(pseudo != null && !pseudo.isEmpty() && inputValidation.pseudoValidation(pseudo)) {
 			
 			try {
-				if(this.managerFactory.getUtilisateurManager().setPseudoById(idUtilisateur, pseudo)) {
+				if(this.managerFactory.getUtilisateurManager().setPseudoById(
+						String.valueOf(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur()), pseudo)) {
+					
 					Utilisateur utilisateur = this.managerFactory.getUtilisateurManager()
 							.getUtilisateur(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur());
 					
@@ -1066,7 +994,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}
 		}
 		else {
-			this.addFieldError("pseudo", "Le champs est requis et doit être compris entre "+MIN_PSEUDO+" et "+MAX_PSEUDO+" caractères.");
+			this.addFieldError("pseudo", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PSEUDO()+" et "+inputValidation.getMAX_PSEUDO()+" caractères.");
 		}
 		
 		
@@ -1081,12 +1009,14 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @return Le résultat de la méthode : 'success', 'input', 'error'
 	 * 
 	 * @see GestionUtilisateurAction#localisation
-	 * @see GestionUtilisateurAction#validation(String, int, int)
 	 * @see GestionUtilisateurAction#idUtilisateur
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see GestionUtilisateurAction#request
+	 * @see GestionUtilisateurAction#resourcesBundle
 	 * @see HttpServletRequest
 	 * @see ServletRequestAware
+	 * @see ResourcesBundle#getListLocalisation()
+	 * @see UtilisateurManager#setLocalisationById(String, String)
 	 * 
 	 */
 	public String doModifyLocalisation() {
@@ -1096,7 +1026,9 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 		if(localisation != null && !localisation.isEmpty() && this.resourcesBundle.getListLocalisation().contains(localisation)) {
 			
 			try {
-				if(this.managerFactory.getUtilisateurManager().setLocalisationById(idUtilisateur, localisation)) {
+				if(this.managerFactory.getUtilisateurManager().setLocalisationById(
+						String.valueOf(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur()), localisation)) {
+					
 					Utilisateur utilisateur = this.managerFactory.getUtilisateurManager()
 							.getUtilisateur(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur());
 					
@@ -1132,25 +1064,29 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * @return Le résultat de la méthode : 'success', 'input', 'error'
 	 * 
 	 * @see GestionUtilisateurAction#pass
-	 * @see GestionUtilisateurAction#MIN_PASS
-	 * @see GestionUtilisateurAction#MAX_PASS
-	 * @see GestionUtilisateurAction#validation(String, int, int)
 	 * @see GestionUtilisateurAction#idUtilisateur
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see GestionUtilisateurAction#request
+	 * @see GestionUtilisateurAction#inputValidation
 	 * @see HttpServletRequest
 	 * @see ServletRequestAware
+	 * @see InputValidation#passValidation(String)
+	 * @see InputValidation#getMIN_PASS())
+	 * @see InputValidation#getMAX_PASS()
+	 * @see UtilisateurManager#setPassById(String, String, String)
 	 * 
 	 */
 	public String doModifyPass() {
 	
 		String vResult = ActionSupport.INPUT;
 		
-		if(pass != null && !pass.isEmpty() && this.validation(pass, MIN_PASS, MAX_PASS)) {
-			if(passBis != null && !passBis.isEmpty() && this.validation(passBis, MIN_PASS, MAX_PASS)) {
+		if(pass != null && !pass.isEmpty() && inputValidation.passValidation(pass)) {
+			if(passBis != null && !passBis.isEmpty() && inputValidation.passValidation(passBis)) {
 				if(pass.equals(passBis)) {
 					try {
-						if(this.managerFactory.getUtilisateurManager().setPassById(idUtilisateur, pass, passBis)) {
+						if(this.managerFactory.getUtilisateurManager().setPassById(
+								String.valueOf(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur()), pass, passBis)) {
+							
 							Utilisateur utilisateur = this.managerFactory.getUtilisateurManager()
 									.getUtilisateur(((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur());
 							
@@ -1175,11 +1111,11 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 				}
 			}
 			else {
-				this.addFieldError("passBis", "Le champs est requis et doit être compris entre "+MIN_PASS+" et "+MAX_PASS+" caractères.");
+				this.addFieldError("passBis", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PASS()+" et "+inputValidation.getMAX_PASS()+" caractères.");
 			}
 		}
 		else {
-			this.addFieldError("pass", "Le champs est requis et doit être compris entre "+MIN_PASS+" et "+MAX_PASS+" caractères.");
+			this.addFieldError("pass", "Le champs est requis et doit être compris entre "+inputValidation.getMIN_PASS()+" et "+inputValidation.getMAX_PASS()+" caractères.");
 		}
 		
 		
@@ -1236,44 +1172,4 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	}
 	
 	
-	
-	/**
-	 * 
-	 * <p>Méthode servant à formatter toutes les entrées saisi par l'utilisateur</p>
-	 * <p>Vérification de l'entrée puis formattage en retirant tous les espaces superflus</p>
-	 * 
-	 * @param input La saisi de l'utilisateur
-	 * @return La saisi de l'utilisateur à présent formatté
-	 * 
-	 * @see GestionUtilisateurAction#setMail(String)
-	 * @see GestionUtilisateurAction#setPseudo(String)
-	 * @see GestionUtilisateurAction#setCivilite(String)
-	 * @see GestionUtilisateurAction#setNom(String)
-	 * @see GestionUtilisateurAction#setPrenom(String)
-	 * @see GestionUtilisateurAction#setLocalisation(String)
-	 * @see GestionUtilisateurAction#setIdUtilisateur(String)
-	 */
-	public String inputFormat(String input) {
-		
-		if(input != null && !input.isEmpty()) {
-			for(int i = 0; i < input.length()-1; i++) {
-				String character = input.substring(i, i+1);
-				String characterBis = input.substring(i+1, i+2);
-							
-				if(character.equals(" ") && characterBis.equals(" ")) {
-					input = input.substring(0, i)+input.substring(i+1, input.length());
-					i--;
-				}
-			}
-			if(input.startsWith(" ")) {
-				input = input.substring(1);
-			}
-			
-			if(input.endsWith(" ")) {
-				input = input.substring(0, input.length()-1);
-			}
-		}
-		
-		return input;
-	} 
 }

@@ -10,10 +10,12 @@ import fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl;
 import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
 /**
+ * <p>
   * Interceptor servant à vérifier qu'un utilisateur se trouve bien dans la session
   * et que son couple ID-PASS est le bon (via la bdd)
   * Si tel est le cas, autorisation de passer à l'interceptor suivant via "invocation.invoke()"
   * Sinon l'acces est interdit à l'utilisateur via le code erreur suivant : "error-forbidden"
+  * </p>
   * 
   *  
   * @see ManagerFactory
@@ -61,22 +63,7 @@ public class AuthentificationInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		String vResult = "error-forbidden";
-						
-		// A activer pour simuler un utilisateur présent en bdd
-		/*
-		Map<String, Object> session = invocation.getInvocationContext().getSession();
-		Utilisateur u = new Utilisateur();
-		u.setIdUtilisateur(2);
-		u.setMail("alexandra.deschamps@mail.fr");
-		u.setPseudo("Alex");
-		u.setCivilite("Mme");
-		u.setNom("Deschamps");
-		u.setPrenom("Alexandra");
-		u.setLocalisation("65 - Hautes-Pyrénées");
-		u.setPass("x&4.5d$@ù%v");
-		session.put("utilisateur", u);
-		*/
-				
+									
 		if(invocation.getInvocationContext().getSession().get("utilisateur") != null) {
 			Utilisateur utilisateur = (Utilisateur) invocation.getInvocationContext().getSession().get("utilisateur");
 			

@@ -33,6 +33,8 @@ import fr.openclassrooms.projet_6.model.liaison.TamponSiteTopo;
  * @see TamponSiteTopoRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see TamponSiteTopoDaoImpl#rowMapper
+ * @see TamponSiteTopoDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -80,16 +82,12 @@ public class TamponSiteTopoDaoImpl extends AbstractDao implements TamponSiteTopo
 	@Override
 	public List<TamponSiteTopo> getTamponByTopo(String idTopo) throws Exception {
 		
-		List<TamponSiteTopo> tampons = null;
-		
-		if(String.valueOf(idTopo) != null && !idTopo.isEmpty()) {
-			String sql = "SELECT * FROM public.tampon_site_topo WHERE id_topo = :id_topo";
+		String sql = "SELECT * FROM public.tampon_site_topo WHERE id_topo = :id_topo";
 			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_topo", idTopo, Types.INTEGER);
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_topo", idTopo, Types.INTEGER);
 			
-			tampons = getJdbcTemplate().query(sql, map, this.rowMapper);
-		}
+		List<TamponSiteTopo> tampons = getJdbcTemplate().query(sql, map, this.rowMapper);
 		
 		return tampons;
 	}
@@ -103,16 +101,12 @@ public class TamponSiteTopoDaoImpl extends AbstractDao implements TamponSiteTopo
 	@Override
 	public List<TamponSiteTopo> getTamponBySite(int idSite) throws Exception {
 		
-		List<TamponSiteTopo> tampons = null;
-		
-		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
-			String sql = "SELECT * FROM public.tampon_site_topo WHERE id_site = :id_site";
+		String sql = "SELECT * FROM public.tampon_site_topo WHERE id_site = :id_site";
 			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			tampons = getJdbcTemplate().query(sql, map, this.rowMapper);
-		}
+		List<TamponSiteTopo> tampons = getJdbcTemplate().query(sql, map, this.rowMapper);
 		
 		return tampons;
 	}

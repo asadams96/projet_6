@@ -29,8 +29,6 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  */
 public class CommentaireTopoRM implements RowMapper<CommentaireTopo> {
 	
-	
-	
 	@Override
 	public CommentaireTopo mapRow(ResultSet rs, int rowNum) throws SQLException {
 

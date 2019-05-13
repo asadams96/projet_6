@@ -11,6 +11,7 @@ import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.site.SecteurDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
+import fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.rowmapper.site.SecteurRM;
 import fr.openclassrooms.projet_6.model.site.Secteur;
 import fr.openclassrooms.projet_6.model.site.Site;
@@ -25,10 +26,12 @@ import fr.openclassrooms.projet_6.model.site.Site;
  * @see SecteurDao#getIdsSiteByType(String)
  * @see SecteurDao#checkType(int)
  * @see SecteurDao#checkOrientation(int)
+ * @see SecteurDao#getList(String)
  * @see SecteurDaoImpl#getIdsSiteByOrientation(String)
  * @see SecteurDaoImpl#getIdsSiteByType(String)
  * @see SecteurDaoImpl#checkType(int)
  * @see SecteurDaoImpl#checkOrientation(int)
+ * @see SecteurDaoImpl#getList(String)
  * @see DaoFactory#getSecteurDao()
  * @see DaoFactory#setSecteurDao(SecteurDao)
  * @see DaoFactoryImpl#getSecteurDao()
@@ -37,6 +40,8 @@ import fr.openclassrooms.projet_6.model.site.Site;
  * @see RowMapper
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see SecteurDaoImpl#rowMapper
+ * @see SecteurDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -84,17 +89,13 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 	 */
 	@Override
 	public List<Integer> getIdsSiteByType(String critereType)  throws Exception {
+					
+		String sql = "SELECT id_site FROM public.secteur WHERE type = :type";
 		
-		List<Integer> listIdSite = null;
-
-		if(critereType != null && !critereType.isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("type", critereType, Types.VARCHAR);
 			
-			String sql = "SELECT id_site FROM public.secteur WHERE type = :type";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("type", critereType, Types.VARCHAR);
-			
-			listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
-		}
+		List<Integer> listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
 		
 		return listIdSite;
 	}
@@ -108,17 +109,13 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 	 */
 	@Override
 	public List<Integer> getIdsSiteByOrientation(String critereOrientation) throws Exception {
+				
+		String sql = "SELECT id_site FROM public.secteur WHERE orientation = :orientation";
 		
-		List<Integer> listIdSite = null;
-
-		if(critereOrientation != null && !critereOrientation.isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("orientation", critereOrientation, Types.VARCHAR);
 			
-			String sql = "SELECT id_site FROM public.secteur WHERE orientation = :orientation";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("orientation", critereOrientation, Types.VARCHAR);
-			
-			listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
-		}
+		List<Integer> listIdSite = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
 		
 		return listIdSite;
 	}
@@ -132,16 +129,12 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 	@Override
 	public List<String> checkType(int idSite) throws Exception {
 		
-		List<String> vResult = null;
-
-		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
+		String sql = "SELECT type FROM public.secteur WHERE id_site = :id_site";
+		
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			String sql = "SELECT type FROM public.secteur WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			
-			vResult = this.getJdbcTemplate().queryForList(sql, map, String.class);
-		}
+		List<String> vResult = this.getJdbcTemplate().queryForList(sql, map, String.class);
 		
 		return vResult;
 	}
@@ -154,17 +147,13 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 	 */
 	@Override
 	public List<String> checkOrientation(int idSite) throws Exception {
+					
+		String sql = "SELECT orientation FROM public.secteur WHERE id_site = :id_site";
 		
-		List<String> vResult = null;
-
-		if(String.valueOf(idSite) != null && !String.valueOf(idSite).isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			String sql = "SELECT orientation FROM public.secteur WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			
-			vResult = this.getJdbcTemplate().queryForList(sql, map, String.class);
-		}
+		List<String> vResult = this.getJdbcTemplate().queryForList(sql, map, String.class);
 		
 		return vResult;
 	}
@@ -178,17 +167,13 @@ public class SecteurDaoImpl extends AbstractDao implements SecteurDao {
 	 */
 	@Override
 	public List<Secteur> getList(String idSite) {
-
-		List<Secteur> listSecteur = null;
+			
+		String sql = "SELECT * FROM public.secteur WHERE id_site = :id_site";
 		
-		if(idSite != null && !idSite.isEmpty()) {
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_site", idSite, Types.INTEGER);
 			
-			String sql = "SELECT * FROM public.secteur WHERE id_site = :id_site";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_site", idSite, Types.INTEGER);
-			
-			listSecteur = this.getJdbcTemplate().query(sql, map, this.rowMapper);
-		}
+		List<Secteur> listSecteur = this.getJdbcTemplate().query(sql, map, this.rowMapper);
 		
 		return listSecteur;
 	}

@@ -2,6 +2,8 @@ package fr.openclassrooms.projet_6.consumer.impl.rowmapper.pret;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -24,6 +26,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see RowMapper
  * @see Utilisateur
  * @see Topo
+ * @see Date
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -31,19 +34,20 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  */
 public class PretRM implements RowMapper<Pret> {
 
-	
-	
 	@Override
 	public Pret mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		Pret pret = new Pret();
 		
 		pret.setIdPret(rs.getInt("id_pret"));
-		pret.setDate(rs.getString("date"));
 		pret.setEtat(rs.getString("etat"));
 		pret.setUtilisateur(new Utilisateur(rs.getInt("id_utilisateur")));
 		pret.setTopo(new Topo(rs.getInt("id_topo")));
 		pret.setProprietaire(new Utilisateur(rs.getInt("id_proprietaire")));
+		
+		Date date = rs.getTimestamp("date");
+		SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
+		pret.setDate(formater.format(date));
 		
 		return pret;
 	}

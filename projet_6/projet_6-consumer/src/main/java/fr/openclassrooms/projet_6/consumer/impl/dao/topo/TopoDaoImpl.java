@@ -33,6 +33,8 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  * @see TopoRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
+ * @see TopoDaoImpl#rowMapper
+ * @see TopoDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -78,22 +80,15 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
 	 * @see Topo
 	 */
 	@Override
-	public Topo getTopo(String idTopo)  throws Exception {
-		Topo topo = null;
-		
-		if(idTopo != null && !idTopo.isEmpty()) {
+	public Topo getTopo(String idTopo)  throws Exception {		
 	
-			String sql = "SELECT * FROM public.topo WHERE id_topo = :id_topo";
-			
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_topo", idTopo, Types.INTEGER);
-			
-			topo = this.getJdbcTemplate().queryForObject(sql, map, this.rowMapper);
-			
-			
-		}
-
+		String sql = "SELECT * FROM public.topo WHERE id_topo = :id_topo";
 		
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_topo", idTopo, Types.INTEGER);
+			
+		Topo topo = this.getJdbcTemplate().queryForObject(sql, map, this.rowMapper);
+	
 		return topo;
 	}
 
@@ -106,11 +101,10 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
 	 */
 	@Override
 	public List<Topo> getList() throws Exception {
-		
-		List<Topo> listTopo = null;
-		
+				
 		String sql = "SELECT * FROM public.topo";
-		listTopo = this.getJdbcTemplate().query(sql, this.rowMapper);
+		
+		List<Topo> listTopo = this.getJdbcTemplate().query(sql, this.rowMapper);
 		
 		return listTopo;
 		

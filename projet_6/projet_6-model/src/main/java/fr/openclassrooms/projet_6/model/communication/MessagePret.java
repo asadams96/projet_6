@@ -53,6 +53,41 @@ public class MessagePret extends Message {
 	
 	
 	/**
+	 * <p>Constructeur avec paramètres</p>
+	 * 
+	 * @param idMessage L'identifiant du message
+	 * @param date La date du message
+	 * @param contenu Le contenu du message
+	 * @param utilisateur L'auteur du message
+	 * @param pret Le pret associé au message
+	 * 
+	 * @see MessagePret#MessagePret()
+	 * @see MessagePret#pret
+	 * @see Message#setAuteur(Utilisateur)
+	 * @see Message#setIdMessage(int)
+	 * @see Message#setDate(String)
+	 * @see Message#setContenu(String)
+	 */
+	public MessagePret(int idMessage, String date, String contenu, Utilisateur utilisateur, Pret pret) {
+		this.pret = pret;
+		this.setIdMessage(idMessage);
+		this.setDate(date);
+		this.setContenu(contenu);
+		this.setAuteur(utilisateur);
+	}
+
+
+	
+	/**
+	 * <p>Constructeur par défaut</p>
+	 * 
+	 * @see MessagePret#MessagePret(int, String, String, Utilisateur, Pret)
+	 */
+	public MessagePret() {}
+
+
+
+	/**
 	 * <p>Getter du parametre 'pret'</p>
 	 * 
 	 * @return Le prêt associé au message

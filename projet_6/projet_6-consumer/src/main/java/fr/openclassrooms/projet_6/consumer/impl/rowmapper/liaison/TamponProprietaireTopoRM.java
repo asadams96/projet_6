@@ -29,8 +29,6 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  */
 public class TamponProprietaireTopoRM implements RowMapper<TamponProprietaireTopo> {
 
-	
-	
 	@Override
 	public TamponProprietaireTopo mapRow(ResultSet rs, int rowNum) throws SQLException {
 

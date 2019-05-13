@@ -27,8 +27,6 @@ import fr.openclassrooms.projet_6.model.site.Site;
  *
  */
 public class CommentaireSiteRM implements RowMapper<CommentaireSite> {
-
-	
 	
 	@Override
 	public CommentaireSite mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -60,6 +60,18 @@ public abstract class AbstractManager {
 	
 	
 	/**
+	 * <p>Représente une instance de la classe 'ManagerFactory'</p>
+	 * 
+	 * @see AbstractManager#getManagerFactory()
+	 * @see AbstractManager#setManagerFactory(ManagerFactory)
+	 * @see ManagerFactory
+	 * @see ManagerFactoryImpl
+	 */
+	private ManagerFactory managerFactory;
+	
+	
+	
+	/**
 	 * <p>
 	 * 	Getter permettant à tous les enfants de la classe AbstractManager 
 	 * (tout les Manager) d'avoir accès à une instance de la 'DaoFactory'
@@ -93,5 +105,43 @@ public abstract class AbstractManager {
 	 */
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	
+	
+	/**
+	 * <p>
+	 * 	Getter permettant à tous les enfants de la classe AbstractManager 
+	 * (tout les Manager) d'avoir accès à une instance de la 'ManagerFactory'
+	 * </p>
+	 * 
+	 * @return Une instance de la classe 'ManagerFactoryImpl'
+	 * 
+	 * @see AbstractManager#managerFactory
+	 * @see AbstractManager#setManagerFactory(ManagerFactory)
+	 * @see ManagerFactory
+	 * @see ManagerFactoryImpl
+	 */
+	protected ManagerFactory getManagerFactory() {
+		return managerFactory;
+	}
+
+	
+	
+	/**
+	 * <p>
+	 * 	Setter utilisé par Spring pour définir une instance de
+	 * 	la 'ManagerFactory'
+	 * </p>
+	 * 
+	 * @param managerFactory Nouvelle instance de la classe 'ManagerFactoryImpl'
+	 * 
+	 * @see AbstractManager#managerFactory
+	 * @see AbstractManager#getManagerFactory()
+	 * @see ManagerFactory
+	 * @see ManagerFactoryImpl
+	 */
+	public void setManagerFactory(ManagerFactory managerFactory) {
+		this.managerFactory = managerFactory;
 	}
 }

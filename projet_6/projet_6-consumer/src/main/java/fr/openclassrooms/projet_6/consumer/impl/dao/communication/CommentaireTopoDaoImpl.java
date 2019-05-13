@@ -35,7 +35,8 @@ import fr.openclassrooms.projet_6.model.communication.Message;
  * @see CommentaireTopoRM
  * @see AbstractDao
  * @see NamedParameterJdbcTemplate
- * 
+ * @see CommentaireTopoDaoImpl#rowMapper
+ * @see CommentaireTopoDaoImpl#setRowMapper(RowMapper)
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda
@@ -81,19 +82,13 @@ public class CommentaireTopoDaoImpl extends AbstractDao implements CommentaireTo
 	 */
 	@Override
 	public List<Integer> getIdsComment(String idTopo) throws Exception {
-		
-		List<Integer> listIdsComment = null;
-		
-		if(idTopo != null && !idTopo.isEmpty()) {
+					
+		String sql = "SELECT id_message FROM public.commentaire_topo WHERE id_topo = :id_topo";
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_topo", idTopo, Types.INTEGER);
 			
-			String sql = "SELECT id_message FROM public.commentaire_topo WHERE id_topo = :id_topo";
-			MapSqlParameterSource map = new MapSqlParameterSource();
-			map.addValue("id_topo", idTopo, Types.INTEGER);
-			
-			listIdsComment = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
-			
-		}
-		
+		List<Integer> listIdsComment = this.getJdbcTemplate().queryForList(sql, map, Integer.class);
+					
 		return listIdsComment;
 	}
 
@@ -104,23 +99,16 @@ public class CommentaireTopoDaoImpl extends AbstractDao implements CommentaireTo
 	 */
 	@Override
 	public boolean addComment(int idNewMessage, String idTopo) throws Exception {
-		
-		Boolean vResult = false;
-		
-			if(String.valueOf(idNewMessage) != null && !String.valueOf(idNewMessage).isEmpty() 
-																	&& idTopo != null && !idTopo.isEmpty()) {
 				
-				String sql = "INSERT INTO public.commentaire_topo (id_message, id_topo) "
-								+ "VALUES (:id_message, :id_topo)";
+		String sql = "INSERT INTO public.commentaire_topo (id_message, id_topo) "
+						+ "VALUES (:id_message, :id_topo)";
 				
-				MapSqlParameterSource map = new MapSqlParameterSource();
-				map.addValue("id_message", idNewMessage, Types.INTEGER);
-				map.addValue("id_topo", idTopo, Types.INTEGER);
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_message", idNewMessage, Types.INTEGER);
+		map.addValue("id_topo", idTopo, Types.INTEGER);
 				
-				this.getJdbcTemplate().update(sql, map);
-				vResult = true;
-			}
-		
-		return vResult;
+		this.getJdbcTemplate().update(sql, map);
+	
+		return true;
 	}
 }

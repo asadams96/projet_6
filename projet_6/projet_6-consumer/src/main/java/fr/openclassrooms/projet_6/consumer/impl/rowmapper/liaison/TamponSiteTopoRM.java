@@ -29,8 +29,6 @@ import fr.openclassrooms.projet_6.model.topo.Topo;
  */
 public class TamponSiteTopoRM implements RowMapper<TamponSiteTopo> {
 	
-	
-	
 	@Override
 	public TamponSiteTopo mapRow(ResultSet rs, int rowNum) throws SQLException {
 

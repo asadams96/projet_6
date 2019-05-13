@@ -26,8 +26,6 @@ import fr.openclassrooms.projet_6.model.site.Voie;
  *
  */
 public class VoieRM implements RowMapper<Voie> {
-
-	
 	
 	@Override
 	public Voie mapRow(ResultSet rs, int rowNum) throws SQLException {

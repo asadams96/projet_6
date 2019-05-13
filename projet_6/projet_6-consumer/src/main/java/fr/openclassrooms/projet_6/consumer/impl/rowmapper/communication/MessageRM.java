@@ -24,6 +24,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see Message
  * @see RowMapper
  * @see Utilisateur
+ * @see Date
  * 
  * @version 1.0
  * @author Ayrton De Abreu Miranda

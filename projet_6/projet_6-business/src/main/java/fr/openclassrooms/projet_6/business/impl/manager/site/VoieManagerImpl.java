@@ -39,85 +39,81 @@ public class VoieManagerImpl extends AbstractManager implements VoieManager {
 	 */
 	@Override
 	public List<Object> getSecteurListVoie(List<Secteur> listSecteur) throws Exception {
-
-		List<Object> linkedListSecteurtVoie = null;
 		
-		if(listSecteur != null && !listSecteur.isEmpty()) {
 			
-			int index = 0;
-			List<Secteur> listSecteurOrdonne = new LinkedList<Secteur>();
-			List<Secteur> listSecteurBis = new LinkedList<Secteur>();
+		int index = 0;
+		List<Secteur> listSecteurOrdonne = new LinkedList<Secteur>();
+		List<Secteur> listSecteurBis = new LinkedList<Secteur>();
 			
-		// Ordonne les secteurs selon leurs numero pour un affichage dans lebon ordre dans les vue
-			while(!listSecteur.isEmpty()) {
-				
-				listSecteurBis.clear();
-				listSecteurBis.addAll(listSecteur);
-				boolean add = false;
-										
-				for(Secteur secteur : listSecteur) {
-					if((secteur.getNumero())-1 == index) {
+	// Ordonne les secteurs selon leurs numero pour un affichage dans lebon ordre dans les vue
+		while(!listSecteur.isEmpty()) {
+			
+			listSecteurBis.clear();
+			listSecteurBis.addAll(listSecteur);
+			boolean add = false;
+									
+			for(Secteur secteur : listSecteur) {
+				if((secteur.getNumero())-1 == index) {
 						
-						listSecteurOrdonne.add(index, secteur);
-						listSecteurBis.remove(secteur);
-						index++;
-						add = true;
-						break;
-					}															
-				}
-				if(add) {
-					listSecteur.clear();
-					listSecteur.addAll(listSecteurBis);
-				}
+					listSecteurOrdonne.add(index, secteur);
+					listSecteurBis.remove(secteur);
+					index++;
+					add = true;
+					break;
+				}															
 			}
-			
-		// Pour chaque secteur, recupère ses voies associes et les ordonnes de même manière que les secteurs	
-			linkedListSecteurtVoie = new LinkedList<Object>();
-			List<Voie> listVoie = null;
-			int indexBis = 0;
-						
-			for(Secteur secteur : listSecteurOrdonne) {
-				listVoie = this.getDaoFactory().getVoieDao().getVoies(secteur.getIdSecteur());
-			
-				if(listVoie != null && !listVoie.isEmpty()) {
-					
-					List<Voie> listVoieOrdonne = new LinkedList<Voie>();
-					List<Voie> listVoieBis = new LinkedList<Voie>();
-					int indexTer = 0;
-					
-					while(!listVoie.isEmpty()) {
-						
-						listVoieBis.clear();
-						listVoieBis.addAll(listVoie);
-						boolean add = false;
-												
-						for(Voie voie : listVoie) {
-							if((voie.getNumero())-1 == indexTer) {
-								
-								listVoieOrdonne.add(indexTer, voie);
-								listVoieBis.remove(voie);
-								indexTer++;
-								add = true;
-								break;
-							}															
-						}
-						if(add) {
-							listVoie.clear();
-							listVoie.addAll(listVoieBis);
-						}
-							
-					}
-					// Ajout également ordonée:
-					// index pair => Secteur
-					// index impaire => List de 'Voie' (associé au secteur)
-					linkedListSecteurtVoie.add(indexBis, secteur); // Pair (cf site.jsp if(%2))
-					indexBis++;
-					linkedListSecteurtVoie.add(indexBis, listVoieOrdonne); // Impair (cf site.jsp if(%2))
-					indexBis++;
-				}
-			}		
+			if(add) {
+				listSecteur.clear();
+				listSecteur.addAll(listSecteurBis);
+			}
 		}
-
+		
+		// Pour chaque secteur, recupère ses voies associes et les ordonnes de même manière que les secteurs	
+		List<Object> linkedListSecteurtVoie = new LinkedList<Object>();
+		List<Voie> listVoie = null;
+		int indexBis = 0;
+						
+		for(Secteur secteur : listSecteurOrdonne) {
+			listVoie = this.getDaoFactory().getVoieDao().getVoies(secteur.getIdSecteur());
+		
+			if(listVoie != null && !listVoie.isEmpty()) {
+				
+				List<Voie> listVoieOrdonne = new LinkedList<Voie>();
+				List<Voie> listVoieBis = new LinkedList<Voie>();
+				int indexTer = 0;
+					
+				while(!listVoie.isEmpty()) {
+					
+					listVoieBis.clear();
+					listVoieBis.addAll(listVoie);
+					boolean add = false;
+											
+					for(Voie voie : listVoie) {
+						if((voie.getNumero())-1 == indexTer) {
+							
+						listVoieOrdonne.add(indexTer, voie);
+							listVoieBis.remove(voie);
+							indexTer++;
+							add = true;
+							break;
+						}															
+					}
+					
+					if(add) {
+						listVoie.clear();
+						listVoie.addAll(listVoieBis);
+					}
+							
+				}
+				// Ajout également ordonée:
+				// index pair => Secteur
+				// index impaire => List de 'Voie' (associé au secteur)
+				linkedListSecteurtVoie.add(indexBis, secteur); // Pair (cf site.jsp if(%2))
+				indexBis++;
+				linkedListSecteurtVoie.add(indexBis, listVoieOrdonne); // Impair (cf site.jsp if(%2))
+				indexBis++;
+			}
+		}		
 		return linkedListSecteurtVoie;
 	}
 

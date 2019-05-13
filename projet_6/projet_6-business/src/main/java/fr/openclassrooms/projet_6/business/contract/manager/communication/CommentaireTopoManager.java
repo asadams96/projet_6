@@ -48,10 +48,7 @@ public interface CommentaireTopoManager {
 	
 	
 	/**
-	 * <p>
-	 * 	Apres plusieurs étapes de validation =>
-	 * 	Demande l'ajout d'un commentaire à la couche du dessous.
-	 * </p>
+	 * <p>Demande l'ajout d'un commentaire à la couche du dessous.</p>
 	 * 
 	 * @param idUtilisateur L'identifiant de l'utilisateur concerné
 	 * @param idTopo L'identifiant du topo concerné
