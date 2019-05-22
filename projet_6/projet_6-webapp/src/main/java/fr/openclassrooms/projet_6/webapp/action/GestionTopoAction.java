@@ -894,19 +894,24 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	public String doLibrary() {
 		String vResult = ActionSupport.SUCCESS;
 		
-		try {
-			int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
-			bibliotheque = managerFactory.getTamponProprietaireTopoManager().getBibliotheque(idUtilisateur);
-			
-			// Dans le cas où l'utilisateur n'a jamais eu de topo (même avec quantite = 0 d'enregistré)
-			if(bibliotheque == null) {
-				bibliotheque = new LinkedList<TamponProprietaireTopo>();
+		if(this.getText("pret.etat1") != null && this.getText("pret.etat2") != null && !this.getText("pret.etat1").isEmpty() && !this.getText("pret.etat2").isEmpty()) {
+			try {
+				int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
+				bibliotheque = managerFactory.getTamponProprietaireTopoManager().getBibliotheque(idUtilisateur, this.getText("pret.etat1"), this.getText("pret.etat2"));
+				
+				// Dans le cas où l'utilisateur n'a jamais eu de topo (même avec quantite = 0 d'enregistré)
+				if(bibliotheque == null) {
+					bibliotheque = new LinkedList<TamponProprietaireTopo>();
+				}
+			}catch(Exception e) {
+				vResult = ActionSupport.ERROR;
+				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 			}
-		}catch(Exception e) {
+		}
+		else {
 			vResult = ActionSupport.ERROR;
 			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 		}
-
 		return vResult;
 	}
 
@@ -953,7 +958,7 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 					}
 				}catch(Exception e) {
 					vResult = ActionSupport.ERROR;
-					this.addActionError("BUne erreur s'est produit. Veuillez reessayer plus tard...");
+					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 				}
 			}
 			else {
@@ -985,54 +990,59 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 	public String doRemoveLibrary() {
 		
 		String vResult = ActionSupport.INPUT;
+		Boolean fieldError = false;
 		
-		if(idTopo != null && !idTopo.isEmpty()) {
-			try {
-				try {
-					if(quantiteTopo != null && !quantiteTopo.isEmpty()) {
-						if(Integer.valueOf(quantiteTopo) > 0) {
-
-						int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
-						
-						if(this.managerFactory.getTamponProprietaireTopoManager().getCheckQuantity(idUtilisateur, idTopo, Integer.valueOf(quantiteTopo))) {
-
-							if(managerFactory.getTamponProprietaireTopoManager().removeTampon(idUtilisateur, idTopo, Integer.valueOf(quantiteTopo))) {
-								
-								vResult = ActionSupport.SUCCESS;
-								this.addActionMessage("Le topo a été retiré de votre bibliothèque avec succès.");
-								
-							}
-							else {
-								vResult = ActionSupport.ERROR;
-								this.addActionError("CUne erreur s'est produit. Veuillez reessayer plus tard...");
-							}
-						}
-						else {
-							this.addActionError("Retrait impossible. Verifier que vous possédez un nombre suffisant de topo et que tous les prêts les concernants ont été traités...");
-						}
-					}
-						else {
-							this.addFieldError("quantiteTopo", "La quantite doit être supérieur à 0.");
-						}
-					}
-					else {
-						this.addFieldError("quantiteTopo", "Ce champs est vide");
-					}
-				}catch(NumberFormatException e) {
-					this.addFieldError("quantiteTopo", "Ce champs ne doit comporter que des chiffres.");
-				}
-			}catch(Exception e) {
-				vResult = ActionSupport.ERROR;
-				this.addActionError("BUne erreur s'est produit. Veuillez reessayer plus tard...");
-			}
-			
+		
+		if(idTopo == null || idTopo.isEmpty() ) {
+			this.addFieldError("idTopo", "Ce champs est vide");
+			fieldError = true;
+		}
+		if(quantiteTopo == null || quantiteTopo.isEmpty()) {
+			this.addFieldError("quantiteTopo", "Ce champs est vide");
+			fieldError = true;
 		}
 		else {
-			vResult = ActionSupport.ERROR;
-			this.addActionError("AUne erreur s'est produit. Veuillez reessayer plus tard...");
+			try {
+				if(Integer.valueOf(quantiteTopo) <= 0) {
+					this.addFieldError("quantiteTopo", "La quantite doit être supérieur à 0.");
+				}
+			}catch (NumberFormatException e) {
+				this.addFieldError("quantiteTopo", "Ce champs ne doit comporter que des chiffres.");
+				fieldError = true;
+			}
 		}
 		
-		return vResult;
+		
+		
+		if(!fieldError) {
+			try {
+
+				int idUtilisateur = ((Utilisateur) request.getSession().getAttribute("utilisateur")).getIdUtilisateur();
+						
+				if(this.managerFactory.getTamponProprietaireTopoManager().getCheckQuantity(idUtilisateur, idTopo, Integer.valueOf(quantiteTopo))) {
+
+					if(managerFactory.getTamponProprietaireTopoManager().removeTampon(idUtilisateur, idTopo, Integer.valueOf(quantiteTopo))) {
+								
+						vResult = ActionSupport.SUCCESS;
+						this.addActionMessage("Le topo a été retiré de votre bibliothèque avec succès.");
+								
+					}
+					else {
+						vResult = ActionSupport.ERROR;
+						this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					}
+				}
+				else {
+					this.addFieldError("quantiteTopo", "La quantite doit être inférieur ou égal à la différence entre la quantité possédé et la quantité réservé/prêté.");
+				}
+
+		}catch(Exception e) {
+			vResult = ActionSupport.ERROR;
+			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+		}
+	}
+		
+	return vResult;
 		
 	}
 
@@ -1081,38 +1091,5 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 
 		return vResult;		
 	}
-	
-	
-	
-	
-	/**
-	 * <p>Méthode servant à vérifier les inputs<p>
-	 * 
-	 * <p>Il y a deux critères de validation :<p>
-	 * <ul>
-	 * 		<li>La taille minimal du champs</li>
-	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
-	 * </ul>
-	 * 
-	 * @param input L'entrée à valider
-	 * @param longueurMin La longueur minimale du chammps
-	 * @param longueurMax La longueur maximale du champs
-	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
-	 * 
-	 * @see GestionTopoAction#doAddComment()
-	 * @see GestionTopoAction#MIN_CONTENU
-	 * @see GestionTopoAction#MAX_CONTENU
-	 */
-	public Boolean validation(String input, int longueurMin, int longueurMax) {
-				
-		Boolean vReturn = false;
 		
-		
-		if(input.length() >= longueurMin && input.length() <= longueurMax) {
-			vReturn = true;
-		}
-		
-		return vReturn;
-	}
-	
 }	

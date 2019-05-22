@@ -30,6 +30,9 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see TamponProprietaireTopo#quantite
  * @see TamponProprietaireTopo#getQuantite()
  * @see TamponProprietaireTopo#setQuantite(int)
+ * @see TamponProprietaireTopo#quantitePrete
+ * @see TamponProprietaireTopo#getQuantitePrete()
+ * @see TamponProprietaireTopo#setQuantitePrete(int)
  * @see Utilisateur
  * @see Topo
  * @see Voie
@@ -79,6 +82,16 @@ public class TamponProprietaireTopo {
 	 * @see TamponProprietaireTopo#setQuantite(int)
 	 */
 	private int quantite;
+	
+	
+	
+	/**
+	 * <p>Représente la quantité prêté d'un topo</p>
+	 * 
+	 * @see TamponProprietaireTopo#getQuantitePrete()
+	 * @see TamponProprietaireTopo#setQuantitePrete(int)
+	 */
+	private int quantitePrete;
 	
 	
 	
@@ -166,5 +179,33 @@ public class TamponProprietaireTopo {
 	 */
 	public void setQuantite(int quantite) {
 		this.quantite = quantite;
+	}
+	
+	
+	
+	/**
+	 * <p>Getter du parametre 'quantitePrete'</p>
+	 * 
+	 * @return La quantité prêté du topo
+	 * 
+	 * @see TamponProprietaireTopo#quantitePrete
+	 * @see TamponProprietaireTopo#setQuantitePrete(int)
+	 */
+	public int getQuantitePrete() {
+		return quantitePrete;
+	}
+	
+	
+	
+	/**
+	 * <p>Setter du parametre 'quantitePrete'</p>
+	 * 
+	 * @param quantitePrete Représente la quantité prêté du topo
+	 * 
+	 * @see TamponProprietaireTopo#quantitePrete
+	 * @see TamponProprietaireTopo#getQuantitePrete()
+	 */
+	public void setQuantitePrete(int quantitePrete) {
+		this.quantitePrete = quantitePrete;
 	}
 }

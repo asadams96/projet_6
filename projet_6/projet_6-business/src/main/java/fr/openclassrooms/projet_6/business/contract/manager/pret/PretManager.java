@@ -23,6 +23,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretManager#cancel(Pret, String, String, String, String)
  * @see PretManager#finish(Pret, String, String, String, String)
  * @see PretManager#decide(Pret, String, String, String, String, String)
+ * @see PretManager#getCountPret(int, int, String, String)
  * @see PretManagerImpl#getListPret(Utilisateur, String)
  * @see PretManagerImpl#getListPret(Utilisateur, String, String)
  * @see PretManagerImpl#getPret(Utilisateur, String)
@@ -31,6 +32,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretManagerImpl#cancel(Pret, String, String, String, String)
  * @see PretManagerImpl#finish(Pret, String, String, String, String)
  * @see PretManagerImpl#decide(Pret, String, String, String, String, String)
+ * @see PretManagerImpl#getCountPret(int, int, String, String)
  * @see ManagerFactory#getPretManager()
  * @see ManagerFactory#setPretManager(PretManager)
  * @see ManagerFactoryImpl#getPretManager()
@@ -182,5 +184,20 @@ public interface PretManager {
 	 * @see PretManagerImpl#decide(Pret, String, String, String, String, String)
 	 */
 	boolean decide(Pret pret, String etat, String idUtilisateur, String etat1, String etat2, String etat5) throws Exception;
+
+
+	/**
+	 * <p>Récupère le nombre de pret ayant pour caractéristiques les paramètres passés en méthodes</p>
+	 * 
+	 * @param idProprietaire L'identifiant du proprietaire du pret
+	 * @param idTopo L'identifiant du topo concerné par le pret
+	 * @param etat1 Un état de pret désiré
+	 * @param etat2  Un état de pret désiré
+	 * @return Le nombre de pret répondant aux caractéristiques
+	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
+	 * 
+	 * @see PretManagerImpl#getCountPret(int, int, String, String)
+	 */
+	int getCountPret(int idProprietaire, int idTopo, String etat1, String etat2) throws Exception;
 
 }

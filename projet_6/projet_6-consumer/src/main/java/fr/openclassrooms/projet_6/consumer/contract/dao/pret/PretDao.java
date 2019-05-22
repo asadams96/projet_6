@@ -20,6 +20,7 @@ import fr.openclassrooms.projet_6.model.pret.Pret;
  * @see PretDaoImpl#getEtat(String)
  * @see PretDaoImpl#insert(Timestamp, String, String, String, String)
  * @see PretDaoImpl#getIdPret(Timestamp, String, String, String)
+ * @see PretDaoImpl#getCountPret(int, int, String, String)
  * @see PretDao#getCountId(String)
  * @see PretDao#getPret(String)
  * @see PretDao#getListPret(String, String)
@@ -28,6 +29,7 @@ import fr.openclassrooms.projet_6.model.pret.Pret;
  * @see PretDao#getEtat(String)
  * @see PretDao#insert(Timestamp, String, String, String, String)
  * @see PretDao#getIdPret(Timestamp, String, String, String)
+ * @see PretDao#getCountPret(int, int, String, String)
  * @see DaoFactory#getPretDao()
  * @see DaoFactory#setPretDao(PretDao)
  * @see DaoFactoryImpl#getPretDao()
@@ -166,5 +168,21 @@ public interface PretDao {
 	 * @see PretDaoImpl#getIdPret(Timestamp, String, String, String)
 	 */
 	String getIdPret(Timestamp date, String idTopo, String idProprietaire, String idUtilisateur) throws Exception;
+
+	
+
+	/**
+	 * <p>Récupère le nombre de pret ayant pour caractéristiques les paramètres passés en méthodes</p>
+	 * 
+	 * @param idProprietaire L'identifiant du proprietaire du pret
+	 * @param idTopo L'identifiant du topo concerné par le pret
+	 * @param etat1 Un état de pret désiré
+	 * @param etat2  Un état de pret désiré
+	 * @return Le nombre de pret répondant aux caractéristiques
+	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
+	 * 
+	 * @see PretDaoImpl#getCountPret(int, int, String, String)
+	 */
+	int getCountPret(int idProprietaire, int idTopo, String etat1, String etat2) throws Exception;
 
 }

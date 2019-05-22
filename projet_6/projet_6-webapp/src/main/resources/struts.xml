@@ -56,7 +56,7 @@
                 <param name="actionName">index</param>
             </result>   
             
-            <result name="error">/WEB-INF/jsp/other/error.jsp</result>      
+            <result name="error">/WEB-INF/classes/WEB-INF/jsp/other/error.jsp</result>      
         </global-results>
                 
      </package>
@@ -86,6 +86,14 @@
         <!-- ===========================  Action INDEX" ============================== -->
         <action name="index">
             <result>/WEB-INF/jsp/other/index.jsp</result>
+        </action>
+        
+        <action name="test_j">
+            <result>/WEB-INF/jsp/other/test.jsp</result>
+        </action>
+        
+        <action name="test_h">
+            <result>/WEB-INF/jsp/other/test.html</result>
         </action>
         
         
@@ -302,6 +310,7 @@
         	<result name ="input" type="redirectAction">
         		<param name="actionName">library</param>
         		<param name="quantiteTopo">${quantiteTopo}</param>
+        		<param name="idTopo">${idTopo}</param>
     		</result>
         </action>
         

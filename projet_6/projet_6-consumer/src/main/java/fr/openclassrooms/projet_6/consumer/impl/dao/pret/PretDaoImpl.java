@@ -29,6 +29,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretDaoImpl#insert(Timestamp, String, String, String, String)
  * @see PretDaoImpl#getEtat(String)
  * @see PretDaoImpl#getIdPret(Timestamp, String, String, String)
+ * @see PretDaoImpl#getCountPret(int, int, String, String)
  * @see PretDao#getCountId(String)
  * @see PretDao#getPret(String)
  * @see PretDao#getListPret(String, String)
@@ -37,6 +38,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretDao#getEtat(String)
  * @see PretDao#insert(Timestamp, String, String, String, String)
  * @see PretDao#getIdPret(Timestamp, String, String, String)
+ * @see PretDao#getCountPret(int, int, String, String)
  * @see DaoFactory#getPretDao()
  * @see DaoFactory#setPretDao(PretDao)
  * @see DaoFactoryImpl#getPretDao()
@@ -264,6 +266,27 @@ public class PretDaoImpl extends AbstractDao implements PretDao {
 		String vResult = String.valueOf(this.getJdbcTemplate().queryForObject(sql, map, Integer.class));
 
 		return vResult;
+	}
+
+
+
+	/**
+	 * @see PretDao#getCountPret(int, int, String, String)
+	 */
+	@Override
+	public int getCountPret(int idProprietaire, int idTopo, String etat1, String etat2) throws Exception {
+
+		String sql = "SELECT COUNT(*) FROM public.pret "
+				+ "WHERE id_proprietaire = :id_proprietaire AND id_topo = :id_topo "
+				+ "AND (etat = :etat_1 OR etat = :etat_2)";
+	
+		MapSqlParameterSource map = new MapSqlParameterSource();
+		map.addValue("id_proprietaire", idProprietaire, Types.INTEGER);
+		map.addValue("id_topo", idTopo, Types.INTEGER);
+		map.addValue("etat_1", etat1, Types.VARCHAR);
+		map.addValue("etat_2", etat2, Types.VARCHAR);
+			
+		return this.getJdbcTemplate().queryForObject(sql, map, Integer.class);
 	}
 
 }

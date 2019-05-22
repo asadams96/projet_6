@@ -41,11 +41,11 @@ public class TamponProprietaireTopoManagerImpl extends AbstractManager implement
 	
 	
 	/**
-	 * @see TamponProprietaireTopoManager#getBibliotheque(int)
+	 * @see TamponProprietaireTopoManager#getBibliotheque(int, String, String)
 	 * @see TamponProprietaireTopo
 	 */
 	@Override
-	public List<TamponProprietaireTopo> getBibliotheque(int idUtilisateur) throws Exception {
+	public List<TamponProprietaireTopo> getBibliotheque(int idUtilisateur, String etat1, String etat2) throws Exception {
 		
 		List<TamponProprietaireTopo> listTampons = null;
 		
@@ -56,14 +56,18 @@ public class TamponProprietaireTopoManagerImpl extends AbstractManager implement
 			listTampons = new ArrayList<TamponProprietaireTopo>();
 				
 			for(TamponProprietaireTopo tampon : tampons) {
+				
+				TamponProprietaireTopo tamponBis = new TamponProprietaireTopo();
+				
+				tamponBis.setProprietaire(this.getManagerFactory().getUtilisateurManager().getUtilisateur(tampon.getProprietaire().getIdUtilisateur()));
+				tamponBis.setTopo(this.getManagerFactory().getTopoManager().getTopo(String.valueOf(tampon.getTopo().getIdTopo())));
+				tamponBis.setQuantitePrete(this.getManagerFactory().getPretManager().getCountPret(idUtilisateur, tamponBis.getTopo().getIdTopo(), etat1, etat2 ));
+				tamponBis.setQuantite(tampon.getQuantite()+tamponBis.getQuantitePrete());
+				
+				if(tamponBis.getQuantite() != 0) {
+						
 					
-				if(tampon.getQuantite() != 0) {
-						
-					TamponProprietaireTopo tamponBis = new TamponProprietaireTopo();
-						
-					tamponBis.setProprietaire(this.getManagerFactory().getUtilisateurManager().getUtilisateur(tampon.getProprietaire().getIdUtilisateur()));
-					tamponBis.setTopo(this.getManagerFactory().getTopoManager().getTopo(String.valueOf(tampon.getTopo().getIdTopo())));
-					tamponBis.setQuantite(tampon.getQuantite());
+					
 						
 					listTampons.add(tamponBis);
 				}
@@ -111,7 +115,6 @@ public class TamponProprietaireTopoManagerImpl extends AbstractManager implement
 				vResult = true;
 				
 		}
-		System.out.println("vRult removet=>"+vResult);
 		return vResult;
 		
 	}

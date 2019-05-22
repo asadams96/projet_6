@@ -27,6 +27,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretManager#cancel(Pret, String, String, String, String)
  * @see PretManager#finish(Pret, String, String, String, String)
  * @see PretManager#decide(Pret, String, String, String, String, String)
+ * @see PretManager#getCountPret(int, int, String, String)
  * @see PretManagerImpl#getListPret(Utilisateur, String)
  * @see PretManagerImpl#getListPret(Utilisateur, String, String)
  * @see PretManagerImpl#getPret(Utilisateur, String)
@@ -36,6 +37,7 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
  * @see PretManagerImpl#finish(Pret, String, String, String, String)
  * @see PretManagerImpl#decide(Pret, String, String, String, String, String)
  * @see PretManagerImpl#getEtat(String)
+ * @see PretManagerImpl#getCountPret(int, int, String, String)
  * @see ManagerFactory#getPretManager()
  * @see ManagerFactory#setPretManager(PretManager)
  * @see ManagerFactoryImpl#getPretManager()
@@ -256,6 +258,17 @@ public class PretManagerImpl extends AbstractManager implements PretManager {
 		}
 		
 		return idPret;
+	}
+
+
+
+	/**
+	 * @see PretManager#getCountPret(int, int, String, String)
+	 */
+	@Override
+	public int getCountPret(int idProprietaire, int idTopo, String etat1, String etat2) throws Exception {
+
+		return this.getDaoFactory().getPretDao().getCountPret(idProprietaire, idTopo, etat1, etat2);
 	}
 
 }

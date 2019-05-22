@@ -679,7 +679,6 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			vResult = ActionSupport.ERROR;
 			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
-			e.printStackTrace();
 		}
 		return vResult;
 		
@@ -734,39 +733,5 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 
 		return vResult;		
 	}
-	
-	
-	
-	/**
-	 * <p>Méthode servant à vérifier les inputs<p>
-	 * 
-	 * <p>Il y a deux critères de validation :<p>
-	 * <ul>
-	 * 		<li>La taille minimal du champs</li>
-	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
-	 * </ul>
-	 * 
-	 * @param input  L'entrée à valider
-	 * @param longueurMin La longueur minimale du chammps
-	 * @param longueurMax La longueur maximale du champs
-	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
-	 * 
-	 * @see GestionSiteAction#doAddComment()
-	 * @see GestionSiteAction#MIN_CONTENU
-	 * @see GestionSiteAction#MAX_CONTENU
-	 */
-	public Boolean validation(String input, int longueurMin, int longueurMax) {
-				
-		Boolean vReturn = false;
 		
-		
-		if(input.length() >= longueurMin && input.length() <= longueurMax) {
-			vReturn = true;
-		}
-		
-		return vReturn;
-	}
-	
-	
-	
 }

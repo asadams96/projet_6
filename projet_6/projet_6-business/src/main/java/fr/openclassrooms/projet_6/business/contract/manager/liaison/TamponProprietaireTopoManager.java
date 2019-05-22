@@ -42,14 +42,15 @@ public interface TamponProprietaireTopoManager {
 	 * <p>Récupère la bibliothèque de l'utilisateur en paramètre de méthode</p>
 	 * 
 	 * @param idUtilisateur L'identifiant d'un utilisateur
+	 * @param etat1 Etat de pret où la quantite de topo de l'objet 'Topo' lui meme de l'objet 'TamponProprietaireTopo' a été modifié
+	 * @param etat2 Etat de pret où la quantite de topo de l'objet 'Topo' lui meme de l'objet 'TamponProprietaireTopo' a été modifié
 	 * @return Une liste d'instance de la classe 'TamponProprietaireTopo'
 	 * @throws Exception Si une exception est levé, elle est remonté dans la couche du dessus
 	 * 
-	 * @see TamponProprietaireTopoManagerImpl#getBibliotheque(int)
+	 * @see TamponProprietaireTopoManagerImpl#getBibliotheque(int, String, String)
 	 * @see TamponProprietaireTopo
 	 */
-	List<TamponProprietaireTopo> getBibliotheque(int idUtilisateur) throws Exception;
-
+	List<TamponProprietaireTopo> getBibliotheque(int idUtilisateur, String etat1, String etat2) throws Exception;
 	
 	
 	/**

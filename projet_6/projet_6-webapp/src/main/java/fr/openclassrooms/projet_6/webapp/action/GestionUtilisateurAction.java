@@ -1,5 +1,7 @@
 package fr.openclassrooms.projet_6.webapp.action;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
@@ -183,6 +185,17 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	
 	
 	/**
+	* <p>Objet servant à stocker l'adresse mailBis défini par l'utilisateur</p>
+	* 
+	* @see GestionUtilisateurAction#getMailBis()
+	* @see GestionUtilisateurAction#setMailBis(String)
+	* @see GestionUtilisateurAction#doLogin()
+	*/
+	private String mailBis;
+	
+	
+	
+	/**
 	* <p>Objet servant à stocker le pseudo défini par l'utilisateur</p>
 	* 
 	* @see GestionUtilisateurAction#getPseudo()
@@ -264,6 +277,16 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	* @see GestionUtilisateurAction#doModifyPass()
 	*/
 	private String passBis;
+	
+	
+	
+	/**
+	* <p>Objet servant à stocker la vérification de mot de passe de l'utilisateur</p>
+	* 
+	* @see GestionUtilisateurAction#setPassTer(String)
+	* @see GestionUtilisateurAction#doLogin()
+	*/
+	private String passTer;
 	
 	
 	
@@ -360,7 +383,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	
 	/**
 	 * <p>
-	 * 	Setter servant au vues 'connexion.jsp', 'inscription.jsp',
+	 * 	Setter servant au vues 'inscription.jsp',
 	 * 	'profil.jsp' pour définir l'adresse mail saisi par l'utilisateur.
 	 * </p>
 	 * 
@@ -372,6 +395,37 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 */
 	public void setMail(String mail) {
 		this.mail = inputValidation.inputFormat(mail);
+	}
+
+
+
+	/**
+	 * <p>
+	 * 	Setter servant à la vue 'connexion.jsp' pour définir l'adresse mail saisi par l'utilisateur.
+	 * </p>
+	 * 
+	 * @param mail L'adresse mail saisi par l'utilisateur
+	 * 
+	 * @see GestionUtilisateurAction#mailBis
+	 * @see InputValidation#inputFormat(String)
+	 */
+	public void setMailBis(String mailBis) {
+		this.mailBis = mailBis;
+	}
+
+
+	
+	/**
+	 * <p>
+	 * 	Setter servant à la vue 'connexion.jsp' pour définir le mot de passe saisi par l'utilisateur.
+	 * </p>
+	 * 
+	 * @param pass Le mot de passe saisi par l'utilisateur
+	 * 
+	 * @see GestionUtilisateurAction#passTer
+	 */
+	public void setPassTer(String passTer) {
+		this.passTer = passTer;
 	}
 
 
@@ -535,7 +589,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	
 	
 	/**
-	 * <p>Getter permettant de récupérer le paramètre 'mail' depuis les vues 'inscription.jsp', 'profil.jsp', 'connexion.jsp'</p>
+	 * <p>Getter permettant de récupérer le paramètre 'mail' depuis les vues 'inscription.jsp', 'profil.jsp'</p>
 	 * 
 	 * @return L'adresse mail de l'utilisateur
 	 * 
@@ -544,6 +598,20 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	public String getMail() {
 		return mail;
 	}
+
+
+	
+	/**
+	 * <p>Getter permettant de récupérer le paramètre 'mail' depuis la vue 'connexion.jsp'</p>
+	 * 
+	 * @return L'adresse mail de l'utilisateur
+	 * 
+	 * @see GestionUtilisateurAction#mailBis
+	 * */
+	public String getMailBis() {
+		return mailBis;
+	}
+
 
 
 	/**
@@ -753,8 +821,8 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 	 * 
 	 * @return Retourne le résultat de la méthode : 'success' / 'input' / 'error'
 	 * 
-	 * @see GestionUtilisateurAction#mail
-	 * @see GestionUtilisateurAction#pass
+	 * @see GestionUtilisateurAction#mailBis
+	 * @see GestionUtilisateurAction#passTer
 	 * @see GestionUtilisateurAction#utilisateur
 	 * @see GestionUtilisateurAction#managerFactory
 	 * @see GestionUtilisateurAction#request
@@ -770,27 +838,27 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 		String vResult = ActionSupport.INPUT;
 		Boolean fieldError = false;
 		
-		if(mail != null && pass != null) {
+		if(mailBis != null && passTer != null) {
 			
-			if(mail.isEmpty()) {
+			if(mailBis.isEmpty()) {
 				fieldError = true;
-				this.addFieldError("mail", "Le champs ne doit pas être vide.");
+				this.addFieldError("mailBis", "Le champs ne doit pas être vide.");
 			}
-			if(pass.isEmpty()) {
+			if(passTer.isEmpty()) {
 				fieldError = true;
-				this.addFieldError("pass", "Le champs ne doit pas être vide.");
+				this.addFieldError("passTer", "Le champs ne doit pas être vide.");
 			}
 			
 			String idUtilisateur = null;
 			if(!fieldError) {
 				try {
-					idUtilisateur = this.managerFactory.getUtilisateurManager().getIdbyMail(mail);
+					idUtilisateur = this.managerFactory.getUtilisateurManager().getIdbyMail(mailBis);
 				}catch(Exception e) {
-					this.addFieldError("mail", "Aucun compte n'est enregistré avec cette adresse mail");
+					this.addFieldError("mailBis", "Aucun compte n'est enregistré avec cette adresse mail");
 				}
 				try {
 					if(idUtilisateur != null && !idUtilisateur.isEmpty()) {
-						utilisateur = new Utilisateur(Integer.valueOf(idUtilisateur), pass);
+						utilisateur = new Utilisateur(Integer.valueOf(idUtilisateur), passTer);
 
 						if(this.managerFactory.getUtilisateurManager().getCheckCoupleIdPass(utilisateur)) {
 							utilisateur = this.managerFactory.getUtilisateurManager().getUtilisateur(utilisateur.getIdUtilisateur());
@@ -808,7 +876,7 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 							}
 						}
 						else {
-							this.addFieldError("pass", "Mot de passe invalide");
+							this.addFieldError("passTer", "Mot de passe invalide");
 						}
 					}
 			}catch(Exception e) {
@@ -1121,55 +1189,5 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 		
 		return vResult;
 	}
-	
-	
-	
-	/**
-	 * <p>Méthode servant à valider les input<p>
-	 * 
-	 * <p>Il y a deux critères de validation :<p>
-	 * <ul>
-	 * 		<li>La taille minimal du champs</li>
-	 * 		<li>La taille maximal du champss (lié à l'espace alloué)</li>
-	 * </ul>
-	 * 
-	 * @param input  Le contenu de l'input
-	 * @param longueurMin La longueur minimal du champs
-	 * @param longueurMax La longueur maximal du champs
-	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
-	 * 
-	 * @see GestionUtilisateurAction#setMail(String)
-	 * @see GestionUtilisateurAction#setPseudo(String)
-	 * @see GestionUtilisateurAction#setCivilite(String)
-	 * @see GestionUtilisateurAction#setNom(String)
-	 * @see GestionUtilisateurAction#setPrenom(String)
-	 * @see GestionUtilisateurAction#setPass(String)
-	 * @see GestionUtilisateurAction#setPassBis(String)
-	 * @see GestionUtilisateurAction#MIN_MAIL
-	 * @see GestionUtilisateurAction#MIN_NOM
-	 * @see GestionUtilisateurAction#MIN_PRENOM
-	 * @see GestionUtilisateurAction#MIN_CIVILITE
-	 * @see GestionUtilisateurAction#MIN_PSEUDO
-	 * @see GestionUtilisateurAction#MIN_PASS
-	 * @see GestionUtilisateurAction#MAX_MAIL
-	 * @see GestionUtilisateurAction#MAX_NOM
-	 * @see GestionUtilisateurAction#MAX_PRENOM
-	 * @see GestionUtilisateurAction#MAX_CIVILITE
-	 * @see GestionUtilisateurAction#MAX_PSEUDO
-	 * @see GestionUtilisateurAction#MAX_PASS
-	 */
-	public Boolean validation(String input, int longueurMin, int longueurMax) {
-				
-		Boolean vReturn = false;
 		
-		if(input != null && !input.isEmpty()) {
-			if(input.length() >= longueurMin && input.length() <= longueurMax) {
-				vReturn = true;
-			}
-		}
-		
-		return vReturn;
-	}
-	
-	
 }

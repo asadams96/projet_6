@@ -636,7 +636,6 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 						this.addActionError("1Une erreur s'est produite. Veuillez réessayer plus tard...");
 					}
 				}catch(Exception e) {
-					e.printStackTrace();
 					vResult = ActionSupport.ERROR;
 					this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
 				}
@@ -850,7 +849,6 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 								
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
-				e.printStackTrace();
 			}
 			
 		}
@@ -913,7 +911,6 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 				}
 								
 			}catch(Exception e) {
-				e.printStackTrace();
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 			}
 			
@@ -979,7 +976,6 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 								
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
-				e.printStackTrace();
 			}
 			
 		}
@@ -1046,7 +1042,7 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 						}
 						else {
 							vResult = ActionSupport.ERROR;
-							this.addActionError("1.1Une erreur s'est produit. Veuillez reessayer plus tard...");
+							this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 						}
 						if(idPret != null && !idPret.isEmpty()) {
 							vResult = ActionSupport.SUCCESS;
@@ -1054,54 +1050,21 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 						}
 						else {
 							vResult = ActionSupport.ERROR;
-							this.addActionError("1.2Une erreur s'est produit. Veuillez reessayer plus tard...");
+							this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 						}					
 					}catch(Exception e) {
 						vResult = ActionSupport.ERROR;
-						this.addActionError("2Une erreur s'est produit. Veuillez reessayer plus tard...");
-						e.printStackTrace();
+						this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 					}	
 				}
 			} 
 			else {
 				vResult = ActionSupport.ERROR;
-				this.addActionError("1.3Une erreur s'est produit. Veuillez reessayer plus tard...");
+				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
 			}
 		}
 		
 		return vResult;
-	}
-	
-	
-	
-	/**
-	 * <p>Méthode servant à vérifier les inputs<p>
-	 * 
-	 * <p>Il y a deux critères de validation :<p>
-	 * <ul>
-	 * 		<li>La taille minimal du champs</li>
-	 * 		<li>La taille maximal du champs (lié à l'espace alloué en BDD)</li>
-	 * </ul>
-	 * 
-	 * @param input  L'entrée à valider
-	 * @param longueurMin La longueur minimale du chammps
-	 * @param longueurMax La longueur maximale du champs
-	 * @return Retourne le résultat de la validation => validée (=true) / refusée (=false)
-	 * 
-	 * @see GestionPretAction#doAddMessage()
-	 * @see GestionPretAction#MIN_CONTENU
-	 * @see GestionPretAction#MAX_CONTENU
-	 */
-	public Boolean validation(String input, int longueurMin, int longueurMax) {
-				
-		Boolean vReturn = false;
-		
-		
-		if(input.length() >= longueurMin && input.length() <= longueurMax) {
-			vReturn = true;
-		}
-		
-		return vReturn;
 	}
 	
 }
