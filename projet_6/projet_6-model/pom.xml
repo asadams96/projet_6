@@ -18,6 +18,15 @@
   </properties>
   
   <dependencies>
+  
+  	<!-- ===== Modules ===== -->
+    <dependency>
+        <groupId>fr.openclassrooms</groupId>
+        <artifactId>projet_6-technical</artifactId>
+    </dependency>
+    
+    <!-- ===== Bibliothèques tierces ===== -->
+    <!-- JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
