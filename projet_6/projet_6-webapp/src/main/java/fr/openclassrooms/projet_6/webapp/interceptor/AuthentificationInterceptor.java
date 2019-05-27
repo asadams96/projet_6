@@ -1,6 +1,12 @@
 package fr.openclassrooms.projet_6.webapp.interceptor;
 
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -20,15 +26,29 @@ import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
   *  
   * @see ManagerFactory
   * @see ManagerFactoryImpl
+  * @see AuthentificationInterceptor#managerFactory
+  * @see AuthentificationInterceptor#logger
   * @see AuthentificationInterceptor#setManagerFactory(ManagerFactory)
   * @see AuthentificationInterceptor#intercept(ActionInvocation)
   * @see AbstractInterceptor
   * @see UtilisateurManager#getCheckCoupleIdPass(Utilisateur)
+  * @see Logger
+  * @see LogManager#getLogger(Class)
   * 
   * @version 1.0
   * @author Ayrton De Abreu Miranda
   */
 public class AuthentificationInterceptor extends AbstractInterceptor {
+	
+	
+	
+	/**
+	 * <p>Logger de la classe 'AuthentificationInterceptor'</p>
+	 * 
+	 * @see Logger
+	 * @see LogManager#getLogger(Class)
+	 */
+	private static Logger logger = LogManager.getLogger(AuthentificationInterceptor.class);
 	
 	
 	
@@ -61,16 +81,22 @@ public class AuthentificationInterceptor extends AbstractInterceptor {
 	
 	
 	@Override
-	public String intercept(ActionInvocation invocation) throws Exception {
+	public String intercept(ActionInvocation invocation) {
 		String vResult = "error-forbidden";
 									
 		if(invocation.getInvocationContext().getSession().get("utilisateur") != null) {
 			Utilisateur utilisateur = (Utilisateur) invocation.getInvocationContext().getSession().get("utilisateur");
 			
 			if(utilisateur != null) {
-				if(managerFactory.getUtilisateurManager().getCheckUtilisateur(utilisateur)) {
-					
-					vResult = invocation.invoke();
+				try {
+					if(managerFactory.getUtilisateurManager().getCheckUtilisateur(utilisateur)) {
+						
+						vResult = invocation.invoke();
+					}
+				} catch (Exception e) {
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 		}

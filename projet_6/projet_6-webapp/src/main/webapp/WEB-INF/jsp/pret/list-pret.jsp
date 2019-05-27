@@ -59,7 +59,7 @@
 	        		<div class="col-lg-4 col-md-6 mb-4">
 	        			<div class="card h-100">
 	            
-				             <img class="card-img-top" src="${pageContext.request.contextPath}/WebContent/classes/fr/openclassrooms/projet_6/webapp/images${ topo.urlImage }"" alt="">
+				             <img class="card-img-top" src="${pageContext.request.contextPath}/WebContent/classes/fr/openclassrooms/projet_6/webapp/images${ topo.urlImage }" alt="">
 				              
 				             <div class="card-body">
 				             	<h4 class="card-title">

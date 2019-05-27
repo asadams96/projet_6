@@ -1,7 +1,6 @@
 package fr.openclassrooms.projet_6.business.impl.manager.pret;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

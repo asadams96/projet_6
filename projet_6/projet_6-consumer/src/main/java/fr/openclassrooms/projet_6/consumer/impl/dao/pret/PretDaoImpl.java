@@ -12,10 +12,8 @@ import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.pret.PretDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.rowmapper.pret.PretRM;
 import fr.openclassrooms.projet_6.model.pret.Pret;
-import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
 /**
  * <p>Implémentation de l'interface PretDao</p>

@@ -1,9 +1,13 @@
 package fr.openclassrooms.projet_6.webapp.action;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -12,11 +16,9 @@ import fr.openclassrooms.projet_6.business.contract.manager.ManagerFactory;
 import fr.openclassrooms.projet_6.business.contract.manager.communication.MessagePretManager;
 import fr.openclassrooms.projet_6.business.contract.manager.pret.PretManager;
 import fr.openclassrooms.projet_6.business.contract.manager.utilisateur.UtilisateurManager;
-import fr.openclassrooms.projet_6.model.communication.CommentaireTopo;
 import fr.openclassrooms.projet_6.model.communication.Message;
 import fr.openclassrooms.projet_6.model.communication.MessagePret;
 import fr.openclassrooms.projet_6.model.pret.Pret;
-import fr.openclassrooms.projet_6.model.site.Site;
 import fr.openclassrooms.projet_6.model.topo.Topo;
 import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 import fr.openclassrooms.projet_6.webapp.bundle.ResourcesBundle;
@@ -39,6 +41,7 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * </ul>
  * 
  * 
+ * @see GestionPretAction#logger
  * @see GestionPretAction#request
  * @see GestionPretAction#managerFactory
  * @see GestionPretAction#resourcesBundle
@@ -95,6 +98,8 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * @see HttpServletRequest
  * @see ServletRequestAware
  * @see ActionSupport
+ * @see Logger
+ * @see LogManager#getLogger(Class)
  * 
  * 
  * @version 1.0
@@ -104,7 +109,17 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
 public class GestionPretAction extends ActionSupport implements ServletRequestAware {
 	
 	
+	
+	/**
+	 * <p>Logger de la classe 'GestionPretAction'</p>
+	 * 
+	 * @see Logger
+	 * @see LogManager#getLogger(Class)
+	 */
+	private static Logger logger = LogManager.getLogger(GestionPretAction.class);
+	
 		
+	
 	/**
 	 * <p>Objet servant à stocker la requête en cours</p>
 	 * 
@@ -638,6 +653,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 				}catch(Exception e) {
 					vResult = ActionSupport.ERROR;
 					this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {
@@ -719,6 +738,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 					}
 				}catch(Exception e) {
 					this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {
@@ -779,6 +802,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 					}
 				}catch(Exception e) {
 					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {
@@ -849,6 +876,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 								
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 			
 		}
@@ -912,6 +943,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 								
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 			
 		}
@@ -976,6 +1011,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 								
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 			
 		}
@@ -1055,6 +1094,10 @@ public class GestionPretAction extends ActionSupport implements ServletRequestAw
 					}catch(Exception e) {
 						vResult = ActionSupport.ERROR;
 						this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+						
+						StringWriter stackTrace = new StringWriter();
+						e.printStackTrace(new PrintWriter(stackTrace));
+						logger.error(stackTrace.toString());
 					}	
 				}
 			} 

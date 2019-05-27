@@ -50,13 +50,7 @@
 	            		</s:a>
 	          		</li>
 	          
-	          		<li class="nav-item active">
-	            		<s:a class="nav-link"  action="utilisateur_detail">Profil
-							<s:param name="idUtilisateur" value="#session.utilisateur.idUtilisateur"/>
-	              			<span class="sr-only">(current)</span>
-	            		</s:a>
-	          		</li>
-	          		
+	          			          		
 	          		<li class="nav-item active">
 	            		<s:a class="nav-link"  action="pret_list">Prêts
 							<s:param name="type"><s:text name="pret.type1" /></s:param>
@@ -69,6 +63,13 @@
 							<s:param name="type"><s:text name="pret.type2" /></s:param>
 							<span class="sr-only">(current)</span>
 						</s:a>
+	          		</li>
+	          		
+	          		<li class="nav-item active">
+	            		<s:a class="nav-link"  action="utilisateur_detail">Profil
+							<s:param name="idUtilisateur" value="#session.utilisateur.idUtilisateur"/>
+	              			<span class="sr-only">(current)</span>
+	            		</s:a>
 	          		</li>
           		</s:if>
         	</ul>

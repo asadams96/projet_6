@@ -4,7 +4,6 @@ import fr.openclassrooms.projet_6.business.contract.manager.ManagerFactory;
 import fr.openclassrooms.projet_6.business.contract.manager.utilisateur.UtilisateurManager;
 import fr.openclassrooms.projet_6.business.impl.manager.AbstractManager;
 import fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.utilisateur.UtilisateurDaoImpl;
 import fr.openclassrooms.projet_6.model.utilisateur.Utilisateur;
 
 

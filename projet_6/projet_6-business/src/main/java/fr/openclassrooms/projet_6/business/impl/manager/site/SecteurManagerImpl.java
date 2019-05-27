@@ -7,7 +7,6 @@ import fr.openclassrooms.projet_6.business.contract.manager.site.SecteurManager;
 import fr.openclassrooms.projet_6.business.impl.manager.AbstractManager;
 import fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl;
 import fr.openclassrooms.projet_6.model.site.Secteur;
-import fr.openclassrooms.projet_6.model.site.Site;
 
 
 

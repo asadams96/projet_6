@@ -1,11 +1,15 @@
 package fr.openclassrooms.projet_6.webapp.action;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -40,6 +44,7 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * </ul>
  * 
  * 
+ * @see GestionTopoAction#logger
  * @see GestionTopoAction#doList()
  * @see GestionTopoAction#doDetail()
  * @see GestionTopoAction#doLibrary()
@@ -109,6 +114,8 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * @see HttpServletRequest
  * @see ServletRequestAware
  * @see ActionSupport
+ * @see Logger
+ * @see LogManager#getLogger(Class)
  * 
  * 
  * @version 1.0
@@ -116,6 +123,17 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  *
  */
 public class GestionTopoAction extends ActionSupport implements ServletRequestAware {
+	
+	
+	
+	/**
+	 * <p>Logger de la classe 'GestionTopoAction'</p>
+	 * 
+	 * @see Logger
+	 * @see LogManager#getLogger(Class)
+	 */
+	private static Logger logger = LogManager.getLogger(GestionTopoAction.class);
+	
 	
 	
 	/**
@@ -821,6 +839,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			this.addActionError("Une erreur s'est produit, veuillez reessayer plus tard...");
 			vResult = ActionSupport.ERROR;
+			
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			logger.error(stackTrace.toString());
 		}
 		
 		return vResult;
@@ -858,8 +880,11 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 				
 				String idUtilisateur = null;
 				try {
+					
 					idUtilisateur = String.valueOf(((Utilisateur) request.getSession(false).getAttribute("utilisateur")).getIdUtilisateur());
-				}catch(Exception e) {}
+					
+				}catch(Exception e) {/* Catch si deconnecté */}
+				
 				listTamponProprietaireTopo = managerFactory.getTamponProprietaireTopoManager().getList(idTopo, idUtilisateur);
 				
 				// Si aucune liaison evite le null pour eviter exception topo.jsp dans le choix du proprio
@@ -874,6 +899,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			vResult = ActionSupport.ERROR;
 			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+			
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			logger.error(stackTrace.toString());
 		}
 		return vResult;
 		
@@ -906,6 +935,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 			}catch(Exception e) {
 				vResult = ActionSupport.ERROR;
 				this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 		}
 		else {
@@ -959,6 +992,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 				}catch(Exception e) {
 					vResult = ActionSupport.ERROR;
 					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {
@@ -1039,6 +1076,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			vResult = ActionSupport.ERROR;
 			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+			
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			logger.error(stackTrace.toString());
 		}
 	}
 		
@@ -1077,6 +1118,10 @@ public class GestionTopoAction extends ActionSupport implements ServletRequestAw
 				}catch(Exception e) {
 					vResult = ActionSupport.ERROR;
 					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {

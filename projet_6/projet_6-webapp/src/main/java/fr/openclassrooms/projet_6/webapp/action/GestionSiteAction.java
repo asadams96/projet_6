@@ -1,10 +1,13 @@
 package fr.openclassrooms.projet_6.webapp.action;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts2.dispatcher.Parameter.Request;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -42,6 +45,7 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * @see GestionSiteAction#doList()
  * @see GestionSiteAction#doDetail()
  * @see GestionSiteAction#doAddComment()
+ * @see GestionSiteAction#logger
  * @see GestionSiteAction#request
  * @see GestionSiteAction#managerFactory
  * @see GestionSiteAction#resourcesBundle
@@ -91,6 +95,8 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * @see HttpServletRequest
  * @see ServletRequestAware
  * @see ActionSupport
+ * @see Logger
+ * @see LogManager#getLogger(Class)
  * 
  * 
  * @version 1.0
@@ -98,6 +104,16 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  *
  */
 public class GestionSiteAction extends ActionSupport implements ServletRequestAware {
+	
+	
+	
+	/**
+	 * <p>Logger de la classe 'GestionSiteAction'</p>
+	 * 
+	 * @see Logger
+	 * @see LogManager#getLogger(Class)
+	 */
+	private static Logger logger = LogManager.getLogger(GestionSiteAction.class);
 	
 		
 	
@@ -635,6 +651,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			this.addActionError("Une erreur s'est produit, veuillez reessayer plus tard...");
 			vResult = ActionSupport.ERROR;
+			
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			logger.error(stackTrace.toString());
 		}
 		
 		return vResult;
@@ -679,6 +699,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 		}catch(Exception e) {
 			vResult = ActionSupport.ERROR;
 			this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+			
+			StringWriter stackTrace = new StringWriter();
+			e.printStackTrace(new PrintWriter(stackTrace));
+			logger.error(stackTrace.toString());
 		}
 		return vResult;
 		
@@ -720,6 +744,10 @@ public class GestionSiteAction extends ActionSupport implements ServletRequestAw
 					}
 				}catch(Exception e) {
 					this.addActionError("Une erreur s'est produit. Veuillez reessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			else {

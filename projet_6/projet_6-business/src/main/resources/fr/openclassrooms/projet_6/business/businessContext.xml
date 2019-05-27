@@ -1,77 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd
 			http://www.springframework.org/schema/aop
 			http://www.springframework.org/schema/aop/spring-aop.xsd">
-            
-     
-     <!-- ========================================= Transaction Manager ========================================= -->
-     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-     	<property name="dataSource" ref="dataSource"></property> 
-     </bean>
-     
-     <tx:advice id="managerTxAdvice" transaction-manager="txManager">
+
+
+	<!-- ========================================= Transaction Manager ========================================= -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<tx:advice id="managerTxAdvice"
+		transaction-manager="txManager">
 		<tx:attributes>
-			<tx:method name="get*" propagation="REQUIRED" read-only="true" rollback-for="AnyCheckedException"/>
-			<tx:method name="*" propagation="REQUIRED" rollback-for="AnyCheckedException" />
+			<tx:method name="get*" propagation="REQUIRED"
+				read-only="true" rollback-for="AnyCheckedException" />
+			<tx:method name="*" propagation="REQUIRED"
+				rollback-for="AnyCheckedException" />
 		</tx:attributes>
 	</tx:advice>
-	
+
 	<aop:config>
-		<aop:pointcut id="managerMethodes" expression="execution(* fr.openclassrooms.projet_6.business.impl.manager.*.*ManagerImpl.*(..))" />
-		<aop:advisor advice-ref="managerTxAdvice" pointcut-ref="managerMethodes" />
+		<aop:pointcut id="managerMethodes"
+			expression="execution(* fr.openclassrooms.projet_6.business.impl.manager.*.*ManagerImpl.*(..))" />
+		<aop:advisor advice-ref="managerTxAdvice"
+			pointcut-ref="managerMethodes" />
 	</aop:config>
 
 	<!-- ========================================= Abstract Manager ======================================= -->
 	<bean id="abstractManager" abstract="true">
-        <property name="daoFactory" ref="daoFactory" />
-        <property name="managerFactory" ref="managerFactory" />
-    </bean>
+		<property name="daoFactory" ref="daoFactory" />
+		<property name="managerFactory" ref="managerFactory" />
+	</bean>
 
-	<!-- ========================================= Déclaration des Managers ======================================= -->
-	<bean id="messageManager" class="fr.openclassrooms.projet_6.business.impl.manager.communication.MessageManagerImpl" parent="abstractManager" />
-	<bean id="messagePretManager" class="fr.openclassrooms.projet_6.business.impl.manager.communication.MessagePretManagerImpl" parent="abstractManager" />
-	<bean id="commentaireSiteManager" class="fr.openclassrooms.projet_6.business.impl.manager.communication.CommentaireSiteManagerImpl" parent="abstractManager" />
-	<bean id="commentaireTopoManager" class="fr.openclassrooms.projet_6.business.impl.manager.communication.CommentaireTopoManagerImpl" parent="abstractManager" />
-	
-	<bean id="tamponProprietaireTopoManager" class="fr.openclassrooms.projet_6.business.impl.manager.liaison.TamponProprietaireTopoManagerImpl" parent="abstractManager" />
-	<bean id="tamponSiteTopoManager" class="fr.openclassrooms.projet_6.business.impl.manager.liaison.TamponSiteTopoManagerImpl" parent="abstractManager" />
-	
-	<bean id="pretManager" class="fr.openclassrooms.projet_6.business.impl.manager.pret.PretManagerImpl" parent="abstractManager" />
-	
-	<bean id="siteManager" class="fr.openclassrooms.projet_6.business.impl.manager.site.SiteManagerImpl" parent="abstractManager" />
-	<bean id="secteurManager" class="fr.openclassrooms.projet_6.business.impl.manager.site.SecteurManagerImpl" parent="abstractManager" />
-	<bean id="voieManager" class="fr.openclassrooms.projet_6.business.impl.manager.site.VoieManagerImpl" parent="abstractManager" />
-	
-	<bean id="topoManager" class="fr.openclassrooms.projet_6.business.impl.manager.topo.TopoManagerImpl" parent="abstractManager" />
-	
-	<bean id="utilisateurManager" class="fr.openclassrooms.projet_6.business.impl.manager.utilisateur.UtilisateurManagerImpl" parent="abstractManager" />
-	
+	<!-- ========================================= Déclaration des Managers 
+		======================================= -->
+	<bean id="messageManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.communication.MessageManagerImpl"
+		parent="abstractManager" />
+	<bean id="messagePretManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.communication.MessagePretManagerImpl"
+		parent="abstractManager" />
+	<bean id="commentaireSiteManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.communication.CommentaireSiteManagerImpl"
+		parent="abstractManager" />
+	<bean id="commentaireTopoManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.communication.CommentaireTopoManagerImpl"
+		parent="abstractManager" />
+
+	<bean id="tamponProprietaireTopoManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.liaison.TamponProprietaireTopoManagerImpl"
+		parent="abstractManager" />
+	<bean id="tamponSiteTopoManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.liaison.TamponSiteTopoManagerImpl"
+		parent="abstractManager" />
+
+	<bean id="pretManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.pret.PretManagerImpl"
+		parent="abstractManager" />
+
+	<bean id="siteManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.site.SiteManagerImpl"
+		parent="abstractManager" />
+	<bean id="secteurManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.site.SecteurManagerImpl"
+		parent="abstractManager" />
+	<bean id="voieManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.site.VoieManagerImpl"
+		parent="abstractManager" />
+
+	<bean id="topoManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.topo.TopoManagerImpl"
+		parent="abstractManager" />
+
+	<bean id="utilisateurManager"
+		class="fr.openclassrooms.projet_6.business.impl.manager.utilisateur.UtilisateurManagerImpl"
+		parent="abstractManager" />
+
 	<!-- ================================================ Manager Factory ========================================= -->
-    <bean id="managerFactory" class="fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl">
-        <property name="messageManager" ref="messageManager"/>
-        <property name="messagePretManager" ref="messagePretManager"/>
-        <property name="commentaireSiteManager" ref="commentaireSiteManager"/>
-		<property name="commentaireTopoManager" ref="commentaireTopoManager"/>
-		
-        <property name="tamponSiteTopoManager" ref="tamponSiteTopoManager"/>
-        <property name="tamponProprietaireTopoManager" ref="tamponProprietaireTopoManager"/>
-        
-		<property name="pretManager" ref="pretManager"/>
-		
-        <property name="siteManager" ref="siteManager"/>
-        <property name="secteurManager" ref="secteurManager"/>
-		<property name="voieManager" ref="voieManager"/>
-		
-        <property name="topoManager" ref="topoManager"/>
-        <property name="utilisateurManager" ref="utilisateurManager"/>
-    </bean>
-         
+	<bean id="managerFactory"
+		class="fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl">
+		<property name="messageManager" ref="messageManager" />
+		<property name="messagePretManager" ref="messagePretManager" />
+		<property name="commentaireSiteManager"
+			ref="commentaireSiteManager" />
+		<property name="commentaireTopoManager"
+			ref="commentaireTopoManager" />
+
+		<property name="tamponSiteTopoManager"
+			ref="tamponSiteTopoManager" />
+		<property name="tamponProprietaireTopoManager"
+			ref="tamponProprietaireTopoManager" />
+
+		<property name="pretManager" ref="pretManager" />
+
+		<property name="siteManager" ref="siteManager" />
+		<property name="secteurManager" ref="secteurManager" />
+		<property name="voieManager" ref="voieManager" />
+
+		<property name="topoManager" ref="topoManager" />
+		<property name="utilisateurManager" ref="utilisateurManager" />
+	</bean>
+
 </beans>

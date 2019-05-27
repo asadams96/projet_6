@@ -4,11 +4,7 @@ import java.util.List;
 
 import fr.openclassrooms.projet_6.business.contract.manager.ManagerFactory;
 import fr.openclassrooms.projet_6.business.impl.manager.ManagerFactoryImpl;
-import fr.openclassrooms.projet_6.business.impl.manager.site.SecteurManagerImpl;
 import fr.openclassrooms.projet_6.business.impl.manager.site.SiteManagerImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.site.SecteurDaoImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.site.SiteDaoImpl;
-import fr.openclassrooms.projet_6.model.site.Secteur;
 import fr.openclassrooms.projet_6.model.site.Site;
 
 

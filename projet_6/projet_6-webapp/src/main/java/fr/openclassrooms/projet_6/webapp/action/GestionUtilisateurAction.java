@@ -1,9 +1,12 @@
 package fr.openclassrooms.projet_6.webapp.action;
 
-import java.util.List;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -39,6 +42,7 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * </ul>
  *  
  * 
+ * @see GestionUtilisateurAction#logger
  * @see GestionUtilisateurAction#managerFactory
  * @see GestionUtilisateurAction#resourcesBundle
  * @see GestionUtilisateurAction#inputValidation
@@ -100,6 +104,8 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  * @see HttpServletRequest
  * @see ServletRequestAware
  * @see ActionSupport
+ * @see Logger
+ * @see LogManager#getLogger(Class)
  * 
  * 
  * @version 1.0
@@ -107,7 +113,17 @@ import fr.openclassrooms.projet_6.webapp.validator.InputValidation;
  *
  */
 public class GestionUtilisateurAction extends ActionSupport implements ServletRequestAware {
-
+	
+	
+	
+	/**
+	 * <p>Logger de la classe 'GestionUtilisateurAction'</p>
+	 * 
+	 * @see Logger
+	 * @see LogManager#getLogger(Class)
+	 */
+	private static Logger logger = LogManager.getLogger(GestionUtilisateurAction.class);
+	
 	
 		
 	/**
@@ -807,6 +823,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 				}catch(Exception e) {
 					vResult = ActionSupport.ERROR;
 					this.addActionError("Une erreur s'est produit. Veuillez réessayer plus tard...");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 			}
 			
@@ -855,6 +875,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 					idUtilisateur = this.managerFactory.getUtilisateurManager().getIdbyMail(mailBis);
 				}catch(Exception e) {
 					this.addFieldError("mailBis", "Aucun compte n'est enregistré avec cette adresse mail");
+					
+					StringWriter stackTrace = new StringWriter();
+					e.printStackTrace(new PrintWriter(stackTrace));
+					logger.error(stackTrace.toString());
 				}
 				try {
 					if(idUtilisateur != null && !idUtilisateur.isEmpty()) {
@@ -882,6 +906,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}catch(Exception e) {
 				vResult = ActionSupport.ERROR;
 				this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 			}
 			
@@ -942,6 +970,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 				}
 			}catch(Exception e) {
 				this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 		}
 		else {
@@ -1002,6 +1034,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}catch(Exception e) {
 				vResult = ActionSupport.ERROR;
 				this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 		}
 		else {
@@ -1059,6 +1095,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}catch(Exception e) {
 				vResult = ActionSupport.ERROR;
 				this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 		}
 		else {
@@ -1114,6 +1154,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 			}catch(Exception e) {
 				vResult = ActionSupport.ERROR;
 				this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+				
+				StringWriter stackTrace = new StringWriter();
+				e.printStackTrace(new PrintWriter(stackTrace));
+				logger.error(stackTrace.toString());
 			}
 		}
 		else {
@@ -1172,6 +1216,10 @@ public class GestionUtilisateurAction extends ActionSupport implements ServletRe
 					}catch(Exception e) {
 						vResult = ActionSupport.ERROR;
 						this.addActionError("Une erreur s'est produite. Veuillez réessayer plus tard...");
+						
+						StringWriter stackTrace = new StringWriter();
+						e.printStackTrace(new PrintWriter(stackTrace));
+						logger.error(stackTrace.toString());
 					}
 				}
 				else {

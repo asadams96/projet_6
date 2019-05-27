@@ -4,9 +4,7 @@ import java.util.List;
 
 import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.communication.CommentaireTopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.dao.communication.MessagePretDaoImpl;
-import fr.openclassrooms.projet_6.model.communication.CommentaireTopo;
 import fr.openclassrooms.projet_6.model.communication.MessagePret;
 
 /**

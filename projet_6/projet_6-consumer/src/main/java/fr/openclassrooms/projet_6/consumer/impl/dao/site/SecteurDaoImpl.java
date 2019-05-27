@@ -11,7 +11,6 @@ import fr.openclassrooms.projet_6.consumer.contract.dao.DaoFactory;
 import fr.openclassrooms.projet_6.consumer.contract.dao.site.SecteurDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.AbstractDao;
 import fr.openclassrooms.projet_6.consumer.impl.dao.DaoFactoryImpl;
-import fr.openclassrooms.projet_6.consumer.impl.dao.topo.TopoDaoImpl;
 import fr.openclassrooms.projet_6.consumer.impl.rowmapper.site.SecteurRM;
 import fr.openclassrooms.projet_6.model.site.Secteur;
 import fr.openclassrooms.projet_6.model.site.Site;
